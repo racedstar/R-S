@@ -1,0 +1,10 @@
+*.7z
+*.zip
+*.dll
+*.bak
+*.sln
+packages/
+
+/Upload/
+/bin/
+/obj/
