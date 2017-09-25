@@ -143,7 +143,7 @@ namespace RioManager.Controllers
             string Message = App_Code.ImageTools.ReScaling(new PicModel().getAllPic());
             Response.Write(App_Code.JS.Alert(Message));
 
-            return RedirectToAction("RioPicView");
+            return RedirectToAction("RioPicView", "Rio_Pic", new {m="E"});
         }
         
     }
