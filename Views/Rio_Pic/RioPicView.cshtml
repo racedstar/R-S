@@ -1,0 +1,134 @@
+﻿@model IEnumerable<RioManager.Models.Rio_Pic>
+@{
+    ViewBag.Title = "RioPicView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var isView = true;
+    var title = "PicView";
+    if (Request.QueryString.Get("m") != null && Request.QueryString.Get("m").ToString() == "E")
+    {
+        isView = false;
+        title = "PicEdit";
+    }
+}
+
+<div class="container">
+    <div class="col-md-6">
+        <h2>@title</h2>
+    </div>
+    <div class="col-md-6 text-right" style="line-height:70px;">                
+        @{
+            if (!isView)
+            {
+                <input class="btn btn-default" type="button" id="imgReScaling" value="多檔下載" onclick="location.href='@Url.Action("ReScaling", "Rio_Pic")'" />
+                <input class="btn btn-default" type="button" id="imgReScaling" value="重置縮圖" onclick="location.href='@Url.Action("ReScaling", "Rio_Pic")'" />
+                <input class="btn btn-default" type="button" id="imgReScaling" value="刪除圖片" onclick="getSelectPic();" />
+                <a class="btn btn-default" href="RioPicView?m=V">檢視模式</a>
+            }
+            else
+            {
+                <a class="btn btn-default" href="RioPicView?m=E">編輯模式</a>
+            }
+        }
+        <a class="btn btn-default various fancybox.iframe" rel="" href="~/Tools/fmUpload?t=img">上傳圖片</a>        
+    </div>
+</div>
+<div class="form-group" style="overflow: hidden;">
+    @{
+        if (!isView)
+        {
+            foreach (var item in Model)
+            {
+                <div id="@item.SN" class="col-md-3 thumbnail picEditDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName);" onclick="selectPic(event)" ></div>
+            }
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <a class="fancybox" style="display:block;" rel="ligthbox" href="@item.PicPath/@item.PicName" title="@item.PicName">
+                    <div class="col-md-3 thumbnail picViewDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)"></div>
+                </a>
+
+            }
+        }
+    }
+</div>
+<script>
+        $(document).ready(function () {
+            $(".various").fancybox({
+                maxWidth: 1920,
+                maxHeight: 1024,
+                fitToView: false,
+                width: '85%',
+                height: '85%',
+                autoSize: false,
+                closeClick: false,
+                openEffect: 'none',
+                closeEffect: 'none',
+                afterClose: function () { window.location.reload(); }
+            });
+
+        })
+
+        function selectPic(ev) {
+
+            var PicDiv = document.getElementById(ev.target.id).className,
+                selected = document.getElementById(ev.target.id),
+                isShiftSelect = false,
+                docInitialClass = "col-md-3  thumbnail picEditDiv",
+                docInitialjQueryClass = ".col-md-3.thumbnail.picEditDiv",
+                shiftRangeparentID = document.getElementById(ev.target.id).id,
+                shiftRange = $(docInitialjQueryClass).length;
+
+            if (PicDiv.indexOf("Active") === -1) {
+                selected.className = docInitialClass + " Active";
+            }
+            else {
+                selected.className = docInitialClass;
+            }
+
+            if (ev.shiftKey) {
+                for (var i = 0; i < shiftRange; i++) {
+                    if (isShiftSelect === true) {
+                        if ($(docInitialjQueryClass)[i].className.indexOf("Active") != -1) {
+                            isShiftSelect = false;
+                        }
+                        $(docInitialjQueryClass)[i].className = docInitialClass + " Active";
+
+                    }
+                    else if ($(docInitialjQueryClass)[i].className.indexOf("Active") != -1) {
+                        isShiftSelect = true;
+                    }
+                }
+            }
+
+        }
+
+        function getSelectPic()
+        {
+            var selectCount = $(".Active").length;
+            var SNArray = [];
+            for (var i = 0; i < selectCount; i++) {
+                SNArray.push($(".Active")[i].id);
+            }
+            deletePic(SNArray);//呼叫刪除用function
+        }
+
+        function deletePic(SNArray) {
+            $.ajax({
+                type: 'post',
+                cache: false,
+                traditional: true,
+                url: '../Tools/deleteFile.ashx?t=img',
+                dataType: 'html',
+                data: { picSN: SNArray },
+                success: function (data) { //成功時
+                    alert('圖片刪除成功');
+                    location.reload();
+                },
+                error: function () {  //失敗時
+                    alert("圖片刪除失敗");
+                }
+            });
+        }
+</script>

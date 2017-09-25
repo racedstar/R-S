@@ -1,0 +1,88 @@
+﻿@model IEnumerable<RioManager.Models.Rio_Pic>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PicName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PicContent)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HitCount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PicPath)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ModifyID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ModifyDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsEnable)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsDelete)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PicName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PicContent)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HitCount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PicPath)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreateID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreateDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ModifyID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ModifyDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsEnable)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsDelete)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.SN }) |
+            @Html.ActionLink("Details", "Details", new { id=item.SN }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.SN })
+        </td>
+    </tr>
+}
+
+</table>

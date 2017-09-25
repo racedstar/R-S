@@ -1,0 +1,589 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Entity.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Rio_Account">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="AccountContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PicSN" Type="int" Nullable="false" />
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="CreateID" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifyID" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ModifyName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ModifyDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rio_Album">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FrontCoverSN" Type="int" Nullable="false" />
+          <Property Name="AlbumName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="AlbumContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Sort" Type="int" Nullable="false" />
+          <Property Name="HitCount" Type="int" Nullable="false" />
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="CreateID" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifyID" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ModifyName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ModifyDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rio_AlbumJoinPic">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AlbumSN" Type="int" Nullable="false" />
+          <Property Name="PicSN" Type="int" Nullable="false" />
+          <Property Name="Sort" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rio_Doc">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocName" Type="nvarchar(max)" />
+          <Property Name="DocContent" Type="nvarchar(max)" />
+          <Property Name="DocPath" Type="nvarchar(max)" />
+          <Property Name="HitCount" Type="int" />
+          <Property Name="Extension" Type="nvarchar(max)" />
+          <Property Name="CreateID" Type="nvarchar(max)" />
+          <Property Name="CreateName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="ModifyId" Type="nvarchar(max)" />
+          <Property Name="ModifyName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ModifyDate" Type="datetime" />
+          <Property Name="IsEnable" Type="bit" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="Rio_Pic">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PicName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PicContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="HitCount" Type="int" Nullable="false" />
+          <Property Name="PicPath" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="CreateID" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifyID" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ModifyName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ModifyDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rio_SystemList">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="URL" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="SystemName" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'RioBlog.dbo.Vw_Album' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="Vw_Album">
+          <Key>
+            <PropertyRef Name="SN" />
+            <PropertyRef Name="FrontCoverSN" />
+            <PropertyRef Name="AlbumName" />
+            <PropertyRef Name="AlbumContent" />
+            <PropertyRef Name="Sort" />
+            <PropertyRef Name="HitCount" />
+            <PropertyRef Name="IsEnable" />
+            <PropertyRef Name="IsDelete" />
+            <PropertyRef Name="CreateID" />
+            <PropertyRef Name="CreateName" />
+            <PropertyRef Name="CreateDate" />
+            <PropertyRef Name="ModifyID" />
+            <PropertyRef Name="ModifyName" />
+            <PropertyRef Name="ModifyDate" />
+          </Key>
+          <Property Name="PicName" Type="nvarchar(max)" />
+          <Property Name="PicPath" Type="nvarchar(max)" />
+          <Property Name="SN" Type="int" Nullable="false" />
+          <Property Name="FrontCoverSN" Type="int" Nullable="false" />
+          <Property Name="AlbumName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="AlbumContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Sort" Type="int" Nullable="false" />
+          <Property Name="HitCount" Type="int" Nullable="false" />
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="CreateID" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifyID" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ModifyName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ModifyDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'RioBlog.dbo.Vw_AlbumJoinPic' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="Vw_AlbumJoinPic">
+          <Key>
+            <PropertyRef Name="JoinSN" />
+          </Key>
+          <Property Name="PicSN" Type="int" />
+          <Property Name="PicName" Type="nvarchar(max)" />
+          <Property Name="PicContent" Type="nvarchar(max)" />
+          <Property Name="PicPath" Type="nvarchar(max)" />
+          <Property Name="PicHitCount" Type="int" />
+          <Property Name="PicIsEnable" Type="bit" />
+          <Property Name="PicIsDelete" Type="bit" />
+          <Property Name="PicCreateID" Type="nvarchar(max)" />
+          <Property Name="PicCreateName" Type="nvarchar(max)" />
+          <Property Name="PicCreateDate" Type="datetime" />
+          <Property Name="PicModifyID" Type="nvarchar(max)" />
+          <Property Name="PicModifyName" Type="nvarchar(max)" />
+          <Property Name="PicModifyDate" Type="datetime" />
+          <Property Name="AlbumSN" Type="int" />
+          <Property Name="AlbumName" Type="nvarchar(max)" />
+          <Property Name="AlbumContent" Type="nvarchar(max)" />
+          <Property Name="FrontCoverSN" Type="int" />
+          <Property Name="AlbumHitCount" Type="int" />
+          <Property Name="AlbumIsEnable" Type="bit" />
+          <Property Name="AlbumIsDelete" Type="bit" />
+          <Property Name="AlbumCreateID" Type="nvarchar(max)" />
+          <Property Name="AlbumCreateName" Type="nvarchar(max)" />
+          <Property Name="AlbumCreateDate" Type="datetime" />
+          <Property Name="AlbumModifyID" Type="nvarchar(max)" />
+          <Property Name="AlbumModifyName" Type="nvarchar(max)" />
+          <Property Name="AlbumModifyDate" Type="datetime" />
+          <Property Name="JoinSN" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="EntityStoreContainer">
+          <EntitySet Name="Rio_Account" EntityType="Self.Rio_Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rio_Album" EntityType="Self.Rio_Album" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rio_AlbumJoinPic" EntityType="Self.Rio_AlbumJoinPic" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rio_Doc" EntityType="Self.Rio_Doc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rio_Pic" EntityType="Self.Rio_Pic" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rio_SystemList" EntityType="Self.Rio_SystemList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vw_Album" EntityType="Self.Vw_Album" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Vw_Album].[PicName] AS [PicName], 
+    [Vw_Album].[PicPath] AS [PicPath], 
+    [Vw_Album].[SN] AS [SN], 
+    [Vw_Album].[FrontCoverSN] AS [FrontCoverSN], 
+    [Vw_Album].[AlbumName] AS [AlbumName], 
+    [Vw_Album].[AlbumContent] AS [AlbumContent], 
+    [Vw_Album].[Sort] AS [Sort], 
+    [Vw_Album].[HitCount] AS [HitCount], 
+    [Vw_Album].[IsEnable] AS [IsEnable], 
+    [Vw_Album].[IsDelete] AS [IsDelete], 
+    [Vw_Album].[CreateID] AS [CreateID], 
+    [Vw_Album].[CreateName] AS [CreateName], 
+    [Vw_Album].[CreateDate] AS [CreateDate], 
+    [Vw_Album].[ModifyID] AS [ModifyID], 
+    [Vw_Album].[ModifyName] AS [ModifyName], 
+    [Vw_Album].[ModifyDate] AS [ModifyDate]
+    FROM [dbo].[Vw_Album] AS [Vw_Album]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Vw_AlbumJoinPic" EntityType="Self.Vw_AlbumJoinPic" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Vw_AlbumJoinPic].[PicSN] AS [PicSN], 
+    [Vw_AlbumJoinPic].[PicName] AS [PicName], 
+    [Vw_AlbumJoinPic].[PicContent] AS [PicContent], 
+    [Vw_AlbumJoinPic].[PicPath] AS [PicPath], 
+    [Vw_AlbumJoinPic].[PicHitCount] AS [PicHitCount], 
+    [Vw_AlbumJoinPic].[PicIsEnable] AS [PicIsEnable], 
+    [Vw_AlbumJoinPic].[PicIsDelete] AS [PicIsDelete], 
+    [Vw_AlbumJoinPic].[PicCreateID] AS [PicCreateID], 
+    [Vw_AlbumJoinPic].[PicCreateName] AS [PicCreateName], 
+    [Vw_AlbumJoinPic].[PicCreateDate] AS [PicCreateDate], 
+    [Vw_AlbumJoinPic].[PicModifyID] AS [PicModifyID], 
+    [Vw_AlbumJoinPic].[PicModifyName] AS [PicModifyName], 
+    [Vw_AlbumJoinPic].[PicModifyDate] AS [PicModifyDate], 
+    [Vw_AlbumJoinPic].[AlbumSN] AS [AlbumSN], 
+    [Vw_AlbumJoinPic].[AlbumName] AS [AlbumName], 
+    [Vw_AlbumJoinPic].[AlbumContent] AS [AlbumContent], 
+    [Vw_AlbumJoinPic].[FrontCoverSN] AS [FrontCoverSN], 
+    [Vw_AlbumJoinPic].[AlbumHitCount] AS [AlbumHitCount], 
+    [Vw_AlbumJoinPic].[AlbumIsEnable] AS [AlbumIsEnable], 
+    [Vw_AlbumJoinPic].[AlbumIsDelete] AS [AlbumIsDelete], 
+    [Vw_AlbumJoinPic].[AlbumCreateID] AS [AlbumCreateID], 
+    [Vw_AlbumJoinPic].[AlbumCreateName] AS [AlbumCreateName], 
+    [Vw_AlbumJoinPic].[AlbumCreateDate] AS [AlbumCreateDate], 
+    [Vw_AlbumJoinPic].[AlbumModifyID] AS [AlbumModifyID], 
+    [Vw_AlbumJoinPic].[AlbumModifyName] AS [AlbumModifyName], 
+    [Vw_AlbumJoinPic].[AlbumModifyDate] AS [AlbumModifyDate], 
+    [Vw_AlbumJoinPic].[JoinSN] AS [JoinSN]
+    FROM [dbo].[Vw_AlbumJoinPic] AS [Vw_AlbumJoinPic]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Entity" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Rio_Account" EntityType="Entity.Rio_Account" />
+          <EntitySet Name="Rio_Album" EntityType="Entity.Rio_Album" />
+          <EntitySet Name="Rio_AlbumJoinPic" EntityType="Entity.Rio_AlbumJoinPic" />
+          <EntitySet Name="Rio_Doc" EntityType="Entity.Rio_Doc" />
+          <EntitySet Name="Rio_Pic" EntityType="Entity.Rio_Pic" />
+          <EntitySet Name="Rio_SystemList" EntityType="Entity.Rio_SystemList" />
+          <EntitySet Name="Vw_Album" EntityType="Entity.Vw_Album" />
+          <EntitySet Name="Vw_AlbumJoinPic" EntityType="Entity.Vw_AlbumJoinPic" />
+        </EntityContainer>
+        <EntityType Name="Rio_Account">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AccountContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicSN" Type="Int32" Nullable="false" />
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="CreateID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifyID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Rio_Album">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FrontCoverSN" Type="Int32" Nullable="false" />
+          <Property Name="AlbumName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AlbumContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Sort" Type="Int32" Nullable="false" />
+          <Property Name="HitCount" Type="Int32" Nullable="false" />
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="CreateID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifyID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Rio_AlbumJoinPic">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AlbumSN" Type="Int32" Nullable="false" />
+          <Property Name="PicSN" Type="Int32" Nullable="false" />
+          <Property Name="Sort" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rio_Doc">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DocContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DocPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="HitCount" Type="Int32" />
+          <Property Name="Extension" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifyId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="IsEnable" Type="Boolean" />
+          <Property Name="IsDelete" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Rio_Pic">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PicName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="HitCount" Type="Int32" Nullable="false" />
+          <Property Name="PicPath" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="CreateID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifyID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Rio_SystemList">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="URL" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SystemName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Vw_Album">
+          <Key>
+            <PropertyRef Name="SN" />
+            <PropertyRef Name="FrontCoverSN" />
+            <PropertyRef Name="AlbumName" />
+            <PropertyRef Name="AlbumContent" />
+            <PropertyRef Name="Sort" />
+            <PropertyRef Name="HitCount" />
+            <PropertyRef Name="IsEnable" />
+            <PropertyRef Name="IsDelete" />
+            <PropertyRef Name="CreateID" />
+            <PropertyRef Name="CreateName" />
+            <PropertyRef Name="CreateDate" />
+            <PropertyRef Name="ModifyID" />
+            <PropertyRef Name="ModifyName" />
+            <PropertyRef Name="ModifyDate" />
+          </Key>
+          <Property Name="PicName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SN" Type="Int32" Nullable="false" />
+          <Property Name="FrontCoverSN" Type="Int32" Nullable="false" />
+          <Property Name="AlbumName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AlbumContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Sort" Type="Int32" Nullable="false" />
+          <Property Name="HitCount" Type="Int32" Nullable="false" />
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="CreateID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifyID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Vw_AlbumJoinPic">
+          <Key>
+            <PropertyRef Name="JoinSN" />
+          </Key>
+          <Property Name="PicSN" Type="Int32" />
+          <Property Name="PicName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicHitCount" Type="Int32" />
+          <Property Name="PicIsEnable" Type="Boolean" />
+          <Property Name="PicIsDelete" Type="Boolean" />
+          <Property Name="PicCreateID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicCreateName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicCreateDate" Type="DateTime" Precision="3" />
+          <Property Name="PicModifyID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicModifyName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="AlbumSN" Type="Int32" />
+          <Property Name="AlbumName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AlbumContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FrontCoverSN" Type="Int32" />
+          <Property Name="AlbumHitCount" Type="Int32" />
+          <Property Name="AlbumIsEnable" Type="Boolean" />
+          <Property Name="AlbumIsDelete" Type="Boolean" />
+          <Property Name="AlbumCreateID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AlbumCreateName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AlbumCreateDate" Type="DateTime" Precision="3" />
+          <Property Name="AlbumModifyID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AlbumModifyName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AlbumModifyDate" Type="DateTime" Precision="3" />
+          <Property Name="JoinSN" Type="Int32" Nullable="false" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EntityStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Rio_Account">
+            <EntityTypeMapping TypeName="Entity.Rio_Account">
+              <MappingFragment StoreEntitySet="Rio_Account">
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyName" ColumnName="ModifyName" />
+                <ScalarProperty Name="ModifyID" ColumnName="ModifyID" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateName" ColumnName="CreateName" />
+                <ScalarProperty Name="CreateID" ColumnName="CreateID" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+                <ScalarProperty Name="PicSN" ColumnName="PicSN" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="AccountContent" ColumnName="AccountContent" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rio_Album">
+            <EntityTypeMapping TypeName="Entity.Rio_Album">
+              <MappingFragment StoreEntitySet="Rio_Album">
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyName" ColumnName="ModifyName" />
+                <ScalarProperty Name="ModifyID" ColumnName="ModifyID" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateName" ColumnName="CreateName" />
+                <ScalarProperty Name="CreateID" ColumnName="CreateID" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+                <ScalarProperty Name="HitCount" ColumnName="HitCount" />
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
+                <ScalarProperty Name="AlbumContent" ColumnName="AlbumContent" />
+                <ScalarProperty Name="AlbumName" ColumnName="AlbumName" />
+                <ScalarProperty Name="FrontCoverSN" ColumnName="FrontCoverSN" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rio_AlbumJoinPic">
+            <EntityTypeMapping TypeName="Entity.Rio_AlbumJoinPic">
+              <MappingFragment StoreEntitySet="Rio_AlbumJoinPic">
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
+                <ScalarProperty Name="PicSN" ColumnName="PicSN" />
+                <ScalarProperty Name="AlbumSN" ColumnName="AlbumSN" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rio_Doc">
+            <EntityTypeMapping TypeName="Entity.Rio_Doc">
+              <MappingFragment StoreEntitySet="Rio_Doc">
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyName" ColumnName="ModifyName" />
+                <ScalarProperty Name="ModifyId" ColumnName="ModifyId" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateName" ColumnName="CreateName" />
+                <ScalarProperty Name="CreateID" ColumnName="CreateID" />
+                <ScalarProperty Name="Extension" ColumnName="Extension" />
+                <ScalarProperty Name="HitCount" ColumnName="HitCount" />
+                <ScalarProperty Name="DocPath" ColumnName="DocPath" />
+                <ScalarProperty Name="DocContent" ColumnName="DocContent" />
+                <ScalarProperty Name="DocName" ColumnName="DocName" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rio_Pic">
+            <EntityTypeMapping TypeName="Entity.Rio_Pic">
+              <MappingFragment StoreEntitySet="Rio_Pic">
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyName" ColumnName="ModifyName" />
+                <ScalarProperty Name="ModifyID" ColumnName="ModifyID" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateName" ColumnName="CreateName" />
+                <ScalarProperty Name="CreateID" ColumnName="CreateID" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+                <ScalarProperty Name="PicPath" ColumnName="PicPath" />
+                <ScalarProperty Name="HitCount" ColumnName="HitCount" />
+                <ScalarProperty Name="PicContent" ColumnName="PicContent" />
+                <ScalarProperty Name="PicName" ColumnName="PicName" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rio_SystemList">
+            <EntityTypeMapping TypeName="Entity.Rio_SystemList">
+              <MappingFragment StoreEntitySet="Rio_SystemList">
+                <ScalarProperty Name="SystemName" ColumnName="SystemName" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vw_Album">
+            <EntityTypeMapping TypeName="Entity.Vw_Album">
+              <MappingFragment StoreEntitySet="Vw_Album">
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyName" ColumnName="ModifyName" />
+                <ScalarProperty Name="ModifyID" ColumnName="ModifyID" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateName" ColumnName="CreateName" />
+                <ScalarProperty Name="CreateID" ColumnName="CreateID" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+                <ScalarProperty Name="HitCount" ColumnName="HitCount" />
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
+                <ScalarProperty Name="AlbumContent" ColumnName="AlbumContent" />
+                <ScalarProperty Name="AlbumName" ColumnName="AlbumName" />
+                <ScalarProperty Name="FrontCoverSN" ColumnName="FrontCoverSN" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+                <ScalarProperty Name="PicPath" ColumnName="PicPath" />
+                <ScalarProperty Name="PicName" ColumnName="PicName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vw_AlbumJoinPic">
+            <EntityTypeMapping TypeName="Entity.Vw_AlbumJoinPic">
+              <MappingFragment StoreEntitySet="Vw_AlbumJoinPic">
+                <ScalarProperty Name="JoinSN" ColumnName="JoinSN" />
+                <ScalarProperty Name="AlbumModifyDate" ColumnName="AlbumModifyDate" />
+                <ScalarProperty Name="AlbumModifyName" ColumnName="AlbumModifyName" />
+                <ScalarProperty Name="AlbumModifyID" ColumnName="AlbumModifyID" />
+                <ScalarProperty Name="AlbumCreateDate" ColumnName="AlbumCreateDate" />
+                <ScalarProperty Name="AlbumCreateName" ColumnName="AlbumCreateName" />
+                <ScalarProperty Name="AlbumCreateID" ColumnName="AlbumCreateID" />
+                <ScalarProperty Name="AlbumIsDelete" ColumnName="AlbumIsDelete" />
+                <ScalarProperty Name="AlbumIsEnable" ColumnName="AlbumIsEnable" />
+                <ScalarProperty Name="AlbumHitCount" ColumnName="AlbumHitCount" />
+                <ScalarProperty Name="FrontCoverSN" ColumnName="FrontCoverSN" />
+                <ScalarProperty Name="AlbumContent" ColumnName="AlbumContent" />
+                <ScalarProperty Name="AlbumName" ColumnName="AlbumName" />
+                <ScalarProperty Name="AlbumSN" ColumnName="AlbumSN" />
+                <ScalarProperty Name="PicModifyDate" ColumnName="PicModifyDate" />
+                <ScalarProperty Name="PicModifyName" ColumnName="PicModifyName" />
+                <ScalarProperty Name="PicModifyID" ColumnName="PicModifyID" />
+                <ScalarProperty Name="PicCreateDate" ColumnName="PicCreateDate" />
+                <ScalarProperty Name="PicCreateName" ColumnName="PicCreateName" />
+                <ScalarProperty Name="PicCreateID" ColumnName="PicCreateID" />
+                <ScalarProperty Name="PicIsDelete" ColumnName="PicIsDelete" />
+                <ScalarProperty Name="PicIsEnable" ColumnName="PicIsEnable" />
+                <ScalarProperty Name="PicHitCount" ColumnName="PicHitCount" />
+                <ScalarProperty Name="PicPath" ColumnName="PicPath" />
+                <ScalarProperty Name="PicContent" ColumnName="PicContent" />
+                <ScalarProperty Name="PicName" ColumnName="PicName" />
+                <ScalarProperty Name="PicSN" ColumnName="PicSN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

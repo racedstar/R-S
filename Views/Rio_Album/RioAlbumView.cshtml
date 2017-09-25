@@ -1,0 +1,73 @@
+﻿@model IEnumerable<RioManager.Models.Rio_Album>
+@{
+    ViewBag.Title = "RioPicView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="col-md-6">
+        <h2>AlbumView</h2>
+    </div>
+    <div class="col-md-6 text-right" style="line-height:70px;">
+        <a class="btn btn-default various fancybox.iframe" rel="" href="CreateAlbum?s=0">建立新相簿</a>         
+        <input class="btn btn-default" type="button" id="deleteAlbum" onclick="getDeleteAlbumSN()" value="刪除相簿" />
+    </div>
+    <div class="form-group">
+        @{ 
+            var VwAlbum = @ViewBag.VwAlbum;
+         }                   
+         @foreach (var item in VwAlbum)
+         {
+            <div id="@item.SN" class="col-md-3 albumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
+                <a href="RioAlbumContent?as=@item.SN">
+                    <p>@item.AlbumName</p>
+                </a>
+            </div>            
+         }
+         
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".various").fancybox({
+            maxWidth: 1920,
+            maxHeight: 1024,
+            fitToView: false,
+            width: '85%',
+            height: '85%',
+            autoSize: false,
+            closeClick: false,
+            openEffect: 'none',
+            closeEffect: 'none',
+            afterClose: function () { window.location.reload(); }
+        });
+
+    })
+
+    function getDeleteAlbumSN() {
+        var albumSN = [];
+        for (var i = 0; i < $(".selectChk").length; i++) {
+            if ($(".selectChk")[i].checked) {
+                albumSN.push($(".selectChk")[i].value);
+            }
+        }
+        deleteAlbum(albumSN);
+    }
+
+    function deleteAlbum(albumSN) {
+        $.ajax({
+            type: 'post',
+            cache: false,
+            traditional: true,
+            url: '../Tools/albumSystem.ashx?State=delete',
+            dataType: 'html',
+            data: { aSN: albumSN },
+            success: function (data) { //成功時
+                alert('相簿刪除成功');
+                location.reload();
+            },
+            error: function () {  //失敗時
+                alert("相簿刪除失敗");
+            }
+        });        
+    }
+</script>

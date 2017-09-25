@@ -1,0 +1,56 @@
+﻿@model IEnumerable<RioManager.Models.Rio_Album>
+@{
+    ViewBag.Title = "RioAlbumContent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var aSN = "0";
+    if (Request.QueryString.Get("as") != null)
+    {
+        aSN = Request.QueryString.Get("as").ToString();
+    }
+    var JoinPic = ViewBag.getJoinPic;
+    var VwAlbum = ViewBag.VwAlbum;
+}
+
+
+<div class="container">
+    <div class="col-md-6">
+        <h2>@VwAlbum.AlbumName</h2>
+    </div>
+    <div class="col-md-6 text-right" style="line-height:70px;">
+        <a class="btn btn-default" href="RioAlbumView?m=V">相簿列表</a>
+        <a class="btn btn-default various fancybox.iframe" rel="" href="CreateAlbum?s=1&as=@aSN">編輯相簿</a>
+    </div>
+</div>
+<div class="form-group">
+    @{        
+        if (JoinPic != null)
+        {
+            foreach (var item in JoinPic)
+            {
+                <div class="col-md-3">
+                    <a class="thumbnail fancybox" rel="ligthbox" href="@item.PicPath/@item.PicName" title="@item.PicName">
+                        <img style="height:165px;" src="@item.PicPath/Scaling/@item.PicName" alt="@item.PicName" />
+                    </a>
+                </div>
+            }
+        }
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".various").fancybox({
+            maxWidth: 1920,
+            maxHeight: 1024,
+            fitToView: false,
+            width: '85%',
+            height: '85%',
+            autoSize: false,
+            closeClick: false,
+            openEffect: 'none',
+            closeEffect: 'none',
+            afterClose: function () { window.location.reload(); }
+        });
+
+    })
+</script>

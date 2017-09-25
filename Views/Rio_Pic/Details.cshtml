@@ -1,0 +1,99 @@
+﻿@model RioManager.Models.Rio_Pic
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Rio_Pic</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PicName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PicName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PicContent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PicContent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HitCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HitCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PicPath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PicPath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifyID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifyID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifyDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifyDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsEnable)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsEnable)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsDelete)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsDelete)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.SN }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

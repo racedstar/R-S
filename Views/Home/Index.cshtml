@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    var ID = "";
+    if (Context.Session["UserID"] != null)
+    {
+        ID = Context.Session["UserID"].ToString();
+    }
+}
+<div class="jumbotron">
+    <h1>RioStudioManager</h1>
+    <p class="lead">This Website is a Rio Test works</p>    
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>相簿管理</h2>
+        <p>
+            新增、修改、編輯相簿順序
+        </p>
+        <p><a class="btn btn-default" href="../Rio_Album/RioAlbumView">Go to &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>圖片管理</h2>
+        <p>上傳圖片、刪除圖片、重製縮圖</p>
+        <p><a class="btn btn-default" href="../Rio_Pic/RioPicView">Go to &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>文件管理</h2>
+        <p>上傳文件</p>
+        <p><a class="btn btn-default" href="../Rio_Doc/RioDocView?m=V">Go to &raquo;</a></p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <h2>文章管理</h2>
+        <p>BLOG文章管理(未實裝)</p>
+        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Go to &raquo;</a></p>
+    </div>
+    @{
+        if(ID == "Rio")
+        {
+            <div class="col-md-4">        
+                <h2>帳號管理</h2>
+                <p>管理所有帳號</p>
+                <p><a class="btn btn-default" href="../Rio_Account/Index">Go to &raquo;</a></p>
+            </div>
+            <div class="col-md-4">
+                <h2>文字編碼</h2>
+                <p>如題</p>
+                <p><a class="btn btn-default" href="../Tools/ConvertText">Go to &raquo;</a></p>
+            </div>
+        }
+    }
+</div>

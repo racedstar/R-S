@@ -1,0 +1,27 @@
+﻿@model IEnumerable<RioManager.Controllers.ToolsController>
+@{
+    ViewBag.Title = "多檔上傳";
+    Layout = null;
+    string UploadType = @ViewBag.UploadType;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>多檔上傳</title>
+    @Scripts.Render("~/bundles/jquery")
+    @Styles.Render("~/Content/css")
+    <script src="~/Scripts/RioUpload.js"></script>
+</head>
+<body>
+    <div>
+        <div id="UploadArea" ondrop="Drop(event)" ondragover="Allowdrag(event)">
+        </div>
+        <div>
+            上傳檔案限制副檔名為：@UploadType
+            @Html.Hidden("hidUploadType", @UploadType)
+        </div>
+    </div>
+</body>
+</html>

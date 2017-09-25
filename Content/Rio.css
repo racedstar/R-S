@@ -1,0 +1,163 @@
+﻿/*上傳檔案介面*/
+#UploadArea {
+    width: 100%;
+    min-height: 85vh;
+    padding: 10px;
+    border: 1px #ccc dashed;
+    float: left;
+    margin-right: 10px;
+}
+#UploadArea img {
+    max-height: 200px;
+    max-width: 200px;
+    margin: 10px;
+}
+.uploadDocDiv {
+    display: inline-block;
+    width: 150px;
+    margin:10px;
+}
+
+.uploadDocDiv img {
+    width: 100%;
+    display: block;
+    margin:0px;
+}
+.uploadDocDiv p {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.parent {
+    display: table;
+    table-layout: fixed;
+}
+
+.child {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+/*相簿檢視*/
+.albumDiv {    
+    display:block;
+    height: 165px;
+    margin-bottom:40px;
+    padding-bottom:20px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+.albumDiv a{
+    display: block;
+    height: 165px;
+    padding-bottom: 20px;
+}
+.albumDiv a p {
+    position: absolute;
+    bottom: -35px;
+    color: darkred;
+    width: 100%;
+}
+/*建立相簿*/
+.createAlbumBody {
+    background: rgba(169, 169, 169, 0.18);
+}
+.createAlbumDiv {
+    height: 100px;
+    margin-bottom:5px;
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+.frontCover {
+    width: 80px;
+    height: 80px;
+    border: dashed 2px;
+    overflow: hidden;
+}
+.frontCover div {
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center;
+}
+.frontCover img{
+    width:70px;
+    height:70px;
+    margin:3px;
+}
+.createAlbumBottom{
+    padding-top:20px;
+}
+
+#NotJoinedPic {
+    border: dotted 2px;
+    min-height: 75vh;
+}
+#JoinedPic {
+    border: dotted 2px;
+    border-left:inherit;
+    min-height: 75vh;
+}
+.Active {
+    background: rgba(255, 0, 0, 0.16);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+#txtTitle{
+    display: inline-block;
+    width: 50%;
+    margin-top: 10px;
+}
+/*文件檢視*/
+.docViewDiv {
+    height: 160px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+    margin-bottom: 35px;
+}
+.docViewDiv a {
+    display: block;
+    height: 160px;
+    padding-bottom:20px;
+}
+.docViewDiv .docViewA p {
+    display: block;
+    position: absolute;
+    left: 15px;
+    bottom: -25px;
+    width: 90%;
+}
+.docViewDiv p {
+    position: absolute;
+    left: 15px;
+    bottom: -25px;
+    width: 90%;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0px;
+}
+/*圖片系統*/
+.picEditDiv {
+    margin-bottom: 10px;
+    height: 165px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+.picViewDiv {
+    margin-bottom: 10px;
+    height: 165px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}

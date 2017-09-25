@@ -3,6 +3,9 @@
 *.dll
 *.bak
 *.sln
+*.config
+*.csproj
+*.user
 packages/
 
 /Upload/

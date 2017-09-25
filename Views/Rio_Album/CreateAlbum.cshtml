@@ -1,0 +1,85 @@
+﻿
+@{
+    Layout = null;
+    int AlbumSN = 0;
+    var VwAlbumName = string.Empty;
+    var VwAlbumEnable = true;
+    if (@Request.QueryString["as"] != null) {
+        int.TryParse(@Request.QueryString["as"].ToString().ToString(),out AlbumSN);
+    }
+    var createBtn = "inline";
+    var updateBtn = "none";
+    if(AlbumSN != 0) {
+        createBtn = "none";
+        updateBtn = "inline";
+        VwAlbumName = @ViewBag.VwAlbum.AlbumName;
+        VwAlbumEnable = ViewBag.VwAlbum.IsEnable;
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CreateAlbum</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/fancybox")
+    @Scripts.Render("~/bundles/createAlbum")
+</head>
+<body class="">
+    <div class="body-content"> 
+        <div class="container">
+            <div class="col-md-6">
+                <div id="frontCover" class="frontCover" ondrop="cloneDrop(event)" ondragover="allowDrop(event)">
+                    @if (AlbumSN != 0)
+                    {
+                        var forntCoverID = ViewBag.VwAlbum.FrontCoverSN + "==fronCover";
+                        var path = ViewBag.VwAlbum.PicPath;
+                        var PicName = ViewBag.VwAlbum.PicName;
+                        <img id="@forntCoverID" src="@path@PicName" />
+                    }
+                </div>
+                相簿名稱：<input type="text" id="txtTitle" value="@VwAlbumName"  />
+                啟用：<input type="checkbox" id="chkEnable" checked="@VwAlbumEnable" />
+            </div>
+            <div class="col-md-6 text-right">
+                <input id="createAlbumBtn" class="btn btn-default" type="button" value="建立相簿" onclick="SaveData(0)" style="display:@createBtn;"  />
+                <input id="updateAlbumBtn" class="btn btn-default" type="button" value="修改相簿" onclick="SaveData(1)" style="display:@updateBtn;"/>
+            </div>
+        </div>
+        <div class="col-md-12 createAlbumBottom">
+            <div  id="NotJoinedPic" class="col-md-6" ondrop="popDrop(event)" ondragover="allowDrop(event)">
+                @{
+                    var notJoinData = @ViewBag.getNotJoinPic;
+                }                
+                @if(notJoinData != null)
+                {
+                    foreach (var item in notJoinData)
+                    {
+                    <div id="@item.SN" class="col-md-3 text-center createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)"  onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)">
+                        @*<img id="@item.SN" style="height:100px; margin:3px;position:relative;"  src="@item.PicPath/Scaling/@item.PicName" alt="@item.PicName" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)"  onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)"  />*@
+                    </div>
+                    }
+                }
+            </div>
+            <div id="JoinedPic" class="col-md-6" ondrop="addPhoto(event)" ondragover="allowDrop(event)">
+                @{ 
+                    var joinData = ViewBag.getJoinPic;
+                }
+                @if(joinData != null)
+                {
+                    foreach (var item in joinData)
+                    {
+                        <div id="@item.PicSN" class="col-md-3 text-center createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)" onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)">
+                            @*<img id="@item.PicSN" style="height:100px; margin:3px;position:relative;" src="@item.PicPath/Scaling/@item.PicName" alt="@item.PicName" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)" onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)" />*@
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>
