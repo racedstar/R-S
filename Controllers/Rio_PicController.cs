@@ -145,6 +145,6 @@ namespace RioManager.Controllers
 
             return RedirectToAction("RioPicView", "Rio_Pic", new {m="E"});
         }
-        
+       
     }
 }

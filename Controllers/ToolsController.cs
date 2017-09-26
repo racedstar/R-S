@@ -44,16 +44,15 @@ namespace RioManager.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public ActionResult ConvertText(string input,string coding)
-        {
+        public ActionResult ConvertText(string input, string coding)
+        {       
             if (input != null)
             {
                 if (!input.Equals(string.Empty))
                 {
-                    if(coding == "Encrypt")
-                       ViewBag.output = App_Code.Coding.Encrypt(input);
-                    else if(coding == "Decrypt")
+                    if (coding == "Encrypt")
+                        ViewBag.output = App_Code.Coding.Encrypt(input);
+                    else if (coding == "Decrypt")
                         ViewBag.output = App_Code.Coding.Decrypt(input);
                 }
             }

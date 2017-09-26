@@ -21,7 +21,7 @@ namespace RioManager.Views.Tools
                 switch (HttpContext.Current.Request.QueryString.Get("t").ToString())
                 {
                     case "img":
-                        string[] picSN = HttpContext.Current.Request.Form["picSN"].ToString().Split(',');
+                        string[] picSN = HttpContext.Current.Request.Form["SN"].ToString().Split(',');
                         deletePic(picSN);
                         break;
                     case "doc":

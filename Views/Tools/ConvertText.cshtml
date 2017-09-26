@@ -3,20 +3,20 @@
     ViewBag.Title = "ConvertText";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var ConvertText = "";
-    if (ViewBag.ConvertText != null)
+    if (ViewBag.output != null)
     {
-        ConvertText = ViewBag.ConvertText;
+        ConvertText = ViewBag.output;
     }
 }
 
 <h2>ConvertText</h2>
 @using (Html.BeginForm())
 {
-<div class="container">
-        輸入：@Html.TextBox("input", null, htmlAttributes: new { @class = "form-control" })
-        輸出：@Html.TextBox("output", null, htmlAttributes: new { @class = "form-control" })
-        加密：@Html.RadioButton("coding", "Encrypt",true )
-        解密：@Html.RadioButton("coding", "Decrypt", false)
-        <input type="submit" class="btn btn-default" id="btnEncrypt" value="送出" />        
-    </div>
+        <div class="container">
+            輸入：@Html.TextBox("input", null, htmlAttributes: new { @class = "form-control" })
+            輸出：@Html.TextBox("output", null, htmlAttributes: new { @class = "form-control" })
+            @Html.RadioButton("coding", "Encrypt", true)加密<br/>
+            @Html.RadioButton("coding", "Decrypt", false)解密<br/>
+            <input type="submit" class="btn btn-default" id="btnEncrypt" value="送出" />
+        </div>
 }

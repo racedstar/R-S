@@ -19,9 +19,9 @@
         @{
             if (!isView)
             {
-                <input class="btn btn-default" type="button" id="imgReScaling" value="多檔下載" onclick="location.href='@Url.Action("ReScaling", "Rio_Pic")'" />
+                <input class="btn btn-default" type="button" id="imgReScaling" value="多檔下載" onclick="zipPic('img')" />
                 <input class="btn btn-default" type="button" id="imgReScaling" value="重置縮圖" onclick="location.href='@Url.Action("ReScaling", "Rio_Pic")'" />
-                <input class="btn btn-default" type="button" id="imgReScaling" value="刪除圖片" onclick="getSelectPic();" />
+                <input class="btn btn-default" type="button" id="imgReScaling" value="刪除圖片" onclick="deletePic();" />
                 <a class="btn btn-default" href="RioPicView?m=V">檢視模式</a>
             }
             else
@@ -104,30 +104,59 @@
 
         }
 
-        function getSelectPic()
+        function getSelectFile()
         {
             var selectCount = $(".Active").length;
             var SNArray = [];
             for (var i = 0; i < selectCount; i++) {
                 SNArray.push($(".Active")[i].id);
             }
-            deletePic(SNArray);//呼叫刪除用function
+            return SNArray;//呼叫刪除用function
         }
 
-        function deletePic(SNArray) {
+        function deletePic() {
+
+            var SNArray = getSelectFile();            
+
             $.ajax({
                 type: 'post',
                 cache: false,
                 traditional: true,
                 url: '../Tools/deleteFile.ashx?t=img',
                 dataType: 'html',
-                data: { picSN: SNArray },
+                data: { SN: SNArray },
                 success: function (data) { //成功時
-                    alert('圖片刪除成功');
+                    alert('檔案刪除成功');
                     location.reload();
                 },
                 error: function () {  //失敗時
-                    alert("圖片刪除失敗");
+                    alert("檔案刪除失敗");
+                }
+            });
+        }
+
+        function zipPic(type) {
+
+            var SNArray = getSelectFile();
+
+            if (SNArray.length == 0)
+            {
+                alert("請點選檔案");
+                return;
+            }
+
+            $.ajax({
+                type: 'post',
+                cache: false,
+                traditional: true,
+                url: '../Tools/Addzip.ashx?t=' + type,
+                dataType: 'html',
+                data: { picSN: SNArray },
+                success: function (data) { //成功時                                        
+                    location.href = data;
+                },
+                error: function () {  //失敗時
+                    alert("壓縮失敗");
                 }
             });
         }
