@@ -171,5 +171,28 @@ namespace RioManager.Controllers
             }
             return View(db.Rio_Album.ToList());
         }        
+
+        public ActionResult ZipAlbum()
+        {
+            if (Request.QueryString.Get("SN") != null)
+            {
+                int SN = 0;
+                int.TryParse(Request.QueryString.Get("SN").ToString(), out SN);
+                string ziPath = Server.MapPath("~/Upload//zip//Album");
+                string zipName = string.Empty;
+                List<Vw_AlbumJoinPic> Album = new RioManager.Models.AlbumModel().getUpdateJoinPic(SN);
+                List<string> picName  = new List<string>();
+
+                foreach (var item in Album)
+                {
+                    picName.Add(Server.MapPath(item.PicPath) + item.PicName);
+                }
+
+                zipName = App_Code.Zip.AddZip(picName, ziPath);
+
+                return File("/Upload/zip/Album/" + zipName , "zip" ,Album[0].AlbumName + ".zip");
+            }
+            return Redirect("RioAlbumView");
+        }
     }
 }

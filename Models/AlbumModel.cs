@@ -25,6 +25,7 @@ namespace RioManager.Models
             return data;
         }
 
+        //編輯相簿未與相簿關聯的圖片
         public List<Rio_Pic> getUpdateNotJoinPic(int aSN)
         {
             var data = (from o in db.Rio_Pic
@@ -34,8 +35,9 @@ namespace RioManager.Models
                                 && o.IsDelete == false
                         select o).ToList();
             return data;
-        } //編輯相簿未與相簿關聯的圖片
+        }
 
+        //編輯相簿已與相簿關聯的圖片
         public List<Vw_AlbumJoinPic> getUpdateJoinPic(int aSN)
         {
             var data = (from o in db.Vw_AlbumJoinPic
@@ -43,14 +45,16 @@ namespace RioManager.Models
                         select o).ToList();
 
             return data;
-        } //編輯相簿已與相簿關聯的圖片
+        }
 
+        //寫入圖片與相簿關聯
         public void joinAlbum(Rio_AlbumJoinPic joined)
         {
             db.Rio_AlbumJoinPic.Add(joined);
             db.SaveChanges();
-        } //寫入圖片與相簿關聯
+        }
 
+        //刪除圖片與相簿關聯
         public void deleteJoinAlbum(int AlbumSN)
         {
             var data = (from o in db.Rio_AlbumJoinPic
@@ -61,6 +65,6 @@ namespace RioManager.Models
                 db.Rio_AlbumJoinPic.Remove(item);
             }
             db.SaveChanges();
-        } //刪除圖片與相簿關聯
+        } 
     }
 }

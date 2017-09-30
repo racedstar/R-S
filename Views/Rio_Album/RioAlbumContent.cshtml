@@ -18,6 +18,8 @@
     </div>
     <div class="col-md-6 text-right" style="line-height:70px;">
         <a class="btn btn-default" href="RioAlbumView?m=V">相簿列表</a>
+        @*<input id="btnZip" class="btn btn-default" value="相簿下載" onclick="location.href=''")/>*@ 
+        <a class="btn btn-default" href="@Url.Action("ZipAlbum","Rio_Album",new {SN= @aSN.ToString() })">相簿下載</a>
         <a class="btn btn-default various fancybox.iframe" rel="" href="CreateAlbum?s=1&as=@aSN">編輯相簿</a>
     </div>
 </div>

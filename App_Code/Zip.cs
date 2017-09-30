@@ -15,7 +15,7 @@ namespace RioManager.App_Code
         /// </summary>
         /// <param name="zipFilePathName"></param>被壓縮檔名(字串陣列)        
         /// <param name="savePath"></param>壓縮檔存檔目錄
-        public static string AddZip(string[] zipFileNamePath, string savePath)
+        public static string AddZip(List<string> zipFileNamePath, string savePath)
         {            
             string zipName = Guid.NewGuid().ToString("N") + ".zip";
             string zipPath = savePath + "\\" + zipName;
@@ -25,11 +25,11 @@ namespace RioManager.App_Code
 
             try
             {
-                using (ZipFile zip = new ZipFile(zipName))
+                using (ZipFile zip = new ZipFile(zipName, System.Text.Encoding.Default))//(壓縮檔名稱,編碼(若是檔案為中文沒有使用System.Text.Encoding.Default會無法壓縮中文檔名的檔案))
                 {
-                    foreach(var item in zipFileNamePath)
+                    foreach (var item in zipFileNamePath)
                     {
-                        zip.AddFile(item, "");
+                        zip.AddFile(item, "");//AddFile(檔案名稱,壓縮檔內的儲存路徑)
                     }
                     zip.Save(zipPath);
                 }
@@ -40,15 +40,6 @@ namespace RioManager.App_Code
             }
 
             return zipName;
-        }
-
-        public static string AddAlbumZip(string dirPath, string fileName, string savePath)
-        {
-            string zipName = string.Empty;
-
-
-
-            return string.Empty;
         }
     }
 }

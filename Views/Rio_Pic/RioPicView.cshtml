@@ -19,7 +19,7 @@
         @{
             if (!isView)
             {
-                <input class="btn btn-default" type="button" id="imgReScaling" value="多檔下載" onclick="zipPic('img')" />
+                <input class="btn btn-default" type="button" id="imgReScaling" value="多檔下載" onclick="zipFile('img')" />
                 <input class="btn btn-default" type="button" id="imgReScaling" value="重置縮圖" onclick="location.href='@Url.Action("ReScaling", "Rio_Pic")'" />
                 <input class="btn btn-default" type="button" id="imgReScaling" value="刪除圖片" onclick="deletePic();" />
                 <a class="btn btn-default" href="RioPicView?m=V">檢視模式</a>
@@ -135,7 +135,7 @@
             });
         }
 
-        function zipPic(type) {
+        function zipFile(type) {
 
             var SNArray = getSelectFile();
 
@@ -151,7 +151,7 @@
                 traditional: true,
                 url: '../Tools/Addzip.ashx?t=' + type,
                 dataType: 'html',
-                data: { picSN: SNArray },
+                data: { SN: SNArray },
                 success: function (data) { //成功時                                        
                     location.href = data;
                 },

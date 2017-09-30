@@ -25,12 +25,12 @@
         @{
             if (isView)
             {
-                <a id="btnEdit" class="btn btn-default" href="RioDocView?m=E">編輯模式</a>                
+                <a id="btnEdit" class="btn btn-default" href="RioDocView?m=E">編輯模式</a>
             }
             else
             {
-                <input id="btnDelete" type="button" value="刪除檔案" class="btn btn-default"  onclick="getSelect()" />
-                <a id="btnZip" class="btn btn-default" href="">多檔下載</a>
+                <input class="btn btn-default" type="button" id="imgReScaling" value="多檔下載" onclick="zipFile('doc')" />
+                <input id="btnDelete" type="button" value="刪除檔案" class="btn btn-default"  onclick="deleteFile('doc')" />                
                 <a id="btnView" class="btn btn-default" href="RioDocView?m=V">檢視模式</a>
             }
         }
@@ -139,7 +139,7 @@
 
     }
 
-    function getSelect()
+    function getSelectFile()
     {
         var selectCount = $(".Active").length;
         var SNArray = [];
@@ -147,10 +147,12 @@
         {
             SNArray.push($(".Active")[i].id);
         }
-        deleteFile(SNArray);
+        return SNArray;
     }
 
-    function deleteFile(SNArray) {
+    function deleteFile(type) {
+        var SNArray = getSelectFile();
+
         $.ajax({
             type: 'post',
             cache: false,
@@ -165,6 +167,31 @@
             },
             error: function () {  //失敗時
                 alert("文件刪除失敗");
+            }
+        });
+    }
+
+    function zipFile(type) {
+
+        var SNArray = getSelectFile();
+
+        if (SNArray.length == 0) {
+            alert("請點選檔案");
+            return;
+        }
+
+        $.ajax({
+            type: 'post',
+            cache: false,
+            traditional: true,
+            url: '../Tools/Addzip.ashx?t=' + type,
+            dataType: 'html',
+            data: { SN: SNArray },
+            success: function (data) { //成功時                                        
+                location.href = data;
+            },
+            error: function () {  //失敗時
+                alert("壓縮失敗");
             }
         });
     }
