@@ -1,4 +1,4 @@
-﻿@model RioManager.Models.Rio_Account
+﻿@model RioManager.Models.Vw_Account
 
 @{
     ViewBag.Title = "Details";
@@ -19,14 +19,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
 
@@ -43,11 +35,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PicSN)
+            Cover
         </dt>
-
+            
         <dd>
-            @Html.DisplayFor(model => model.PicSN)
+            <img src="@Model.PicPath/Scaling/@Model.PicName" />
         </dd>
 
         <dt>
@@ -56,14 +48,6 @@
 
         <dd>
             @Html.DisplayFor(model => model.CreateID)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreateName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreateName)
         </dd>
 
         <dt>
@@ -83,14 +67,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ModifyName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ModifyName)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.ModifyDate)
         </dt>
 
@@ -104,14 +80,6 @@
 
         <dd>
             @Html.DisplayFor(model => model.IsEnable)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.IsDelete)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsDelete)
         </dd>
 
     </dl>

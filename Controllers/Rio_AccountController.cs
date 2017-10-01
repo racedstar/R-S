@@ -18,7 +18,8 @@ namespace RioManager.Controllers
         // GET: Rio_Account
         public ActionResult Index()
         {
-            return View(db.Rio_Account.ToList());
+            var data = db.Rio_Account.Where(o => o.IsDelete == false).ToList();
+            return View(data);
         }
 
         // GET: Rio_Account/Details/5
@@ -28,7 +29,9 @@ namespace RioManager.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Rio_Account rio_Account = db.Rio_Account.Find(id);
+            int SN = 0;
+            int.TryParse(id.ToString(), out SN);
+            Vw_Account rio_Account = new AccountModel().getAccount(SN);
             if (rio_Account == null)
             {
                 return HttpNotFound();
@@ -43,40 +46,38 @@ namespace RioManager.Controllers
         }
 
         // POST: Rio_Account/Create
-        // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
-        // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SN,ID,Password,Name,Account_Content,IsEnable")] Rio_Account rio_Account)
+        //[ValidateAntiForgeryToken]
+        public ActionResult Create(string ID,string Password, string Name,string AccountContent, bool IsEnable)
         {
-            if (ModelState.IsValid)
+            Rio_Account rio_Account = new Rio_Account();
+            string createID = string.Empty;
+            if (HttpContext.Session["UserID"] != null)
             {
-                string ID = string.Empty;
-                if (HttpContext.Session["ID"] != null)
-                {
-                    ID = HttpContext.Session["ID"].ToString();
-                }
-                DateTime dt = DateTime.Now;
-
-                rio_Account.Password = App_Code.Coding.Encrypt(rio_Account.Password);
-                rio_Account.PicSN = 0;
-
-                rio_Account.CreateID = ID;
-                rio_Account.CreateName = ID;
-                rio_Account.ModifyID = ID;
-                rio_Account.ModifyName = ID;
-                rio_Account.CreateDate = dt;
-                rio_Account.ModifyDate = dt;
-
-                rio_Account.IsDelete = false;
-                
-
-                db.Rio_Account.Add(rio_Account);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                createID = HttpContext.Session["UserID"].ToString();
             }
+            DateTime dt = DateTime.Now;
 
-            return View(rio_Account);
+            rio_Account.ID = ID;
+            rio_Account.Name = Name;
+            rio_Account.Password = App_Code.Coding.Encrypt(Password);
+            rio_Account.AccountContent = AccountContent;
+            rio_Account.Email = string.Empty;
+            rio_Account.PicSN = 0;
+
+            rio_Account.CreateID = createID;
+            rio_Account.CreateName = createID;
+            rio_Account.ModifyID = createID;
+            rio_Account.ModifyName = createID;
+            rio_Account.CreateDate = dt;
+            rio_Account.ModifyDate = dt;
+
+            rio_Account.IsEnable = IsEnable;
+            rio_Account.IsDelete = false;
+
+            new AccountModel().Insert(rio_Account);
+
+            return RedirectToAction("Index");
         }
 
         // GET: Rio_Account/Edit/5
@@ -87,6 +88,7 @@ namespace RioManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Rio_Account rio_Account = db.Rio_Account.Find(id);
+            rio_Account.Password = App_Code.Coding.Decrypt(rio_Account.Password);
             if (rio_Account == null)
             {
                 return HttpNotFound();
@@ -95,19 +97,36 @@ namespace RioManager.Controllers
         }
 
         // POST: Rio_Account/Edit/5
-        // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
-        // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "SN,ID,Password,Name,Account_Content,PicSN,CreateID,CreateDate,ModifyID,ModifyDate,IsEnable,IsDelete")] Rio_Account rio_Account)
+        public ActionResult Edit(int SN,string Name,string Password, string AccountContent,int PicSN,bool IsEnable)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(rio_Account).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                Rio_Account rio_Account = db.Rio_Account.Find(SN);
+                string modifyID = string.Empty;                
+                DateTime dt = DateTime.Now;
+
+                if (HttpContext.Session["UserID"] != null)
+                {
+                    modifyID = HttpContext.Session["UserID"].ToString();
+                }
+
+                rio_Account.Name = Name;
+                rio_Account.Password = App_Code.Coding.Encrypt(Password);
+                rio_Account.AccountContent = AccountContent;
+                rio_Account.PicSN = PicSN;
+
+                rio_Account.ModifyID = modifyID;
+                rio_Account.ModifyName = modifyID;
+                rio_Account.ModifyDate = dt;
+
+                rio_Account.IsEnable = IsEnable;
+
+                new AccountModel().Update(rio_Account);
+
             }
-            return View(rio_Account);
+            return RedirectToAction("Index");
         }
 
         // GET: Rio_Account/Delete/5
@@ -131,8 +150,9 @@ namespace RioManager.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Rio_Account rio_Account = db.Rio_Account.Find(id);
-            db.Rio_Account.Remove(rio_Account);
-            db.SaveChanges();
+            //db.Rio_Account.Remove(rio_Account);
+            rio_Account.IsDelete = true;
+            new AccountModel().Update(rio_Account);
             return RedirectToAction("Index");
         }
 

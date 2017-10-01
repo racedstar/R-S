@@ -1,4 +1,17 @@
-﻿/*上傳檔案介面*/
+﻿/*首頁封面*/
+.jumbotron {
+    background-image: url(/Upload/Rio/img//63134826_p0.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.jumbotron h1 {    
+    color: #fff3de;
+}
+.jumbotron p {
+    color: #fff3de;
+}
+
+/*上傳檔案介面*/
 #UploadArea {
     width: 100%;
     min-height: 85vh;
