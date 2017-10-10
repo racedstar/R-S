@@ -35,18 +35,20 @@ function imgClick(ev) {
     }
 
     //Shift連續選取功能
-    if (ev.shiftKey) {
-        for (var i = 0; i < shiftRange; i++) {
-            if (isShiftSelect === true) {
-                if ($("#" + shiftRangeparentID + " .col-md-3.text-center.createAlbumDiv")[i].className.indexOf("Active") != -1) {
-                    isShiftSelect = false;
-                }
-                $("#" + shiftRangeparentID + " .col-md-3.text-center.createAlbumDiv")[i].className = initialClassName +" Active";
-                
-            }
-            else if ($("#" + shiftRangeparentID + " .col-md-3.text-center.createAlbumDiv")[i].className.indexOf("Active") != -1) {
-                isShiftSelect = true;
+    if ($('.Active').length > 1) {
+        if (ev.shiftKey) {
+            for (var i = 0; i < shiftRange; i++) {
+                if (isShiftSelect === true) {
+                    if ($("#" + shiftRangeparentID + " .col-md-3.text-center.createAlbumDiv")[i].className.indexOf("Active") != -1) {
+                        isShiftSelect = false;
+                    }
+                    $("#" + shiftRangeparentID + " .col-md-3.text-center.createAlbumDiv")[i].className = initialClassName + " Active";
 
+                }
+                else if ($("#" + shiftRangeparentID + " .col-md-3.text-center.createAlbumDiv")[i].className.indexOf("Active") != -1) {
+                    isShiftSelect = true;
+
+                }
             }
         }
     }

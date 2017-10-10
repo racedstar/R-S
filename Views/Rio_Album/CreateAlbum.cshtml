@@ -24,9 +24,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>CreateAlbum</title>
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/fancybox")
     @Scripts.Render("~/bundles/createAlbum")
 </head>
 <body class="">
@@ -59,9 +57,7 @@
                 {
                     foreach (var item in notJoinData)
                     {
-                    <div id="@item.SN" class="col-md-3 text-center createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)"  onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)">
-                        @*<img id="@item.SN" style="height:100px; margin:3px;position:relative;"  src="@item.PicPath/Scaling/@item.PicName" alt="@item.PicName" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)"  onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)"  />*@
-                    </div>
+                    <div id="@item.SN" class="col-md-3 text-center createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)"  onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)"></div>
                     }
                 }
             </div>
@@ -73,9 +69,7 @@
                 {
                     foreach (var item in joinData)
                     {
-                        <div id="@item.PicSN" class="col-md-3 text-center createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)" onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)">
-                            @*<img id="@item.PicSN" style="height:100px; margin:3px;position:relative;" src="@item.PicPath/Scaling/@item.PicName" alt="@item.PicName" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)" onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)" />*@
-                        </div>
+                        <div id="@item.PicSN" class="col-md-3 text-center createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)" onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)"></div>
                     }
                 }
             </div>

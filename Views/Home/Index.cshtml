@@ -17,17 +17,17 @@
         <p>
             新增、修改、編輯相簿順序
         </p>
-        <p><a class="btn btn-default" href="../Rio_Album/RioAlbumView">Go to &raquo;</a></p>
+        <p><a class="btn btn-default" href="@Url.Action("RioAlbumView","Rio_Album")">Go to &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <h2>圖片管理</h2>
         <p>上傳圖片、刪除圖片、重製縮圖</p>
-        <p><a class="btn btn-default" href="../Rio_Pic/RioPicView">Go to &raquo;</a></p>
+        <p><a class="btn btn-default" href="@Url.Action("RioPicView","Rio_Pic", new { m = "V" })">Go to &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <h2>文件管理</h2>
         <p>上傳文件</p>
-        <p><a class="btn btn-default" href="../Rio_Doc/RioDocView?m=V">Go to &raquo;</a></p>
+        <p><a class="btn btn-default" href="@Url.Action("RioDocView","Rio_Doc",new { m="V" })">Go to &raquo;</a></p>
     </div>
 </div>
 <div class="row">
@@ -37,17 +37,17 @@
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Go to &raquo;</a></p>
     </div>
     @{
-        if(ID == "Rio")
+        if(ID == "Rio" || ID == "Kycheng")
         {
             <div class="col-md-4">        
                 <h2>帳號管理</h2>
                 <p>管理所有帳號</p>
-                <p><a class="btn btn-default" href="../Rio_Account/Index">Go to &raquo;</a></p>
+                <p><a class="btn btn-default" href="@Url.Action("Index","Rio_Account")">Go to &raquo;</a></p>
             </div>
             <div class="col-md-4">
                 <h2>文字編碼</h2>
                 <p>如題</p>
-                <p><a class="btn btn-default" href="../Tools/ConvertText">Go to &raquo;</a></p>
+                <p><a class="btn btn-default" href="@Url.Action("ConvertText","Tools")">Go to &raquo;</a></p>
             </div>
         }
     }

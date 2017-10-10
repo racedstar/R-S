@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RioManager.Models;
+using PagedList;
 
 namespace RioManager.Controllers
 {
@@ -126,9 +127,10 @@ namespace RioManager.Controllers
         }
         #endregion
 
-        public ActionResult RioDocView()
+        public ActionResult RioDocView(int? page)
         {
-            ViewBag.getAllDoc = new DocModel().getAllDoc();
+            int pageNumber = page ?? 1;
+            ViewBag.getAllDoc = new DocModel().getAllDoc().OrderBy(o =>o.SN).ToPagedList(pageNumber,24);
             return View(db.Rio_Doc.ToList());
         }       
     }

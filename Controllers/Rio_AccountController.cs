@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RioManager.Models;
+using PagedList;
 
 namespace RioManager.Controllers
 {
@@ -14,12 +15,17 @@ namespace RioManager.Controllers
     {
         private Entities db = new Entities();
 
+        private int pageSize = 5;
         #region 系統產生
         // GET: Rio_Account
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            var data = db.Rio_Account.Where(o => o.IsDelete == false).ToList();
-            return View(data);
+            var data = db.Rio_Account.Where(o => o.IsDelete == false).OrderBy(o => o.SN);
+
+            var pageNumber = page ?? 1;
+
+            var pageData = data.ToPagedList(pageNumber, pageSize);
+            return View(pageData);
         }
 
         // GET: Rio_Account/Details/5
@@ -170,7 +176,7 @@ namespace RioManager.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult Login(string ID, string Password)
         {
-            if (HttpContext.Session["UserID"] != null)
+            if (HttpContext.Session["UserID"] != null && HttpContext.Session["IsLogin"] != null)
             {
                 return RedirectToAction("../Home/Index");
             }
@@ -195,6 +201,51 @@ namespace RioManager.Controllers
             {
                 System.Web.HttpContext.Current.Response.Redirect("~/Rio_Account/Login");
             }
+        }
+
+        public ActionResult Logout()
+        {
+            Session.RemoveAll();
+            return RedirectToAction("Login");
+        }
+
+        public ActionResult RioAccountRegister()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RioAccountRegister(string ID, string Password, string Name, string AccountContent)
+        {
+            if(!ID.Equals(string.Empty) && !Password.Equals(string.Empty) && !Name.Equals(string.Empty))
+            { 
+                Rio_Account rio_Account = new Rio_Account();
+                string createID = "UserRegister";            
+                DateTime dt = DateTime.Now;
+
+                rio_Account.ID = ID;
+                rio_Account.Name = Name;
+                rio_Account.Password = App_Code.Coding.Encrypt(Password);
+                rio_Account.AccountContent = AccountContent;
+                rio_Account.Email = string.Empty;
+                rio_Account.PicSN = 0;
+
+                rio_Account.CreateID = createID;
+                rio_Account.CreateName = createID;
+                rio_Account.ModifyID = createID;
+                rio_Account.ModifyName = createID;
+                rio_Account.CreateDate = dt;
+                rio_Account.ModifyDate = dt;
+
+                rio_Account.IsEnable = true;
+                rio_Account.IsDelete = false;
+
+                new AccountModel().Insert(rio_Account);
+
+                HttpContext.Session["UserID"] = ID;
+                HttpContext.Session["IsLogin"] = "true";
+            }
+            return View();
         }
 
     }

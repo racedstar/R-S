@@ -8,7 +8,9 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/fancybox")
+    @Scripts.Render("~/bundles/fancybox")    
+    @Scripts.Render("~/bundles/infinitescroll")
+    @Scripts.Render("~/bundles/RioTools")
     @{Html.RenderAction("LoingChecked", "Rio_Account"); }
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen" />
     <script>
@@ -49,6 +51,7 @@
                     <li>@Html.ActionLink("圖片", "RioPicView", "Rio_Pic")</li>
                     <li>@Html.ActionLink("文件", "RioDocView", "Rio_Doc")</li>
                     <li>@Html.ActionLink("相簿", "RioAlbumView", "Rio_Album")</li>
+                    <li>@Html.ActionLink("登出","Logout","Rio_Account")</li>
                 </ul>
             </div>
         </div>

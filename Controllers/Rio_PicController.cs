@@ -7,12 +7,15 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RioManager.Models;
+using PagedList;
 
 namespace RioManager.Controllers
 {
     public class Rio_PicController : Controller
     {
         private Entities db = new Entities();
+
+        private int pageSize = 20;
 
         // GET: Rio_Pic
         #region 系統產生
@@ -130,11 +133,15 @@ namespace RioManager.Controllers
             }
             base.Dispose(disposing);
         }
-        public ActionResult RioPicView()
+        public ActionResult RioPicView(int? page)
         {
-            var data = new PicModel().getAllPic();
+            var data = new PicModel().getAllPic().OrderBy(o => o.SN);            
 
-            return View(data);
+            var pageNumeber = page ?? 1;
+
+            var pageData = data.ToPagedList(pageNumeber, pageSize);
+
+            return View(pageData);
         }
         #endregion
 

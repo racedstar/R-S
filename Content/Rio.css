@@ -5,7 +5,7 @@
     background-position: center;
 }
 .jumbotron h1 {    
-    color: #fff3de;
+    color: white;
 }
 .jumbotron p {
     color: #fff3de;
@@ -173,4 +173,8 @@
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
+}
+.picViewDiv a{
+    display:block;
+    height:165px;
 }

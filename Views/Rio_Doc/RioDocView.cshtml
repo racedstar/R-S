@@ -2,8 +2,8 @@
 @{
     ViewBag.Title = "RioDocView";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var getAllDoc = ViewBag.getAllDoc;
-    var mode = "";
+    PagedList.IPagedList<RioManager.Models.Rio_Doc> getAllDoc = (PagedList.IPagedList<RioManager.Models.Rio_Doc>)ViewBag.getAllDoc;
+    var mode = "V";
     var title = "DocView";
     var isView = true;
     if (Request.QueryString.Get("m") != null)
@@ -37,162 +37,58 @@
         <a id="btnUpload" class="btn btn-default various fancybox.iframe" rel="" href="~/Tools/fmUpload?t=Doc">上傳文件</a>        
     </div>
 </div>
-<div class="form-group" style="overflow:hidden;">
-    @{
-        if (@mode == "V" || @mode == "")
-        {
-            foreach (var item in getAllDoc)
+<div class="body-content">
+    <div class="form-group" style="overflow:hidden;">
+        @{
+            if (@mode == "V" || @mode == "")
             {
-                var imgSrc = "";
-                if (@item.Extension == "docx" || @item.Extension == "doc")
+                foreach (var item in getAllDoc)
                 {
-                    imgSrc = "../../Content/img/icon/doc.ico";
+                    var imgSrc = "";
+                    if (@item.Extension == "docx" || @item.Extension == "doc")
+                    {
+                        imgSrc = "../../Content/img/icon/doc.ico";
+                    }
+                    else if (@item.Extension == "xlsx" || @item.Extension == "xls")
+                    {
+                        imgSrc = "../../Content/img/icon/xls.ico";
+                    }
+                    else if (@item.Extension == "pptx" || @item.Extension == "ppt")
+                    {
+                        imgSrc = "../../Content/img/icon/ppt.ico";
+                    }
+
+                    <div class="col-md-2 docViewDiv" style="background-image:url(@imgSrc)">
+                        <a href="@item.DocPath/@item.DocName" title="@item.DocName">
+                            <p>@item.DocName</p>
+                        </a>
+                    </div>
                 }
-                else if (@item.Extension == "xlsx" || @item.Extension == "xls")
-                {
-                    imgSrc = "../../Content/img/icon/xls.ico";
-                }
-                else if (@item.Extension == "pptx" || @item.Extension == "ppt")
-                {
-                    imgSrc = "../../Content/img/icon/ppt.ico";
-                }
-                
-                <div class="col-md-2 docViewDiv" style="background-image:url(@imgSrc)">
-                    <a href="@item.DocPath/@item.DocName" title="@item.DocName" >
-                        <p>@item.DocName</p>
-                    </a>
-                </div>                
             }
-        }
-        else if (@mode == "E")
-        {
-            foreach (var item in getAllDoc)
+            else if (@mode == "E")
             {
-                var imgSrc = "";
-                if (@item.Extension == "docx" || @item.Extension == "doc")
+                foreach (var item in getAllDoc)
                 {
-                    imgSrc = "../../Content/img/icon/doc.ico";
-                }
-                else if (@item.Extension == "xlsx" || @item.Extension == "xls")
-                {
-                    imgSrc = "../../Content/img/icon/xls.ico";
-                }
-                else if (@item.Extension == "pptx" || @item.Extension == "ppt")
-                {
-                    imgSrc = "../../Content/img/icon/ppt.ico";
-                }
-                    <div id="@item.SN" class="col-md-2 docViewDiv"  style="background-image:url(@imgSrc)" onclick="selectDoc(event)">                        
+                    var imgSrc = "";
+                    if (@item.Extension == "docx" || @item.Extension == "doc")
+                    {
+                        imgSrc = "../../Content/img/icon/doc.ico";
+                    }
+                    else if (@item.Extension == "xlsx" || @item.Extension == "xls")
+                    {
+                        imgSrc = "../../Content/img/icon/xls.ico";
+                    }
+                    else if (@item.Extension == "pptx" || @item.Extension == "ppt")
+                    {
+                        imgSrc = "../../Content/img/icon/ppt.ico";
+                    }
+                    <div id="@item.SN" class="col-md-2 docViewDiv" style="background-image:url(@imgSrc)" onclick="selectDiv(event,'col-md-2 docViewDiv','.col-md-2.docViewDiv')">
                         <p class="docViewP">@item.DocName</p>
                     </div>
                 }
             }
         }
+    </div>
 </div>
-<script>
-    $(document).ready(function () {
-        $(".various").fancybox({
-            maxWidth: 1920,
-            maxHeight: 1024,
-            fitToView: false,
-            width: '85%',
-            height: '85%',
-            autoSize: false,
-            closeClick: false,
-            openEffect: 'none',
-            closeEffect: 'none',
-            afterClose: function () { window.location.reload(); }
-        });
-    })
-
-    function selectDoc(ev)
-    {        
-        var docDiv = document.getElementById(ev.target.id).className,
-            selected = document.getElementById(ev.target.id),
-            isShiftSelect = false,
-            docInitialClass = "col-md-2 docViewDiv",
-            docInitialjQueryClass = ".col-md-2.docViewDiv",
-            shiftRangeparentID = document.getElementById(ev.target.id).id,
-            shiftRange = $(docInitialjQueryClass).length;
-        
-        if (docDiv.indexOf("Active") === -1) {
-            selected.className = docInitialClass + " Active";
-        }
-        else {
-            selected.className = docInitialClass;
-            }
-
-        if (ev.shiftKey) {
-            ev.preventDefault();
-            for (var i = 0; i < shiftRange; i++) {
-                if (isShiftSelect === true) {
-                    if ($(docInitialjQueryClass)[i].className.indexOf("Active") != -1) {
-                        isShiftSelect = false;
-                    }
-                    $(docInitialjQueryClass)[i].className = docInitialClass + " Active";
-
-                }
-                else if ($(docInitialjQueryClass)[i].className.indexOf("Active") != -1) {
-                    isShiftSelect = true;
-                }
-            }
-        }
-
-    }
-
-    function getSelectFile()
-    {
-        var selectCount = $(".Active").length;
-        var SNArray = [];
-        for (var i = 0; i < selectCount; i++)
-        {
-            SNArray.push($(".Active")[i].id);
-        }
-        return SNArray;
-    }
-
-    function deleteFile(type) {
-        var SNArray = getSelectFile();
-
-        $.ajax({
-            type: 'post',
-            cache: false,
-            async: false,
-            traditional: true,
-            url: '../Tools/deleteFile.ashx?t=doc',
-            dataType: 'html',
-            data: { SN: SNArray },
-            success: function (data) { //成功時
-                alert('文件刪除成功');
-                location.reload();
-            },
-            error: function () {  //失敗時
-                alert("文件刪除失敗");
-            }
-        });
-    }
-
-    function zipFile(type) {
-
-        var SNArray = getSelectFile();
-
-        if (SNArray.length == 0) {
-            alert("請點選檔案");
-            return;
-        }
-
-        $.ajax({
-            type: 'post',
-            cache: false,
-            traditional: true,
-            url: '../Tools/Addzip.ashx?t=' + type,
-            dataType: 'html',
-            data: { SN: SNArray },
-            success: function (data) { //成功時                                        
-                location.href = data;
-            },
-            error: function () {  //失敗時
-                alert("壓縮失敗");
-            }
-        });
-    }
-</script>
+@Html.PagedListPager(getAllDoc, page => Url.Action("RioDocView", new { m = mode, page }))
+<p>End of content</p>

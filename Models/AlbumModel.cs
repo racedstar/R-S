@@ -25,6 +25,15 @@ namespace RioManager.Models
             return data;
         }
 
+        public List<Vw_Album> getVwAlbumList()
+        {
+            var data = (from o in db.Vw_Album
+                        where o.IsDelete == false
+                        select o).ToList();
+
+            return data;
+        }
+
         //編輯相簿未與相簿關聯的圖片
         public List<Rio_Pic> getUpdateNotJoinPic(int aSN)
         {
@@ -66,5 +75,7 @@ namespace RioManager.Models
             }
             db.SaveChanges();
         } 
+
+
     }
 }

@@ -1,5 +1,4 @@
-﻿@model IEnumerable<RioManager.Models.Rio_Account>
-
+﻿@model IPagedList<RioManager.Models.Rio_Account>
 @{
     ViewBag.Title = "Account";
 }
@@ -12,10 +11,10 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.ID)
+            UserID
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            UserName
         </th>
         <th>
             說明
@@ -75,3 +74,4 @@
 }
 
 </table>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))

@@ -1,20 +1,24 @@
 ﻿@model RioManager.Models.Rio_Account
 @{
     ViewBag.Title = "Login";
-    Layout = null;    
+    Layout = null;
 }
 <!DOCTYPE html>
 
 <html>
 <head>
     @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/fancybox")
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen" />
 </head>
 <body>    
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        <div class="container body-content" >
+
+        <div class="container body-content">
             <h2>Login</h2>
             <div class="form-horizontal">
                 <h4>Please sign in</h4>
@@ -37,11 +41,32 @@
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Login" class="btn btn-default" />
+                        <a class="btn btn-default various fancybox.iframe" href="/Rio_Account/RioAccountRegister">Register</a>
                     </div>
                 </div>
             </div>
         </div>
+
+
     }
+    <script>
+        $(document).ready(function () {
+            $(".various").fancybox({
+                maxWidth: 1920,
+                maxHeight: 1024,
+                fitToView: false,
+                width: '85%',
+                height: '85%',
+                autoSize: false,
+                closeClick: false,
+                openEffect: 'none',
+                closeEffect: 'none',
+                afterClose: function () { window.location.reload(); }
+            });
+        })
+    </script>
 </body>
+
 </html>
+
 

@@ -24,6 +24,7 @@ namespace RioManager
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
+                      "~/Content/infinite-scroll-docs.css",
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/Rio.css"));
@@ -32,8 +33,14 @@ namespace RioManager
                         "~/Scripts/jquery.fancybox.js",
                         "~/Scripts/jquery.fancybox.pack.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/infinitescroll").Include(
+                        "~/Scripts/infinite-scroll.pkgd.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/createAlbum").Include(
-            "~/Scripts/RioCreateAlbum.js"));
+                        "~/Scripts/RioCreateAlbum.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/RioTools").Include(
+                        "~/Scripts/RioTools.js"));
         }
     }
 }

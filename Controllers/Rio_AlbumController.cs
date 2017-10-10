@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RioManager.Models;
+using PagedList;
 
 namespace RioManager.Controllers
 {
@@ -127,28 +128,27 @@ namespace RioManager.Controllers
         }
         #endregion
 
-        public ActionResult RioAlbumView()
+        public ActionResult RioAlbumView(int? page)
         {
-            var data = (from o in db.Vw_Album
-                        where o.IsDelete == false
-                        select o).ToList();
-            ViewBag.VwAlbum = data;
-            return View(db.Rio_Album.ToList());
+
+
+            var data = new AlbumModel().getVwAlbumList().OrderBy(o => o.SN);
+
+            var pageNumber = page ?? 1;
+
+            var pageData = data.ToPagedList(pageNumber, 20);
+
+            ViewBag.VwAlbum = pageData;
+            return View(pageData);
         }
 
-        public ActionResult RioAlbumContent()
+        public ActionResult RioAlbumContent(int? SN, int? page)
         {
-            if (Request.QueryString.Get("as") != null)
-            {
-                if (Request.QueryString.Get("as") != null)
-                {
-                    int aSN = 0;
-                    int.TryParse(Request.QueryString.Get("as").ToString(), out aSN);
+            int aSN = SN ?? 0;                                                           
+            int pageNumber = page ?? 1;
 
-                    ViewBag.VwAlbum = new AlbumModel().getVwAlbum(aSN);
-                    ViewBag.getJoinPic = new AlbumModel().getUpdateJoinPic(aSN);                    
-                }
-            }
+            ViewBag.VwAlbum = new AlbumModel().getVwAlbum(aSN);
+            ViewBag.getJoinPic = new AlbumModel().getUpdateJoinPic(aSN).OrderBy(o => o.PicSN).ToPagedList(pageNumber, 20);                            
             return View(db.Rio_Album.ToList());
         }
 
