@@ -27,11 +27,11 @@ namespace RioManager
                       "~/Content/infinite-scroll-docs.css",
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
+                      "~/Content/jquery.fancybox.min.css",
                       "~/Content/Rio.css"));
-
+            
             bundles.Add(new ScriptBundle("~/bundles/fancybox").Include(
-                        "~/Scripts/jquery.fancybox.js",
-                        "~/Scripts/jquery.fancybox.pack.js"));
+                        "~/Scripts/jquery.fancybox.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/infinitescroll").Include(
                         "~/Scripts/infinite-scroll.pkgd.min.js"));

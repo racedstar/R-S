@@ -48,13 +48,13 @@
     display: table;
     table-layout: fixed;
 }
-
 .child {
     display: table-cell;
     vertical-align: middle;
     text-align: center;
 }
-/*相簿檢視*/
+
+/*相簿List頁*/
 .albumDiv {    
     display:block;
     height: 165px;
@@ -71,21 +71,34 @@
 }
 .albumDiv a p {
     position: absolute;
-    bottom: -35px;
-    color: darkred;
-    width: 100%;
+    left:25px;
+    bottom: 5px;
+    color:khaki;
+    width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0px;
+    font-family:Microsoft JhengHei;/*微軟正黑體*/
+    font-weight:bold;/*粗體*/
 }
+.albumDiv span{
+    bottom:-5px;
+}
+
 /*建立相簿*/
 .createAlbumBody {
     background: rgba(169, 169, 169, 0.18);
+    overflow:hidden;
 }
 .createAlbumDiv {
     height: 100px;
-    margin-bottom:5px;
+    margin-bottom: 5px;
     position: relative;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
+    cursor: pointer;
 }
 .frontCover {
     width: 80px;
@@ -106,15 +119,16 @@
 .createAlbumBottom{
     padding-top:20px;
 }
-
 #NotJoinedPic {
     border: dotted 2px;
-    min-height: 75vh;
+    height: 75vh;
+    overflow-y: scroll;
 }
 #JoinedPic {
     border: dotted 2px;
-    border-left:inherit;
-    min-height: 75vh;
+    border-left: inherit;
+    height: 75vh;
+    overflow-y: scroll;    
 }
 .Active {
     background: rgba(255, 0, 0, 0.16);
@@ -127,6 +141,20 @@
     width: 50%;
     margin-top: 10px;
 }
+
+/*相簿Content頁*/
+.albumContentDiv {
+    margin-bottom: 10px;
+    height: 165px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+.albumContentDiv a {
+        display: block;
+        height: 165px;
+    }
+
 /*文件檢視*/
 .docViewDiv {
     height: 160px;
@@ -159,6 +187,7 @@
     white-space: nowrap;
     margin: 0px;
 }
+
 /*圖片系統*/
 .picEditDiv {
     margin-bottom: 10px;
@@ -177,4 +206,38 @@
 .picViewDiv a{
     display:block;
     height:165px;
+}
+.NotEnable {
+    opacity:0.5;
+}
+
+/*所有使用者連結*/
+.AccoutCover {
+    height: 165px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+
+/*選擇個人照*/
+.selectCover {
+    height: 650px;
+    overflow-y: scroll;
+}
+.coverImg {
+    display: block;
+    margin-bottom: 10px;
+}
+/*個人資料設定驗籤*/
+.settingTitle {
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: large;
+    cursor: pointer;
+    border: solid 1px;
+    background-color: rgba(144, 135, 135, 0.1);
+}
+.bookMarkSelect {
+    background-color: white;
 }

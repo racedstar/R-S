@@ -8,29 +8,52 @@ $(document).ready(function () {
 })
 
 //拖曳相關
-function allowDrop(ev) {
+var allowDrop = function (ev) {
     ev.preventDefault();
 }
 //拖曳相關
-function drag(ev) {
+var drag = function (ev) {
     ev.dataTransfer.setData("Text", ev.target.id);
 }
 
+//將圖片新增到相簿
+var dragPhoto = function (sourceID, ev) {
+    var data = ev.dataTransfer.getData("Text");
+    if (sourceID != ev.target.id) {
+        ev.preventDefault();
+        if (document.getElementsByClassName("Active").length !== 0) {//一次拖拉多檔
+            multiImg(ev, ev.target.id);
+        }
+        else {
+            if (data) {
+                document.getElementById(ev.target.id).appendChild(document.getElementById(data));
+                if (ev.target.id != "NotJoinedPic" && ev.target.id != "JoinedPic") {
+                    $('#' + event.target.id).before(document.getElementById(data));
+                }
+                console.log(event.target.id);
+                if (ev.target.id === "NotJoinedPic") {
+                    checkIsFrontCover(data);//確認取消的圖片不是封面，若是封面就將封面清空
+                }
+            }
+        }
+    }
+}
+
 //多選功能
-function imgClick(ev) {
+var imgClick = function (ev) {
     var imgDivName = document.getElementById(ev.target.id).className,
         shiftRangeparentID = document.getElementById(ev.target.id).parentNode.id;
-        shiftRange = $("#" + shiftRangeparentID + " .createAlbumDiv").length,
+    shiftRange = $("#" + shiftRangeparentID + " .createAlbumDiv").length,
         isShiftSelect = false,
-        initialClassName = "col-md-3 text-center createAlbumDiv",        
+        initialClassName = "col-md-3 text-center createAlbumDiv",
         selected = document.getElementById(ev.target.id),
         allSelected = document.getElementsByClassName("col-md-3 text-center");
 
     //單選功能
-    if (imgDivName.indexOf("Active") === -1) {        
-        selected.className = initialClassName +" Active";
+    if (imgDivName.indexOf("Active") === -1) {
+        selected.className = initialClassName + " Active";
     }
-    else {        
+    else {
         selected.className = initialClassName;
     }
 
@@ -54,38 +77,8 @@ function imgClick(ev) {
     }
 }
 
-//取消圖片新增到相簿
-function popDrop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("Text");
-    if (document.getElementsByClassName("Active").length !== 0) { 
-        multiImg(ev, "NotJoinedPic");
-    }
-    else{
-        if (data) {
-            document.getElementById("NotJoinedPic").appendChild(document.getElementById(data));
-            checkIsFrontCover(data);//確認取消的圖片不是封面，若是封面就將封面清空
-        }
-        
-    }
-}
-
-//將圖片新增到相簿
-function addPhoto(ev) {
-    var data = ev.dataTransfer.getData("Text");
-    ev.preventDefault();
-    if (document.getElementsByClassName("Active").length !== 0) {//一次拖拉多檔
-        multiImg(ev, "JoinedPic");
-    }
-    else {
-        if (data) {
-            document.getElementById("JoinedPic").appendChild(document.getElementById(data));            
-        }
-    }
-}
-
 //拖曳多檔
-function multiImg(ev,divID) {
+var multiImg = function (ev, divID) {
     var Addimg = [];
     for (i = 0; i < document.getElementsByClassName("Active").length; i++) {
         Addimg[i] = document.getElementsByClassName("Active")[i].id;
@@ -93,12 +86,15 @@ function multiImg(ev,divID) {
     for (j = 0; j < Addimg.length; j++) {
         var data = Addimg[j];
         document.getElementById(divID).appendChild(document.getElementById(data));
+        if (ev.target.id != "NotJoinedPic" && ev.target.id != "JoinedPic") {
+            $('#' + event.target.id).before(document.getElementById(data));
+        }
         document.getElementById(data).className = "col-md-3 text-center createAlbumDiv";
     }
 }
 
 //封面用(封面只能單一照片，需要用複製而且是取代的)
-function cloneDrop(ev){
+var cloneDrop = function (ev){
     var getID = ev.dataTransfer.getData("Text"),        
         imgSrc = $("#" + getID).css("background-image").split('"')[1];
     ev.preventDefault();
@@ -110,7 +106,7 @@ function cloneDrop(ev){
 }
 
 //當圖片移除時，確認圖片封面 多檔不判斷((懶惰
-function checkIsFrontCover(data){
+var checkIsFrontCover = function (data){
     if (frontCoverSN === data){
         $("#frontCover").empty();
         frontCoverSN = "";
@@ -118,7 +114,7 @@ function checkIsFrontCover(data){
 }
 
 //取得Querystring  e.g. var s = QueryString("s");
-function getQueryString(name) {  
+var getQueryString = function (name) {  
     var hostUrl = window.location.search.substring(1);
     var aQueryString = hostUrl.split("&");
     for (i = 0; i < aQueryString.length; i++) {
@@ -131,7 +127,7 @@ function getQueryString(name) {
 }
 
 //將所有在addArea內的圖片SN放進陣列送到後端
-function addimgArray() {
+var addimgArray = function () {
     var imgIDArray = [],
         addContanirID = "JoinedPic";
     if ($("#" + addContanirID).length !== 0){
@@ -143,7 +139,7 @@ function addimgArray() {
 }
 
 //存檔
-function SaveData(state) {
+var SaveData = function (state) {
     var title = $("#txtTitle").val(),
         State = 'Create',
         s = "",
@@ -153,7 +149,13 @@ function SaveData(state) {
     if (frontCoverSN === "") {
         alert("請選擇封面");
         return false;
+        }
+
+    if ($("#txtTitle").val() === "") {
+        alert("相簿名稱不得空白")
+        return false;
     }
+
     imgIDArray = addimgArray();
 
     if (state === 1){//state=1為Update
@@ -184,19 +186,19 @@ function SaveData(state) {
 }
 
 //ToolTip系列
-function mouseOver(ev) {
+var mouseOver = function (ev) {
     var imgSrc = ev.target.id;
     imgSrc = $("#" + imgSrc).css("background-image").split('"')[1];    
     $("body").append("<div id='tooltip'><img src='" + imgSrc + "'/></div>");
     setToolTipCss(ev);
 }
-function mouseOut() {
+var mouseOut = function () {
     $("#tooltip").remove();
 }
-function mouseMove(ev) {
+var mouseMove = function (ev) {
     setToolTipCss(ev);
 }
-function setToolTipCss(ev) {
+var setToolTipCss = function (ev) {
     var x = 20,
         y = -100;
     if (ev.target.parentElement.id == "JoinedPic") {
@@ -208,18 +210,4 @@ function setToolTipCss(ev) {
         top: ev.pageY + y + "px",
         position: "absolute"
     }).fadeIn("slow", "swing");
-}
-
-//全選與取消選取(未實裝)
-function selectAll(divObject) {
-    var divID = "#" + divObject.id;
-    $(divID).find("li").each(function(){
-        this.className = "Active";
-    })
-}
-function selectCancel(divObject) {
-    var divID = "#" + divObject.id;
-    $(divID).find("li").each(function () {
-        this.className = "col-md-3 text-center";
-    })
 }

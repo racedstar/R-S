@@ -1,0 +1,48 @@
+﻿@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/modernizr")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/fancybox")
+@Scripts.Render("~/bundles/infinitescroll")
+@Scripts.Render("~/bundles/RioTools")
+@{
+    Layout = null;
+    var Pic = ViewBag.Pic;
+    var CoverSetting = "個人封面設定";
+    if (Request.QueryString["t"] != null)
+    {
+        if (Request.QueryString["t"].ToString() == "Index")
+        {
+            CoverSetting = "封面設定";
+        }
+    }
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SelectCover</title>
+</head>
+<body style="overflow:hidden;">
+    <div class="container">
+        <div class="col-md-6 text-left">
+            <h2>@CoverSetting</h2>
+        </div>
+        <div class="col-md-6 text-right">            
+            <input id="btnOk" style="margin-top: 10px;" data-fancybox-close class="btn btn-default" type="button" value="確定" onclick="updateCover()" />
+        </div>
+    </div>
+    <div class="body-content">
+        <div class="form-group selectCover">
+            @{                              
+                foreach (var item in Pic)
+                {
+                    <div id="@item.SN" class="col-md-3 thumbnail picEditDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName);" onclick="radioSelectDiv(event,'col-md-3  thumbnail picEditDiv')"></div>
+                }
+            }
+        </div>
+    </div>
+</body>
+</html>

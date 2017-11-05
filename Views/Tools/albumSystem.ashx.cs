@@ -45,7 +45,7 @@ namespace RioManager.Views.Tools
                     int.TryParse(HttpContext.Current.Request.QueryString.Get("as").ToString(), out AlbumSN);
                     
                     updateAlbum(AlbumSN,frontCoverSN, Title, IsEnable, userID);
-                    new AlbumModel().deleteJoinAlbum(AlbumSN);
+                    new AlbumJoinPicModel().deleteJoinAlbum(AlbumSN);
                     joinAlbum(picSN, AlbumSN);
                 }
                 #endregion
@@ -76,7 +76,7 @@ namespace RioManager.Views.Tools
             Album.ModifyName = userID;
             Album.ModifyDate = timeNow;                     
 
-            new Rio_AlbumController().Create(Album);
+            new AlbumModel().Insert(Album);
             
             return Album.SN;
         } //新增相簿
@@ -93,7 +93,7 @@ namespace RioManager.Views.Tools
             Album.ModifyName = userID;
             Album.ModifyDate = timeNow;
 
-            new Rio_AlbumController().Edit(Album);
+            new AlbumModel().Update(Album);
         }//編輯相簿
 
         private void joinAlbum(string[] picSN,int AlbumSN)
@@ -109,7 +109,7 @@ namespace RioManager.Views.Tools
                 joined.AlbumSN = AlbumSN;
                 joined.PicSN = SN;
                 joined.Sort = sort;
-                new AlbumModel().joinAlbum(joined);
+                new AlbumJoinPicModel().joinAlbum(joined);
             }
         }//寫入相簿與圖片關聯
 

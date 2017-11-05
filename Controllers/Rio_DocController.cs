@@ -130,7 +130,12 @@ namespace RioManager.Controllers
         public ActionResult RioDocView(int? page)
         {
             int pageNumber = page ?? 1;
-            ViewBag.getAllDoc = new DocModel().getAllDoc().OrderBy(o =>o.SN).ToPagedList(pageNumber,24);
+            string ID = string.Empty;
+            if(Request.QueryString.Get("vid") != null)
+            {
+                ID = Request.QueryString.Get("vid").ToString();
+            }
+            ViewBag.getAllDoc = new DocModel().getDocListByID(ID).OrderBy(o =>o.SN).ToPagedList(pageNumber,24);
             return View(db.Rio_Doc.ToList());
         }       
     }

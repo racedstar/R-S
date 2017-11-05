@@ -39,7 +39,7 @@ namespace RioManager.Views.Tools
             if (File.Exists(savePath + tempName))
             {
                 int ArrayLength = fileName.Split('.').Length;
-                tempName = fileName.Split('.')[ArrayLength - 2] + "(" + checkNameNum.ToString() + ")." + fileName.Split('.')[ArrayLength - 1];
+                tempName = fileName.Split('.')[ArrayLength - 2] + "_" + checkNameNum.ToString() + "." + fileName.Split('.')[ArrayLength - 1];
                 tempName = CheckName(tempName, fileName, savePath, checkNameNum + 1);
             }
             return tempName;
@@ -91,7 +91,7 @@ namespace RioManager.Views.Tools
 
             Pic.IsEnable = true;
             Pic.IsDelete = false;
-            new Rio_PicController().Insert(Pic);
+            new PicModel().Insert(Pic);
         }
 
         private void setDBDoc(string fileName,string upLoadType)

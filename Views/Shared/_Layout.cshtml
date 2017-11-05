@@ -12,15 +12,13 @@
     @Scripts.Render("~/bundles/infinitescroll")
     @Scripts.Render("~/bundles/RioTools")
     @{Html.RenderAction("LoingChecked", "Rio_Account"); }
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen" />
-    <script>
-        $(document).ready(function () {
-            $(".fancybox").fancybox({
-                openEffect: "none",
-                closeEffect: "none"
-            });
-        }); 
-    </script>
+    @{ 
+        var vid = string.Empty;
+        if(Session["UserID"] != null)
+        {
+            vid = Session["UserID"].ToString();
+        }
+    }
 </head>
 <body>    
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -31,26 +29,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("RioStudioMVC", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("RioStudioMVC", "Index", "Home", new { vid = @vid }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("首頁", "Index", "Home")</li>
-                    @{
-                        var ID = "";
-                        if (Context.Session["UserID"] != null)
-                        {
-                            ID = Context.Session["UserID"].ToString();
-                        }
-                        if (ID == "Rio")
-                        {
-                            <li>@Html.ActionLink("帳號", "Index", "Rio_Account")</li>
-                        }
-                    }}
-                    
-                    <li>@Html.ActionLink("圖片", "RioPicView", "Rio_Pic")</li>
-                    <li>@Html.ActionLink("文件", "RioDocView", "Rio_Doc")</li>
-                    <li>@Html.ActionLink("相簿", "RioAlbumView", "Rio_Album")</li>
+                    <li>@Html.ActionLink("首頁", "Index", "Home", new { vid = @vid })</li>                    
+                    @if (vid == "Rio")
+                    {
+                        <li>@Html.ActionLink("帳號", "Index", "Rio_Account")</li>
+                    }                                        
+                    <li>@Html.ActionLink("圖片", "RioPicView", "Rio_Pic", new { vid = @vid }, null)</li>
+                    <li>@Html.ActionLink("相簿", "RioAlbumView", "Rio_Album", new { vid = @vid }, null)</li>
+                    <li>@Html.ActionLink("文件", "RioDocView", "Rio_Doc", new { vid = @vid }, null)</li>
+                    <li>@Html.ActionLink("個人資料", "UserSetting", "Rio_Account", new { vid = @vid }, null)</li>
                     <li>@Html.ActionLink("登出","Logout","Rio_Account")</li>
                 </ul>
             </div>

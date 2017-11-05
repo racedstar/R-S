@@ -1,7 +1,10 @@
-﻿function Allowdrag(ev) { //檔案拖曳結束
+﻿//檔案拖曳結束
+var Allowdrag = function (ev) { 
     event.preventDefault();
 }
-function Drop(ev) { //檔案拖曳中
+
+//檔案拖曳中
+var Drop = function (ev) {
     event.preventDefault();
     var files = ev.dataTransfer.files;//取得檔案
     FileType = document.getElementById('hidUploadType').value,//取得可上傳附檔名
@@ -30,7 +33,9 @@ function Drop(ev) { //檔案拖曳中
         alert('上傳結束，共上傳成功' + successCount + '個檔案');
     }    
 }
-function SaveFiles(fileName, files) //存檔用
+
+//存檔用
+var SaveFiles = function (fileName, files) 
 {
     var fd = new FormData(),
         t = getQueryString("t");
@@ -58,14 +63,18 @@ function SaveFiles(fileName, files) //存檔用
         }
     });
 }
-function createImgTag(ev) { //顯示圖片縮圖用
+
+//顯示圖片縮圖用
+var createImgTag = function (ev) {
     var x = ev.target.result,//將圖片轉成base64
         FileTag = document.createElement('img');//建立img元素
+
     FileTag.src = x;//指定元素連結
     document.getElementById('UploadArea').appendChild(FileTag);
 }
 
-function createDocTag(t, fileName) { //顯示文件icon用
+//顯示文件icon用
+var createDocTag = function (t, fileName) { 
     var FileTag = document.createElement("img"),//建立img元素
         Extansion = fileName.split(".")[fileName.split('.').length - 1],        
         fileNameDiv = document.createElement("div"),
@@ -89,7 +98,7 @@ function createDocTag(t, fileName) { //顯示文件icon用
     document.getElementById("UploadArea").appendChild(fileNameDiv);
 }
 
-function getQueryString(name) {  //取得Querystring  e.g. var s = QueryString("s");
+var getQueryString = function (name) {  //取得Querystring  e.g. var s = QueryString("s");
     var hostUrl = window.location.search.substring(1);
     var aQueryString = hostUrl.split("&");
     for (var i = 0; i < aQueryString.length; i++) {

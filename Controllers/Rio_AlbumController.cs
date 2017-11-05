@@ -130,9 +130,12 @@ namespace RioManager.Controllers
 
         public ActionResult RioAlbumView(int? page)
         {
-
-
-            var data = new AlbumModel().getVwAlbumList().OrderBy(o => o.SN);
+            string ID = Session["UserID"].ToString();
+            if(Request.QueryString.Get("vid") != null)
+            {
+                ID = Request.QueryString.Get("vid").ToString();
+            }
+            var data = new AlbumModel().getUsertVwAlbumListByID(ID).OrderBy(o => o.SN);
 
             var pageNumber = page ?? 1;
 
@@ -148,16 +151,21 @@ namespace RioManager.Controllers
             int pageNumber = page ?? 1;
 
             ViewBag.VwAlbum = new AlbumModel().getVwAlbum(aSN);
-            ViewBag.getJoinPic = new AlbumModel().getUpdateJoinPic(aSN).OrderBy(o => o.PicSN).ToPagedList(pageNumber, 20);                            
+            ViewBag.getJoinPic = new AlbumJoinPicModel().getUpdateJoinPic(aSN).OrderBy(o => o.JoinSort).ToPagedList(pageNumber, 20);                            
             return View(db.Rio_Album.ToList());
         }
 
         public ActionResult CreateAlbum()
         {
             if(Request.QueryString.Get("s") != null)
-            { 
-                if(Request.QueryString.Get("s").ToString() == "0")
-                    ViewBag.getNotJoinPic = new PicModel().getAllPic();
+            {
+                string ID = string.Empty;
+                if (Session["UserID"] != null)
+                {
+                    ID = Session["UserID"].ToString();
+                }
+                if (Request.QueryString.Get("s").ToString() == "0")
+                    ViewBag.getNotJoinPic = new PicModel().getUserPicByID(ID);
 
                 if(Request.QueryString.Get("s").ToString() == "1" && Request.QueryString.Get("as") != null)
                 {
@@ -165,12 +173,24 @@ namespace RioManager.Controllers
                     int.TryParse(Request.QueryString.Get("as").ToString(), out aSN);
 
                     ViewBag.VwAlbum = new AlbumModel().getVwAlbum(aSN);
-                    ViewBag.getJoinPic = new AlbumModel().getUpdateJoinPic(aSN);
-                    ViewBag.getNotJoinPic = new AlbumModel().getUpdateNotJoinPic(aSN);
+                    ViewBag.getJoinPic = new AlbumJoinPicModel().getUpdateJoinPic(aSN);
+                    ViewBag.getNotJoinPic = new AlbumJoinPicModel().getUpdateNotJoinPic(aSN);
                 }
             }
             return View(db.Rio_Album.ToList());
-        }        
+        }
+
+        public ActionResult DeleteAlbum(int? SN)
+        {
+            int aSN = SN ?? 0;
+            if (aSN != 0)
+            {
+                Rio_Album Album  = new AlbumModel().getAlbum(aSN);
+                Album.IsDelete = true;
+                new AlbumModel().Delete(Album);
+            }
+            return Redirect("RioAlbumView");
+        }
 
         public ActionResult ZipAlbum()
         {
@@ -180,7 +200,7 @@ namespace RioManager.Controllers
                 int.TryParse(Request.QueryString.Get("SN").ToString(), out SN);
                 string ziPath = Server.MapPath("~/Upload//zip//Album");
                 string zipName = string.Empty;
-                List<Vw_AlbumJoinPic> Album = new RioManager.Models.AlbumModel().getUpdateJoinPic(SN);
+                List<Vw_AlbumJoinPic> Album = new RioManager.Models.AlbumJoinPicModel().getUpdateJoinPic(SN);
                 List<string> picName  = new List<string>();
 
                 foreach (var item in Album)

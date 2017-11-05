@@ -1,14 +1,35 @@
 ﻿@{
     ViewBag.Title = "Home Page";
     var ID = "";
+    var userSetting = ViewBag.userSetting;
+    var Title = "";
+    var SubTitle = "Index";
+    var img = "";
     if (Context.Session["UserID"] != null)
     {
         ID = Context.Session["UserID"].ToString();
     }
+    var vid = string.Empty;
+    if (Request.QueryString.Get("vid") != null)
+    {
+        vid = Request.QueryString.Get("vid").ToString();
+        Title = vid;
+    }
+    if (userSetting != null)
+    {
+        Title = userSetting.Title;
+        SubTitle = userSetting.SubTitle;
+        if (userSetting.CoverSN != 0)
+        {
+            img = "background: url('" + userSetting.CoverPicPath + userSetting.CoverName + "'); background-repeat:no-repeat; background-position:center;";
+
+        }
+    }
+
 }
-<div class="jumbotron">
-    <h1>RioStudioManager</h1>
-    <p class="lead">This Website is a Rio Test works</p>    
+<div class="jumbotron" style="@img">
+    <h1>@Title</h1>
+    <p class="lead">@SubTitle</p>    
 </div>
 
 <div class="row">
@@ -17,28 +38,34 @@
         <p>
             新增、修改、編輯相簿順序
         </p>
-        <p><a class="btn btn-default" href="@Url.Action("RioAlbumView","Rio_Album")">Go to &raquo;</a></p>
+        <p><a class="btn btn-default" href="@Url.Action("RioAlbumView","Rio_Album",new { vid = @vid })">Go to &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <h2>圖片管理</h2>
         <p>上傳圖片、刪除圖片、重製縮圖</p>
-        <p><a class="btn btn-default" href="@Url.Action("RioPicView","Rio_Pic", new { m = "V" })">Go to &raquo;</a></p>
+        <p><a class="btn btn-default" href="@Url.Action("RioPicView","Rio_Pic", new { vid = @vid,m = "V" })">Go to &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <h2>文件管理</h2>
         <p>上傳文件</p>
-        <p><a class="btn btn-default" href="@Url.Action("RioDocView","Rio_Doc",new { m="V" })">Go to &raquo;</a></p>
+        <p><a class="btn btn-default" href="@Url.Action("RioDocView","Rio_Doc",new { vid = @vid,m="V" })">Go to &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>連結</h2>
+        <p>可進入其他帳號首頁</p>
+        <p><a class="btn btn-default" href="@Url.Action("AllUserLink","Rio_Account")">Go to &raquo;</a></p>
     </div>
 </div>
+@{ 
+    if (ID == "Rio" || ID == "Kycheng")
+    {
+
 <div class="row">
-    <div class="col-md-4">
+    @*<div class="col-md-4">
         <h2>文章管理</h2>
         <p>BLOG文章管理(未實裝)</p>
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Go to &raquo;</a></p>
-    </div>
-    @{
-        if(ID == "Rio" || ID == "Kycheng")
-        {
+    </div>*@    
             <div class="col-md-4">        
                 <h2>帳號管理</h2>
                 <p>管理所有帳號</p>
@@ -48,7 +75,8 @@
                 <h2>文字編碼</h2>
                 <p>如題</p>
                 <p><a class="btn btn-default" href="@Url.Action("ConvertText","Tools")">Go to &raquo;</a></p>
-            </div>
-        }
-    }
+            </div>    
 </div>
+
+    }
+}

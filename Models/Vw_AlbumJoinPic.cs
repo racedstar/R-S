@@ -41,5 +41,6 @@ namespace RioManager.Models
         public string AlbumModifyName { get; set; }
         public Nullable<System.DateTime> AlbumModifyDate { get; set; }
         public int JoinSN { get; set; }
+        public int JoinSort { get; set; }
     }
 }

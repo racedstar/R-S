@@ -6,6 +6,8 @@
     var mode = "V";
     var title = "DocView";
     var isView = true;
+    var vid = string.Empty;
+    var UserID = Session["UserID"].ToString();
     if (Request.QueryString.Get("m") != null)
     {
         mode = Request.QueryString.Get("m").ToString();
@@ -15,80 +17,136 @@
             title = "DocEdit";
         }
     }
+    if (Request.QueryString.Get("vid") != null)
+    {
+        vid = Request.QueryString.Get("vid").ToString();
+    }
 }
 
 <div class="container">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <h2>@title</h2>
     </div>
-    <div class="col-md-6 text-right" style="line-height:70px;">
+    <div class="col-md-8 text-right" style="line-height:70px;">
         @{
-            if (isView)
-            {
-                <a id="btnEdit" class="btn btn-default" href="RioDocView?m=E">編輯模式</a>
+            if(vid == UserID) { 
+                if (isView)
+                {
+                    <a id="btnEdit" class="btn btn-default" href="@Url.Action("RioDocView","Rio_Doc", new {vid=@vid, m="E"})">編輯模式</a>
+                }
+                else
+                {
+                    <input id="fileDownload" class="btn btn-default" type="button"  value="多檔下載" onclick="zipFile('doc')" />
+                    <input id="btnDelete" class="btn btn-default" type="button" value="刪除檔案" onclick="deleteFile('doc')" />
+                    <input  id="cheangeEnable"class="btn btn-default" type="button"  value="改變啟用狀態" onclick="fileEnable('doc')" />
+                    <a id="btnView" class="btn btn-default" href="@Url.Action("RioDocView","Rio_Doc", new {vid=@vid, m="V"})">檢視模式</a>
+                }
+                <a id="btnUpload" class="btn btn-default" data-fancybox data-type="iframe" data-src="/Tools/fmUpload?t=Doc" href="javascript:;">上傳文件</a>
             }
             else
             {
-                <input class="btn btn-default" type="button" id="imgReScaling" value="多檔下載" onclick="zipFile('doc')" />
-                <input id="btnDelete" type="button" value="刪除檔案" class="btn btn-default"  onclick="deleteFile('doc')" />                
-                <a id="btnView" class="btn btn-default" href="RioDocView?m=V">檢視模式</a>
+                @Html.ActionLink("回" + vid + "的首頁", "Index", "Home", new { vid = @vid }, new { @class = "btn btn-default" })
             }
-        }
-        <a id="btnUpload" class="btn btn-default various fancybox.iframe" rel="" href="~/Tools/fmUpload?t=Doc">上傳文件</a>        
+        }    
     </div>
 </div>
 <div class="body-content">
     <div class="form-group" style="overflow:hidden;">
         @{
-            if (@mode == "V" || @mode == "")
+            if (vid == UserID)//本人使用
             {
-                foreach (var item in getAllDoc)
+                if (@mode == "V" || @mode == "")
                 {
-                    var imgSrc = "";
-                    if (@item.Extension == "docx" || @item.Extension == "doc")
+                    foreach (var item in getAllDoc)
                     {
-                        imgSrc = "../../Content/img/icon/doc.ico";
-                    }
-                    else if (@item.Extension == "xlsx" || @item.Extension == "xls")
-                    {
-                        imgSrc = "../../Content/img/icon/xls.ico";
-                    }
-                    else if (@item.Extension == "pptx" || @item.Extension == "ppt")
-                    {
-                        imgSrc = "../../Content/img/icon/ppt.ico";
-                    }
+                        var imgSrc = "";
+                        var className = "col-md-2 docViewDiv";
+                        if (@item.Extension == "docx" || @item.Extension == "doc")
+                        {
+                            imgSrc = "../../Content/img/icon/doc.ico";
+                        }
+                        else if (@item.Extension == "xlsx" || @item.Extension == "xls")
+                        {
+                            imgSrc = "../../Content/img/icon/xls.ico";
+                        }
+                        else if (@item.Extension == "pptx" || @item.Extension == "ppt")
+                        {
+                            imgSrc = "../../Content/img/icon/ppt.ico";
+                        }
 
-                    <div class="col-md-2 docViewDiv" style="background-image:url(@imgSrc)">
-                        <a href="@item.DocPath/@item.DocName" title="@item.DocName">
-                            <p>@item.DocName</p>
-                        </a>
-                    </div>
+                        if (item.IsEnable == false)
+                        {
+                            className = className + " NotEnable";
+                        }
+
+                        <div class="@className" style="background-image:url(@imgSrc)">
+                            <a href="@item.DocPath/@item.DocName" title="@item.DocName">
+                                <p>@item.DocName</p>
+                            </a>
+                        </div>
+                    }
+                }
+                else if (@mode == "E")
+                {
+                    foreach (var item in getAllDoc)
+                    {
+                        var imgSrc = "";
+                        var className = "col-md-2 docViewDiv";
+                        if (@item.Extension == "docx" || @item.Extension == "doc")
+                        {
+                            imgSrc = "../../Content/img/icon/doc.ico";
+                        }
+                        else if (@item.Extension == "xlsx" || @item.Extension == "xls")
+                        {
+                            imgSrc = "../../Content/img/icon/xls.ico";
+                        }
+                        else if (@item.Extension == "pptx" || @item.Extension == "ppt")
+                        {
+                            imgSrc = "../../Content/img/icon/ppt.ico";
+                        }
+
+                        if (item.IsEnable == false)
+                        {
+                            className = className + " NotEnable";
+                        }
+
+                        <div id="@item.SN" class="@className" style="background-image:url(@imgSrc)" onclick="selectDiv(event,'@className','.col-md-2.docViewDiv')">
+                            <p class="docViewP">@item.DocName</p>
+                        </div>
+                    }
                 }
             }
-            else if (@mode == "E")
+            else
             {
-                foreach (var item in getAllDoc)
+                foreach (var item in getAllDoc)//觀光客模式
                 {
-                    var imgSrc = "";
-                    if (@item.Extension == "docx" || @item.Extension == "doc")
+                    if (item.IsEnable == true)
                     {
-                        imgSrc = "../../Content/img/icon/doc.ico";
+                        var imgSrc = "";
+                        var className = "col-md-2 docViewDiv";
+                        if (@item.Extension == "docx" || @item.Extension == "doc")
+                        {
+                            imgSrc = "../../Content/img/icon/doc.ico";
+                        }
+                        else if (@item.Extension == "xlsx" || @item.Extension == "xls")
+                        {
+                            imgSrc = "../../Content/img/icon/xls.ico";
+                        }
+                        else if (@item.Extension == "pptx" || @item.Extension == "ppt")
+                        {
+                            imgSrc = "../../Content/img/icon/ppt.ico";
+                        }
+
+                        <div class="@className" style="background-image:url(@imgSrc)">
+                            <a href="@item.DocPath/@item.DocName" title="@item.DocName">
+                                <p>@item.DocName</p>
+                            </a>
+                        </div>
                     }
-                    else if (@item.Extension == "xlsx" || @item.Extension == "xls")
-                    {
-                        imgSrc = "../../Content/img/icon/xls.ico";
-                    }
-                    else if (@item.Extension == "pptx" || @item.Extension == "ppt")
-                    {
-                        imgSrc = "../../Content/img/icon/ppt.ico";
-                    }
-                    <div id="@item.SN" class="col-md-2 docViewDiv" style="background-image:url(@imgSrc)" onclick="selectDiv(event,'col-md-2 docViewDiv','.col-md-2.docViewDiv')">
-                        <p class="docViewP">@item.DocName</p>
-                    </div>
                 }
             }
         }
     </div>
 </div>
-@Html.PagedListPager(getAllDoc, page => Url.Action("RioDocView", new { m = mode, page }))
+@Html.PagedListPager(getAllDoc, page => Url.Action("RioDocView", new {vid = @vid, m = mode, page }))
 <p>End of content</p>

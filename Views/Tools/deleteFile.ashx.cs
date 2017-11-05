@@ -29,8 +29,6 @@ namespace RioManager.Views.Tools
                         deleteDoc(docSN);
                         break;
                 }
-
-
             }
         }
         private void deletePic(string[] SNArray)
@@ -54,8 +52,7 @@ namespace RioManager.Views.Tools
                 }
 
                 //資料庫更新刪除標記           
-                Pic.IsDelete = true;
-                db.SaveChanges();
+                new PicModel().Delete(Pic);
             }
         }
         private void deleteDoc(string[] SNArray)

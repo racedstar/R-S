@@ -1,0 +1,40 @@
+﻿@model RioManager.Models.Rio_Account
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var VwAccount = ViewBag.VwAccount;
+}
+
+<div class="container">
+    <div class="col-md-12">
+        <h2>所有使用者連結</h2>
+    </div>
+    <div class="body-content">
+        <div claa="form-group">
+            @{
+                foreach (var item in VwAccount)
+                {
+                    //var Album = ViewBag.VwAlbumCount();
+                    //var Pic = ViewBag.VwPicCount();
+                    //var Doc = ViewBag.VwDocCount();
+                    <div class="col-md-6">
+                        <a href="@Url.Action("Index","Home", new { vid = @item.ID })">
+                            <div class="col-md-6 AccoutCover" style="background-image:url('@item.PicPath@item.PicName')"></div>
+                            <div class="col-md-6">
+                                <p>ID：@item.ID</p>
+                                <p>介紹：@item.AccountContent</p>
+                                @*<p>相簿數量：</p>
+                                <p>圖片數量：</p>
+                                <p>文件數量：</p>*@
+                            </div>
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+

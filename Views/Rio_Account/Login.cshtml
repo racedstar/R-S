@@ -10,61 +10,42 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/fancybox")
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen" />
+    @Scripts.Render("~/bundles/fancybox")    
 </head>
-<body>    
+<body style="background:url('../../Content/img/Froncover/cover.png')">    
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
 
-        <div class="container body-content">
+        <div class="body-content text-center">
             <h2>Login</h2>
             <div class="form-horizontal">
                 <h4>Please sign in</h4>
                 <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => model.SN)
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
+                    @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-2">
                         @Html.TextBox("ID", null, htmlAttributes: new { @class = "form-control" })
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
+                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-2">
                         @Html.Password("Password", null, htmlAttributes: new { @class = "form-control text-box single-line" })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
+                    <div class="col-md-12">
                         <input type="submit" value="Login" class="btn btn-default" />
-                        <a class="btn btn-default various fancybox.iframe" href="/Rio_Account/RioAccountRegister">Register</a>
+                        <a class="btn btn-default" data-fancybox data-type="iframe" data-src="/Rio_Account/RioAccountRegister" href="javascript:;">Register</a>
                     </div>
                 </div>
             </div>
         </div>
-
-
     }
-    <script>
-        $(document).ready(function () {
-            $(".various").fancybox({
-                maxWidth: 1920,
-                maxHeight: 1024,
-                fitToView: false,
-                width: '85%',
-                height: '85%',
-                autoSize: false,
-                closeClick: false,
-                openEffect: 'none',
-                closeEffect: 'none',
-                afterClose: function () { window.location.reload(); }
-            });
-        })
-    </script>
+
 </body>
 
 </html>

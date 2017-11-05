@@ -44,12 +44,12 @@
                 啟用：<input type="checkbox" id="chkEnable" checked="@VwAlbumEnable" />
             </div>
             <div class="col-md-6 text-right">
-                <input id="createAlbumBtn" class="btn btn-default" type="button" value="建立相簿" onclick="SaveData(0)" style="display:@createBtn;"  />
-                <input id="updateAlbumBtn" class="btn btn-default" type="button" value="修改相簿" onclick="SaveData(1)" style="display:@updateBtn;"/>
+                <input id="createAlbumBtn" data-fancybox-close class="btn btn-default"  type="button" value="建立相簿" onclick="SaveData(0)" style="display:@createBtn;"  />
+                <input id="updateAlbumBtn" data-fancybox-close class="btn btn-default" type="button" value="修改相簿" onclick="SaveData(1)" style="display:@updateBtn;"/>
             </div>
         </div>
         <div class="col-md-12 createAlbumBottom">
-            <div  id="NotJoinedPic" class="col-md-6" ondrop="popDrop(event)" ondragover="allowDrop(event)">
+            <div  id="NotJoinedPic" class="col-md-6" ondrop="dragPhoto('JoinedPic',event)" ondragover="allowDrop(event)">
                 @{
                     var notJoinData = @ViewBag.getNotJoinPic;
                 }                
@@ -61,7 +61,7 @@
                     }
                 }
             </div>
-            <div id="JoinedPic" class="col-md-6" ondrop="addPhoto(event)" ondragover="allowDrop(event)">
+            <div id="JoinedPic" class="col-md-6" ondrop="dragPhoto('NotJoinedPic',event)" ondragover="allowDrop(event)">
                 @{ 
                     var joinData = ViewBag.getJoinPic;
                 }
@@ -69,7 +69,7 @@
                 {
                     foreach (var item in joinData)
                     {
-                        <div id="@item.PicSN" class="col-md-3 text-center createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)" onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)"></div>
+                        <div id="@item.PicSN" class="col-md-3 text-center createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" ondrop="dragPhoto('sort',event)" ondragover="allowDrop(event)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)" onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)"></div>
                     }
                 }
             </div>

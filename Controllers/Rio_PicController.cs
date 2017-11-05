@@ -62,12 +62,6 @@ namespace RioManager.Controllers
             return View(rio_Pic);
         }
 
-        public void Insert(Rio_Pic Pic)
-        {
-            db.Rio_Pic.Add(Pic);
-            db.SaveChanges();
-        }
-
         // GET: Rio_Pic/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -133,23 +127,35 @@ namespace RioManager.Controllers
             }
             base.Dispose(disposing);
         }
+        #endregion
+
         public ActionResult RioPicView(int? page)
         {
-            var data = new PicModel().getAllPic().OrderBy(o => o.SN);            
-
+            string ID = string.Empty;
+            if (Session["UserID"] != null)
+            {
+                ID = Session["UserID"].ToString();
+            }
+            if (Request.QueryString.Get("vid") != null)
+            {
+                ID = Request.QueryString.Get("vid").ToString();
+            }
+            var data = new PicModel().getUserPicByID(ID).OrderBy(o => o.SN);
             var pageNumeber = page ?? 1;
-
             var pageData = data.ToPagedList(pageNumeber, pageSize);
+            
+            ViewBag.PicView = data.Where(o => o.IsEnable == true).ToPagedList(pageNumeber, pageSize);
 
             return View(pageData);
         }
-        #endregion
 
         public ActionResult ReScaling()//重製縮圖
         {
-            string Message = App_Code.ImageTools.ReScaling(new PicModel().getAllPic());
-            Response.Write(App_Code.JS.Alert(Message));
-
+            if(new PicModel().getAllPic() != null)
+            { 
+                string Message = App_Code.ImageTools.ReScaling(new PicModel().getAllPic());
+                Response.Write(App_Code.JS.Alert(Message));
+            }
             return RedirectToAction("RioPicView", "Rio_Pic", new {m="E"});
         }
        

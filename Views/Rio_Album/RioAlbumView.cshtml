@@ -2,28 +2,68 @@
 @{
     ViewBag.Title = "RioPicView";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var vid = string.Empty;
+    var UserID = Session["UserID"].ToString();
+    if (Request.QueryString.Get("vid") != null)
+    {
+        vid = Request.QueryString.Get("vid").ToString();
+    }
 }
 <div class="container">
     <div class="col-md-6">
         <h2>AlbumView</h2>
     </div>
     <div class="col-md-6 text-right" style="line-height:70px;">
-        <a class="btn btn-default various fancybox.iframe" rel="" href="CreateAlbum?s=0">建立新相簿</a>         
-        <input class="btn btn-default" type="button" id="deleteAlbum" onclick="getDeleteAlbumSN()" value="刪除相簿" />
-    </div>
-    <div class="form-group">
         @{ 
-            var VwAlbum = @ViewBag.VwAlbum;
-         }                   
-         @foreach (var item in VwAlbum)
-         {
-            <div id="@item.SN" class="col-md-3 albumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
-                <a href="@Url.Action("RioAlbumContent","Rio_Album",new {SN=@item.SN })">
-                    <p>@item.AlbumName</p>
-                </a>
-            </div>            
-         }        
-    </div>    
+            if (vid == UserID)
+            {
+                <a class="btn btn-default" data-fancybox data-type="iframe" data-src="CreateAlbum?s=0" rel="" href="javascript:;">建立新相簿</a>
+            }
+            else
+            {
+                @Html.ActionLink("回" + vid + "的首頁", "Index", "Home", new { vid = @vid }, new { @class = "btn btn-default" })
+            }
+        }
+    </div>
+    <div class="body-content">
+        <div class="form-group">
+            @{
+                var VwAlbum = @ViewBag.VwAlbum;
+            }
+            @{
+                if (vid == UserID)
+                {
+                    foreach (var item in VwAlbum)
+                    {
+                        var className = "col-md-3 albumDiv";
+                        if (item.IsEnable == false)
+                        {
+                            className = "col-md-3 albumDiv NotEnable";
+                        }
+                        <div id="@item.SN" class="@className" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
+                            <a href="@Url.Action("RioAlbumContent", "Rio_Album", new { vid = @vid, SN = @item.SN })">
+                                <p>@item.AlbumName</p>
+                            </a>
+                        </div>
+                    }
+                }
+                else
+                {
+                    foreach (var item in VwAlbum)
+                    {
+                        if (item.IsEnable == true)
+                        {
+                            <div id="@item.SN" class="col-md-3 albumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
+                                <a href="@Url.Action("RioAlbumContent", "Rio_Album", new { vid = @vid, SN = @item.SN })">
+                                    <p>@item.AlbumName</p>
+                                </a>
+                            </div>
+                        }
+                    }
+                }
+            }
+        </div>
+    </div>
 </div>
-@Html.PagedListPager(Model, page => Url.Action("RioAlbumView", new { page }))
+@Html.PagedListPager(Model, page => Url.Action("RioAlbumView", new { vid = @vid, page }))
 <p>End of content</p>

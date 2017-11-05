@@ -31,5 +31,11 @@ namespace RioManager.Models
         public string ModifyID { get; set; }
         public string ModifyName { get; set; }
         public System.DateTime ModifyDate { get; set; }
+        public string CoverName { get; set; }
+        public string CoverPicPath { get; set; }
+        public Nullable<int> AccountSN { get; set; }
+        public Nullable<int> CoverSN { get; set; }
+        public string Title { get; set; }
+        public string SubTitle { get; set; }
     }
 }

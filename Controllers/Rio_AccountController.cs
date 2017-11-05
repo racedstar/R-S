@@ -15,7 +15,7 @@ namespace RioManager.Controllers
     {
         private Entities db = new Entities();
 
-        private int pageSize = 5;
+        private int pageSize = 20;
         #region 系統產生
         // GET: Rio_Account
         public ActionResult Index(int? page)
@@ -174,21 +174,23 @@ namespace RioManager.Controllers
 
         //[HttpPost, ActionName("Login")]
         //[ValidateAntiForgeryToken]
+
+        #region 登入、登出、註冊
         public ActionResult Login(string ID, string Password)
         {
             if (HttpContext.Session["UserID"] != null && HttpContext.Session["IsLogin"] != null)
             {
-                return RedirectToAction("../Home/Index");
+                return RedirectToAction("Index","Home",new { vid = HttpContext.Session["UserID"].ToString() });
             }
 
             if(Request.HttpMethod == "POST")
             {
-                var LoginCheck = new AccountModel().LoginCheck(ID, Password);
+                bool LoginCheck = new AccountModel().LoginCheck(ID, Password);
                 if (ModelState.IsValid && LoginCheck)
                 {
                     HttpContext.Session["UserID"] = ID;
                     HttpContext.Session["IsLogin"] = "true";
-                    return RedirectToAction("../Home/Index");
+                    return RedirectToAction("Index", "Home", new { vid = HttpContext.Session["UserID"].ToString() });
                 }
                 ModelState.AddModelError("Password", "帳號密碼錯誤，請重新輸入");
             }
@@ -196,11 +198,12 @@ namespace RioManager.Controllers
         }        
 
         public void LoingChecked()
-        {
+        {            
             if (System.Web.HttpContext.Current.Session["UserID"] == null || System.Web.HttpContext.Current.Session["IsLogin"] == null)
             {
-                System.Web.HttpContext.Current.Response.Redirect("~/Rio_Account/Login");
+                Response.Redirect("/Rio_Account/Login");
             }
+         
         }
 
         public ActionResult Logout()
@@ -217,36 +220,142 @@ namespace RioManager.Controllers
         [HttpPost]
         public ActionResult RioAccountRegister(string ID, string Password, string Name, string AccountContent)
         {
-            if(!ID.Equals(string.Empty) && !Password.Equals(string.Empty) && !Name.Equals(string.Empty))
-            { 
-                Rio_Account rio_Account = new Rio_Account();
-                string createID = "UserRegister";            
-                DateTime dt = DateTime.Now;
 
-                rio_Account.ID = ID;
-                rio_Account.Name = Name;
-                rio_Account.Password = App_Code.Coding.Encrypt(Password);
-                rio_Account.AccountContent = AccountContent;
-                rio_Account.Email = string.Empty;
-                rio_Account.PicSN = 0;
+            Vw_Account Account = new AccountModel().getVwAccountByID(ID);
+            if (Account == null)
+            {
+                if (!ID.Equals(string.Empty) && !Password.Equals(string.Empty) && !Name.Equals(string.Empty))
+                {
+                    Rio_Account rio_Account = new Rio_Account();
+                    string createID = "UserRegister";
+                    DateTime dt = DateTime.Now;
 
-                rio_Account.CreateID = createID;
-                rio_Account.CreateName = createID;
-                rio_Account.ModifyID = createID;
-                rio_Account.ModifyName = createID;
-                rio_Account.CreateDate = dt;
-                rio_Account.ModifyDate = dt;
+                    rio_Account.ID = ID;
+                    rio_Account.Name = Name;
+                    rio_Account.Password = App_Code.Coding.Encrypt(Password);
+                    rio_Account.AccountContent = AccountContent;
+                    rio_Account.Email = string.Empty;
+                    rio_Account.PicSN = 0;
 
-                rio_Account.IsEnable = true;
-                rio_Account.IsDelete = false;
+                    rio_Account.CreateID = createID;
+                    rio_Account.CreateName = createID;
+                    rio_Account.ModifyID = createID;
+                    rio_Account.ModifyName = createID;
+                    rio_Account.CreateDate = dt;
+                    rio_Account.ModifyDate = dt;
 
-                new AccountModel().Insert(rio_Account);
+                    rio_Account.IsEnable = true;
+                    rio_Account.IsDelete = false;
 
-                HttpContext.Session["UserID"] = ID;
-                HttpContext.Session["IsLogin"] = "true";
+                    new AccountModel().Insert(rio_Account);
+
+                    HttpContext.Session["UserID"] = ID;
+                    HttpContext.Session["IsLogin"] = "true";
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("ID", "已有相同帳號。");
             }
             return View();
         }
+        #endregion
 
+        //所有使用者連結
+        public ActionResult AllUserLink()
+        {
+            ViewBag.VwAccount = new AccountModel().getAccountList();
+            ViewBag.VwAlbumCount = new AlbumModel().getUserVwAlbumList();
+            ViewBag.VwPicCount = new PicModel().getAllPic();
+            ViewBag.VwDocCount = new DocModel().getAllDoc();
+
+            return View();
+        }
+
+        //使用者自行設定個人資料
+        public ActionResult UserSetting()
+        {
+            string UserID = string.Empty;
+            if (Session["UserID"] != null)
+            {
+                UserID = Session["UserID"].ToString();
+            }
+            #region 個人資料設定            
+            Vw_Account Account = new AccountModel().getVwAccountByID(UserID);
+            Account.Password = App_Code.Coding.Decrypt(Account.Password);
+            ViewBag.Account = Account;
+            #endregion
+
+            #region 首頁資料設定
+            int SN = new AccountModel().getAccountByID(UserID).SN;
+            if (new UserIndexSettingMode().getUserIndexSettingBySN(SN) != null)
+            {
+                ViewBag.IndexSetting = new UserIndexSettingMode().getVwUserIndexSettingBySN(SN);
+            }
+            else
+            {
+                Rio_UserIndexSetting userSetting = new Rio_UserIndexSetting();
+                userSetting.AccountSN = SN;
+                userSetting.Title = UserID;
+                userSetting.SubTitle = "Index";
+                userSetting.CoverSN = 0;
+
+                new UserIndexSettingMode().Insert(userSetting);
+                ViewBag.IndexSetting = new UserIndexSettingMode().getVwUserIndexSettingBySN(SN);
+            }
+            #endregion
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UserSetting(string Password,string Name, string AccountContent)
+        {
+            string UserID = string.Empty;
+            if (Session["UserID"] != null)
+            {
+                UserID = Session["UserID"].ToString();
+            }
+            int SN = new AccountModel().getAccountByID(UserID).SN;
+            
+            Rio_Account Account = db.Rio_Account.Find(SN);
+            Account.Password = App_Code.Coding.Encrypt(Password); ;
+            Account.Name = Name;
+            Account.AccountContent = AccountContent;
+            new AccountModel().Update(Account);
+
+            Account.Password = App_Code.Coding.Decrypt(Account.Password);
+            ViewBag.Account = Account;
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult IndexSetting(string Title,string SubTitle)
+        {
+            string UserID = string.Empty;
+            if (Session["UserID"] != null)
+            {
+                UserID = Session["UserID"].ToString();
+            }
+            int SN = new AccountModel().getAccountByID(UserID).SN;
+            Rio_UserIndexSetting userSetting = new UserIndexSettingMode().getUserIndexSettingBySN(SN);
+            userSetting.Title = Title;
+            userSetting.SubTitle = SubTitle;
+            new UserIndexSettingMode().Update(userSetting);
+            
+            return RedirectToAction("UserSetting");
+        }
+
+
+        public ActionResult SelectCover()
+        {
+            string UserID = string.Empty;
+            if (Session["UserID"] != null)
+            {
+                UserID = Session["UserID"].ToString();
+            }
+            ViewBag.Pic = new PicModel().getUserPicByID(UserID);
+
+            return View();
+        }
     }
 }
