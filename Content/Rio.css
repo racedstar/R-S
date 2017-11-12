@@ -241,3 +241,11 @@
 .bookMarkSelect {
     background-color: white;
 }
+
+/*通用*/
+.center {
+    margin: 0 auto;    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,7 +1,7 @@
 ﻿@model RioManager.Models.Rio_Account
 @{
     ViewBag.Title = "Login";
-    Layout = null;
+    Layout = null;    
 }
 <!DOCTYPE html>
 
@@ -10,7 +10,8 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/fancybox")    
+    @Scripts.Render("~/bundles/fancybox")
+    @Scripts.Render("~/bundles/recaptcha")   
 </head>
 <body style="background:url('../../Content/img/Froncover/cover.png')">    
     @using (Html.BeginForm())
@@ -26,14 +27,19 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-md-5" })
                     <div class="col-md-2">
-                        @Html.TextBox("ID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.TextBox("ID", null, htmlAttributes: new { @class = "form-control center" })
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-5" })
                     <div class="col-md-2">
-                        @Html.Password("Password", null, htmlAttributes: new { @class = "form-control text-box single-line" })
+                        @Html.Password("Password", null, htmlAttributes: new { @class = "form-control center text-box single-line" })
                         @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="g-recaptcha center" data-sitekey="6LdrUTgUAAAAAHxN_vZgwLb3Fl72_a8U4GGeHzp1"></div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -45,7 +51,13 @@
             </div>
         </div>
     }
+    <script>
+        console.log(@ViewBag.Message);
+    </script>       
+    @if (ViewBag.Message != null)
+    {
 
+    }
 </body>
 
 </html>

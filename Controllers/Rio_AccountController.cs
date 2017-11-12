@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using RioManager.Models;
 using PagedList;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace RioManager.Controllers
 {
@@ -172,9 +174,6 @@ namespace RioManager.Controllers
         }
         #endregion
 
-        //[HttpPost, ActionName("Login")]
-        //[ValidateAntiForgeryToken]
-
         #region 登入、登出、註冊
         public ActionResult Login(string ID, string Password)
         {
@@ -185,14 +184,30 @@ namespace RioManager.Controllers
 
             if(Request.HttpMethod == "POST")
             {
-                bool LoginCheck = new AccountModel().LoginCheck(ID, Password);
-                if (ModelState.IsValid && LoginCheck)
+                #region Google reCAPTCHA驗證
+                var response = Request["g-recaptcha-response"];
+                string secretKey = "6LdrUTgUAAAAAC-zzRKYaXa4KjCJSon9K6K9gaJr";
+                var client = new WebClient();
+                var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+                var obj = JObject.Parse(result);
+                var status = (bool)obj.SelectToken("success");
+                #endregion
+
+                if (status == true)
                 {
-                    HttpContext.Session["UserID"] = ID;
-                    HttpContext.Session["IsLogin"] = "true";
-                    return RedirectToAction("Index", "Home", new { vid = HttpContext.Session["UserID"].ToString() });
+                    bool LoginCheck = new AccountModel().LoginCheck(ID, Password);
+                    if (ModelState.IsValid && LoginCheck)
+                    {
+                        HttpContext.Session["UserID"] = ID;
+                        HttpContext.Session["IsLogin"] = "true";
+                        return RedirectToAction("Index", "Home", new { vid = HttpContext.Session["UserID"].ToString() });
+                    }
+                    ModelState.AddModelError("Password", "帳號密碼錯誤，請重新輸入");
                 }
-                ModelState.AddModelError("Password", "帳號密碼錯誤，請重新輸入");
+                else
+                {
+                    ViewBag.Message = "請勾選我不是機器人";
+                }
             }
             return View();
         }        
@@ -221,41 +236,53 @@ namespace RioManager.Controllers
         public ActionResult RioAccountRegister(string ID, string Password, string Name, string AccountContent)
         {
 
-            Vw_Account Account = new AccountModel().getVwAccountByID(ID);
-            if (Account == null)
-            {
-                if (!ID.Equals(string.Empty) && !Password.Equals(string.Empty) && !Name.Equals(string.Empty))
+            #region Google reCAPTCHA驗證
+            var response = Request["g-recaptcha-response"];
+            string secretKey = "6LdrUTgUAAAAAC-zzRKYaXa4KjCJSon9K6K9gaJr";
+            var client = new WebClient();
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+            #endregion
+
+            if (status == true)
+            { 
+                Vw_Account Account = new AccountModel().getVwAccountByID(ID);
+                if (Account == null)
                 {
-                    Rio_Account rio_Account = new Rio_Account();
-                    string createID = "UserRegister";
-                    DateTime dt = DateTime.Now;
+                    if (!ID.Equals(string.Empty) && !Password.Equals(string.Empty) && !Name.Equals(string.Empty))
+                    {
+                        Rio_Account rio_Account = new Rio_Account();
+                        string createID = "UserRegister";
+                        DateTime dt = DateTime.Now;
 
-                    rio_Account.ID = ID;
-                    rio_Account.Name = Name;
-                    rio_Account.Password = App_Code.Coding.Encrypt(Password);
-                    rio_Account.AccountContent = AccountContent;
-                    rio_Account.Email = string.Empty;
-                    rio_Account.PicSN = 0;
+                        rio_Account.ID = ID;
+                        rio_Account.Name = Name;
+                        rio_Account.Password = App_Code.Coding.Encrypt(Password);
+                        rio_Account.AccountContent = AccountContent;
+                        rio_Account.Email = string.Empty;
+                        rio_Account.PicSN = 0;
 
-                    rio_Account.CreateID = createID;
-                    rio_Account.CreateName = createID;
-                    rio_Account.ModifyID = createID;
-                    rio_Account.ModifyName = createID;
-                    rio_Account.CreateDate = dt;
-                    rio_Account.ModifyDate = dt;
+                        rio_Account.CreateID = createID;
+                        rio_Account.CreateName = createID;
+                        rio_Account.ModifyID = createID;
+                        rio_Account.ModifyName = createID;
+                        rio_Account.CreateDate = dt;
+                        rio_Account.ModifyDate = dt;
 
-                    rio_Account.IsEnable = true;
-                    rio_Account.IsDelete = false;
+                        rio_Account.IsEnable = true;
+                        rio_Account.IsDelete = false;
 
-                    new AccountModel().Insert(rio_Account);
+                        new AccountModel().Insert(rio_Account);
 
-                    HttpContext.Session["UserID"] = ID;
-                    HttpContext.Session["IsLogin"] = "true";
+                        HttpContext.Session["UserID"] = ID;
+                        HttpContext.Session["IsLogin"] = "true";
+                    }
                 }
-            }
-            else
-            {
-                ModelState.AddModelError("ID", "已有相同帳號。");
+                else
+                {
+                    ModelState.AddModelError("ID", "已有相同帳號。");
+                }
             }
             return View();
         }

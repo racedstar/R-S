@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using RioManager.Models;
 using System.Data.Entity.Validation;
+using System.Data.Linq;
+
 
 
 namespace RioManager.Models
@@ -15,9 +17,9 @@ namespace RioManager.Models
     public class AccountModel : Controller
     {
         private Entities db = new Entities();
-
+        
         public void Insert(Rio_Account rio_Account)
-        {
+        {            
                 db.Rio_Account.Add(rio_Account);
                 db.SaveChanges();
 
@@ -42,7 +44,7 @@ namespace RioManager.Models
             var data = (from o in db.Vw_Account
                         where o.SN == SN && o.IsEnable == true && o.IsDelete == false
                         select o).FirstOrDefault();
-            ViewBag.picPath = data.PicPath + data.PicName;
+            //ViewBag.picPath = data.PicPath + data.PicName;
             return data;
         }
 
