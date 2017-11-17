@@ -13,7 +13,7 @@
     @Scripts.Render("~/bundles/fancybox")
     @Scripts.Render("~/bundles/recaptcha")   
 </head>
-<body style="background:url('../../Content/img/Froncover/cover.png')">    
+<body style="background:url('../../Content/img/Froncover/cover.png');background-repeat:no-repeat;background-attachment:fixed;background-size:cover;background-position:center;">    
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
