@@ -6,103 +6,105 @@
     var Account = ViewBag.Account;
     var IndexSetting = ViewBag.IndexSetting;
 }
-<ul>
-    <li class="settingTitle">
-        <a id="AccountSetting" class="settingBookMark bookMarkSelect" onclick="bookMark(event,'divAccountSetting')">個人資料設定</a>
-    </li>
-    <li class="settingTitle">
-        <a id="IndexSetting" class="settingBookMark" onclick="bookMark(event,'divIndexSetting')">首頁設定</a>
-   </li>
-</ul>
-<div id="divAccountSetting" class="settingContent" style="display:block;">
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
+<div class="container">
+    <ul>
+        <li class="settingTitle">
+            <a id="AccountSetting" class="settingBookMark bookMarkSelect" onclick="bookMark(event,'divAccountSetting')">個人資料設定</a>
+        </li>
+        <li class="settingTitle">
+            <a id="IndexSetting" class="settingBookMark" onclick="bookMark(event,'divIndexSetting')">首頁設定</a>
+        </li>
+    </ul>
+    <div id="divAccountSetting" class="settingContent" style="display:block;">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
-        <div class="form-horizontal">
-            <h4>AccountSetting</h4>
-            <hr />
+            <div class="form-horizontal">
+                <h4>AccountSetting</h4>
+                <hr />
 
-            <div class="form-group">
-                <label class="control-label col-md-2">ID</label>
-                <div class="col-md-10">
-                    <label id="ID">@Account.ID</label>
+                <div class="form-group">
+                    <label class="control-label col-md-2">ID</label>
+                    <div class="col-md-10">
+                        <label id="ID">@Account.ID</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Password</label>
+                    <div class="col-md-10">
+                        <input id="Password" type="password" name="Password" class="form-control" style="width:250px" value="@Account.Password" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Name</label>
+                    <div class="col-md-10">
+                        <input id="Name" name="Name" class="form-control" style="width:250px" value="@Account.Name" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">AccountContent</label>
+                    <div class="col-md-10">
+                        <input id="AccountContent" name="AccountContent" class="form-control" style="width:250px" value="@Account.AccountContent" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Cover</label>
+                    <div class="col-md-10">
+                        <img class="coverImg" src="@Account.PicPath/Scaling/@Account.PicName" />
+                        <a class="btn btn-default" data-fancybox data-type="iframe" data-src="SelectCover?t=Account" href="javascript;">設定個人封面</a>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
                 </div>
             </div>
+        }
+    </div>
 
-            <div class="form-group">
-                <label class="control-label col-md-2">Password</label>
-                <div class="col-md-10">
-                    <input id="Password" name="Password" class="form-control" style="width:250px" value="@Account.Password" />
+    <div id="divIndexSetting" class="settingContent" style="display:none;">
+        @using (Html.BeginForm("IndexSetting", "Rio_Account"))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                <h4>IndexSetting</h4>
+                <hr />
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Title</label>
+                    <div class="col-md-10">
+                        <input id="Title" name="Title" class="form-control" style="width:250px" value="@IndexSetting.Title" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">SubTitle</label>
+                    <div class="col-md-10">
+                        <input id="SubTitle" name="SubTitle" class="form-control" style="width:250px" value="@IndexSetting.SubTitle" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">IndexCover</label>
+                    <div class="col-md-10">
+                        <img class="coverImg" src="@IndexSetting.CoverPicPath/Scaling/@IndexSetting.CoverName" />
+                        <a class="btn btn-default" data-fancybox data-type="iframe" data-src="SelectCover?t=Index" href="javascript;">設定首頁封面</a>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-2">Name</label>
-                <div class="col-md-10">
-                    <input id="Name" name="Name" class="form-control" style="width:250px" value="@Account.Name" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-2">AccountContent</label>
-                <div class="col-md-10">
-                    <input id="AccountContent" name="AccountContent" class="form-control" style="width:250px" value="@Account.AccountContent" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-2">Cover</label>
-                <div class="col-md-10">
-                    <img class="coverImg" src="@Account.PicPath/Scaling/@Account.PicName" />
-                    <a class="btn btn-default" data-fancybox data-type="iframe" data-src="SelectCover?t=Account" href="javascript;">設定個人封面</a>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
-                </div>
-            </div>
-        </div>
-    }
-</div>
-
-<div id="divIndexSetting" class="settingContent" style="display:none;">
-    @using (Html.BeginForm("IndexSetting","Rio_Account"))
-    {
-        @Html.AntiForgeryToken()
-        <div class="form-horizontal">
-            <h4>IndexSetting</h4>
-            <hr />
-
-            <div class="form-group">
-                <label class="control-label col-md-2">Title</label>
-                <div class="col-md-10">
-                    <input id="Title" name="Title" class="form-control" style="width:250px" value="@IndexSetting.Title" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-2">SubTitle</label>
-                <div class="col-md-10">
-                    <input id="SubTitle" name="SubTitle" class="form-control" style="width:250px" value="@IndexSetting.SubTitle" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-2">IndexCover</label>
-                <div class="col-md-10">
-                    <img class="coverImg" src="@IndexSetting.CoverPicPath/Scaling/@IndexSetting.CoverName" />
-                    <a class="btn btn-default" data-fancybox data-type="iframe" data-src="SelectCover?t=Index" href="javascript;">設定首頁封面</a>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
-                </div>
-            </div>
-        </div>
-    }
+        }
+    </div>
 </div>

@@ -22,13 +22,13 @@ namespace RioManager.Models
 
         public void Update(Rio_Pic pic)
         {
-            db.Entry(pic).State = EntityState.Modified;
+            db.Entry(pic).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
         }
 
         public void Delete(Rio_Pic pic)
         {
-            db.Entry(pic).State = EntityState.Modified;
+            db.Entry(pic).State = System.Data.Entity.EntityState.Modified;
             pic.IsDelete = true;            
             db.SaveChanges();
 

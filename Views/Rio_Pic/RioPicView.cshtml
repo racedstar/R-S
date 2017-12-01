@@ -6,7 +6,7 @@
     var isView = true;
     var title = "PicView";
     var vid = string.Empty;
-    var m = "V";
+    var mode = "V";
     var UserID = string.Empty;
     var PicView = ViewBag.PicView;
     if (Request.QueryString.Get("vid") != null)
@@ -19,16 +19,16 @@
     }
     if (Request.QueryString.Get("m") != null )
     {
-        if(Request.QueryString.Get("m").ToString() == "E")
+        mode = Request.QueryString.Get("m").ToString();
+        if (mode == "E")
         {
             isView = false;
             title = "PicEdit";
-            m = "E";
         }
     }
 }
 
-<div class="container">
+<div class="topBar">
     <div class="col-md-4">
         <h2>@title</h2>
     </div>
@@ -57,24 +57,13 @@
         }
     </div>
 </div>
-<div class="body-content">
-    <div class="form-group" style="overflow: hidden;">
+<div class="container body-content">
+    <div class="form-group systemGroup">
         @{
-            if (!isView)
+
+            if (vid == UserID)//本人使用
             {
-                foreach (var item in Model)
-                {
-                    var className = "col-md-3 thumbnail picEditDiv";
-                    if(item.IsEnable == false)
-                    {
-                        className = "col-md-3 thumbnail picEditDiv NotEnable";
-                    }
-                    <div id="@item.SN" class="@className" style="background-image:url(@item.PicPath/Scaling/@item.PicName);" onclick="selectDiv(event, '@className' ,'.col-md-3.thumbnail.picEditDiv')"></div>
-                }
-            }
-            else
-            {
-                if (vid == UserID) //本人使用
+                if (isView)//View Mode
                 {
                     foreach (var item in Model)
                     {
@@ -88,21 +77,35 @@
                         </div>
                     }
                 }
-                else//觀光者模式
+                else//Edit Mode
                 {
                     foreach (var item in Model)
                     {
-                        if (item.IsEnable == true)
+                        var className = "col-md-3 thumbnail picEditDiv";
+                        if (item.IsEnable == false)
                         {
-                            <div class="col-md-3 thumbnail picViewDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
-                                <a class="fancybox" data-fancybox="images" style="display:block;" rel="ligthbox" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>
-                            </div>
+                            className = "col-md-3 thumbnail picEditDiv NotEnable";
                         }
+                        <div id="@item.SN" class="@className" style="background-image:url(@item.PicPath/Scaling/@item.PicName);" onclick="selectDiv(event, '@className' ,'.picEditDiv')"></div>
                     }
                 }
             }
+            else//觀光者
+            {
+                foreach (var item in Model)
+                {
+                    if (item.IsEnable == true)
+                    {
+                        <div class="col-md-3 thumbnail picViewDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
+                            <a class="fancybox" data-fancybox="images" style="display:block;" rel="ligthbox" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>
+                        </div>
+                    }
+                }
+            }            
         }
     </div>
 </div>
-@Html.PagedListPager(Model, page => Url.Action("RioPicView", new {vid = @vid, m= m, page }))
-<p>End of content</p>
+<div class="container">
+    @Html.PagedListPager(Model, page => Url.Action("RioPicView", new { vid = @vid, m = mode, page }))
+    <p>End of content</p>
+</div>

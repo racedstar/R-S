@@ -31,52 +31,53 @@
     <h1>@Title</h1>
     <p class="lead">@SubTitle</p>    
 </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h2>相簿管理</h2>
+            <p>
+                新增、修改、編輯相簿順序
+            </p>
+            <p><a class="btn btn-default" href="@Url.Action("RioAlbumView","Rio_Album",new { vid = @vid })">Go to &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>圖片管理</h2>
+            <p>上傳圖片、刪除圖片、重製縮圖</p>
+            <p><a class="btn btn-default" href="@Url.Action("RioPicView","Rio_Pic", new { vid = @vid,m = "V" })">Go to &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>文件管理</h2>
+            <p>上傳文件</p>
+            <p><a class="btn btn-default" href="@Url.Action("RioDocView","Rio_Doc",new { vid = @vid,m="V" })">Go to &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>連結</h2>
+            <p>可進入其他帳號首頁</p>
+            <p><a class="btn btn-default" href="@Url.Action("AllUserLink","Rio_Account")">Go to &raquo;</a></p>
+        </div>
+    </div>
+    @{
+        if (ID == "Rio" || ID == "Kycheng")
+        {
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>相簿管理</h2>
-        <p>
-            新增、修改、編輯相簿順序
-        </p>
-        <p><a class="btn btn-default" href="@Url.Action("RioAlbumView","Rio_Album",new { vid = @vid })">Go to &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>圖片管理</h2>
-        <p>上傳圖片、刪除圖片、重製縮圖</p>
-        <p><a class="btn btn-default" href="@Url.Action("RioPicView","Rio_Pic", new { vid = @vid,m = "V" })">Go to &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>文件管理</h2>
-        <p>上傳文件</p>
-        <p><a class="btn btn-default" href="@Url.Action("RioDocView","Rio_Doc",new { vid = @vid,m="V" })">Go to &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>連結</h2>
-        <p>可進入其他帳號首頁</p>
-        <p><a class="btn btn-default" href="@Url.Action("AllUserLink","Rio_Account")">Go to &raquo;</a></p>
-    </div>
-</div>
-@{ 
-    if (ID == "Rio" || ID == "Kycheng")
-    {
-
-<div class="row">
-    @*<div class="col-md-4">
-        <h2>文章管理</h2>
-        <p>BLOG文章管理(未實裝)</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Go to &raquo;</a></p>
-    </div>*@    
-            <div class="col-md-4">        
-                <h2>帳號管理</h2>
-                <p>管理所有帳號</p>
-                <p><a class="btn btn-default" href="@Url.Action("Index","Rio_Account")">Go to &raquo;</a></p>
+            <div class="row">
+                @*<div class="col-md-4">
+                        <h2>文章管理</h2>
+                        <p>BLOG文章管理(未實裝)</p>
+                        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Go to &raquo;</a></p>
+                    </div>*@
+                <div class="col-md-4">
+                    <h2>帳號管理</h2>
+                    <p>管理所有帳號</p>
+                    <p><a class="btn btn-default" href="@Url.Action("Index","Rio_Account")">Go to &raquo;</a></p>
+                </div>
+                <div class="col-md-4">
+                    <h2>文字編碼</h2>
+                    <p>如題</p>
+                    <p><a class="btn btn-default" href="@Url.Action("ConvertText","Tools")">Go to &raquo;</a></p>
+                </div>
             </div>
-            <div class="col-md-4">
-                <h2>文字編碼</h2>
-                <p>如題</p>
-                <p><a class="btn btn-default" href="@Url.Action("ConvertText","Tools")">Go to &raquo;</a></p>
-            </div>    
-</div>
 
+        }
     }
-}
+</div>

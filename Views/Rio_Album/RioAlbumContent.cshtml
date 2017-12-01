@@ -23,37 +23,40 @@
 }
 
 
-<div class="container">
+<div class="topBar">
     <div class="col-md-6">
         <h2>@VwAlbum.AlbumName</h2>
     </div>
     <div class="col-md-6 text-right" style="line-height:70px;">
         @{
-            if(vid == UserID)
+            if (vid == UserID)
             {
-                <a class="btn btn-default" href="@Url.Action("RioAlbumView","Rio_Album", new { vid = @vid })">相簿列表</a>        
-                <a class="btn btn-default" href="@Url.Action("DeleteAlbum","Rio_Album",new {SN= @aSN.ToString() })">刪除相簿</a>                
+                <a class="btn btn-default" href="@Url.Action("DeleteAlbum","Rio_Album",new {SN= @aSN.ToString() })">刪除相簿</a>
                 <a class="btn btn-default" data-fancybox data-type="iframe" data-src="CreateAlbum?s=1&as=@aSN" href="javascript:;">編輯相簿</a>
             }
+            <a class="btn btn-default" href="@Url.Action("RioAlbumView","Rio_Album", new { vid = @vid })">相簿列表</a>
             <a class="btn btn-default" href="@Url.Action("ZipAlbum","Rio_Album",new {SN= @aSN.ToString() })">相簿下載</a>
         }
     </div>
-    <div class="body-content">
-        <div class="form-group">
-            @{
-                if (JoinPic != null)
+</div>
+
+<div class="container body-content">
+    <div class="form-group systemGroup">
+        @{
+            if (JoinPic != null)
+            {
+                foreach (var item in JoinPic)
                 {
-                    foreach (var item in JoinPic)
-                    {
-                        <div class="col-md-3 albumContentDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
-                            <a data-fancybox="images" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>
-                        </div>
-                    }
+                    <div class="col-md-3 albumContentDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
+                        <a data-fancybox="images" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>
+                    </div>
                 }
             }
-        </div>
+        }
     </div>
 </div>
 
-@Html.PagedListPager(JoinPic, page => Url.Action("RioAlbumContent", new { vid = @vid, SN = aSN, page }))
-<p>End of content</p>
+<div class="container">
+    @Html.PagedListPager(JoinPic, page => Url.Action("RioAlbumContent", new { vid = @vid, SN = aSN, page }))
+    <p>End of content</p>
+</div>

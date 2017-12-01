@@ -1,6 +1,6 @@
 ﻿/*首頁封面*/
 .jumbotron {
-    background-image: url(/Upload/Rio/img//63134826_p0.png);
+    background-image: url(img/Froncover/indexcover.png);
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -9,6 +9,18 @@
 }
 .jumbotron p {
     color: #fff3de;
+}
+/*上方功能列*/
+.topBar {
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+    background-color: white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+/*系統內容*/
+.systemGroup {
+    margin-top: 90px;
 }
 
 /*上傳檔案介面*/
@@ -157,6 +169,7 @@
 
 /*文件檢視*/
 .docViewDiv {
+    display:block;
     height: 160px;
     cursor: pointer;
     background-repeat: no-repeat;

@@ -27,7 +27,7 @@ namespace RioManager.Models
 
         public void Update(Rio_Account rio_Account)
         {
-            db.Entry(rio_Account).State = EntityState.Modified;
+            db.Entry(rio_Account).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
         }
 

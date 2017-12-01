@@ -23,7 +23,7 @@
     }
 }
 
-<div class="container">
+<div class="topBar">
     <div class="col-md-4">
         <h2>@title</h2>
     </div>
@@ -50,12 +50,12 @@
         }    
     </div>
 </div>
-<div class="body-content">
-    <div class="form-group" style="overflow:hidden;">
+<div class="container body-content">
+    <div class="form-group systemGroup">
         @{
             if (vid == UserID)//本人使用
             {
-                if (@mode == "V" || @mode == "")
+                if (isView)//View Mode
                 {
                     foreach (var item in getAllDoc)
                     {
@@ -86,7 +86,7 @@
                         </div>
                     }
                 }
-                else if (@mode == "E")
+                else//Edit Mode
                 {
                     foreach (var item in getAllDoc)
                     {
@@ -148,5 +148,7 @@
         }
     </div>
 </div>
-@Html.PagedListPager(getAllDoc, page => Url.Action("RioDocView", new {vid = @vid, m = mode, page }))
-<p>End of content</p>
+<div class="container">
+    @Html.PagedListPager(getAllDoc, page => Url.Action("RioDocView", new { vid = @vid, m = mode, page }))
+    <p>End of content</p>
+</div>

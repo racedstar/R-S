@@ -21,13 +21,13 @@ namespace RioManager.Models
 
         public void Update(Rio_Album album)
         {
-            db.Entry(album).State = EntityState.Modified;
+            db.Entry(album).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
         }
 
         public void Delete(Rio_Album album)
         {
-            db.Entry(album).State = EntityState.Modified;
+            db.Entry(album).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
         }
         #endregion

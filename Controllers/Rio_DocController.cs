@@ -84,7 +84,7 @@ namespace RioManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(rio_Doc).State = EntityState.Modified;
+                db.Entry(rio_Doc).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
