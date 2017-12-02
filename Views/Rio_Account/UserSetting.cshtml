@@ -16,7 +16,7 @@
         </li>
     </ul>
     <div id="divAccountSetting" class="settingContent" style="display:block;">
-        @using (Html.BeginForm())
+        @using (Html.BeginForm("UserSetting", "Rio_Account"))
         {
             @Html.AntiForgeryToken()
 

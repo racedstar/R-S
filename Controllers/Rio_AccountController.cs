@@ -288,18 +288,7 @@ namespace RioManager.Controllers
         }
         #endregion
 
-        //所有使用者連結
-        public ActionResult AllUserLink()
-        {
-            ViewBag.VwAccount = new AccountModel().getAccountList();
-            ViewBag.VwAlbumCount = new AlbumModel().getUserVwAlbumList();
-            ViewBag.VwPicCount = new PicModel().getAllPic();
-            ViewBag.VwDocCount = new DocModel().getAllDoc();
-
-            return View();
-        }
-
-        //使用者自行設定個人資料
+        #region 使用者自行設定個人資料
         public ActionResult UserSetting()
         {
             string UserID = string.Empty;
@@ -309,7 +298,7 @@ namespace RioManager.Controllers
             }
             #region 個人資料設定            
             Vw_Account Account = new AccountModel().getVwAccountByID(UserID);
-            Account.Password = App_Code.Coding.Decrypt(Account.Password);
+            Account.Password = string.Empty;
             ViewBag.Account = Account;
             #endregion
 
@@ -335,7 +324,7 @@ namespace RioManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult UserSetting(string Password,string Name, string AccountContent)
+        public ActionResult UserSetting(string Password, string Name, string AccountContent)
         {
             string UserID = string.Empty;
             if (Session["UserID"] != null)
@@ -343,20 +332,20 @@ namespace RioManager.Controllers
                 UserID = Session["UserID"].ToString();
             }
             int SN = new AccountModel().getAccountByID(UserID).SN;
-            
+
             Rio_Account Account = db.Rio_Account.Find(SN);
-            Account.Password = App_Code.Coding.Encrypt(Password); ;
+            if (!Password.Equals(string.Empty))
+            {
+                Account.Password = App_Code.Coding.stringToSHA512(Password);
+            }
             Account.Name = Name;
             Account.AccountContent = AccountContent;
             new AccountModel().Update(Account);
 
-            Account.Password = App_Code.Coding.Decrypt(Account.Password);
-            ViewBag.Account = Account;
-
-            return View();
+            return RedirectToAction("UserSetting");
         }
         [HttpPost]
-        public ActionResult IndexSetting(string Title,string SubTitle)
+        public ActionResult IndexSetting(string Title, string SubTitle)
         {
             string UserID = string.Empty;
             if (Session["UserID"] != null)
@@ -368,7 +357,7 @@ namespace RioManager.Controllers
             userSetting.Title = Title;
             userSetting.SubTitle = SubTitle;
             new UserIndexSettingMode().Update(userSetting);
-            
+
             return RedirectToAction("UserSetting");
         }
 
@@ -383,6 +372,19 @@ namespace RioManager.Controllers
 
             return View();
         }
+        #endregion
 
+        //所有使用者連結
+        public ActionResult AllUserLink()
+        {
+            ViewBag.VwAccount = new AccountModel().getAccountList();
+            ViewBag.VwAlbumCount = new AlbumModel().getUserVwAlbumList();
+            ViewBag.VwPicCount = new PicModel().getAllPic();
+            ViewBag.VwDocCount = new DocModel().getAllDoc();
+
+            return View();
+        }
+
+        
     }
 }
