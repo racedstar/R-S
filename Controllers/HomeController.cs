@@ -17,9 +17,14 @@ namespace RioManager.Controllers
             {
                 userID = Request.QueryString.Get("vid").ToString();                
             }
-            SN = new AccountModel().getAccountByID(userID).SN;
+            Vw_Account rioAccount = new AccountModel().getVwAccountByID(userID);
+            int.TryParse(rioAccount.SN.ToString(), out SN);
 
             ViewBag.userSetting = new UserIndexSettingMode().getVwUserIndexSettingBySN(SN);
+            ViewBag.indexAccountCover = rioAccount.PicPath + rioAccount.PicName;
+            ViewBag.albumCount = new AlbumModel().getUsertVwAlbumListByID(userID).Count;
+            ViewBag.picCount = new PicModel().getUserPicByID(userID).Count;
+            ViewBag.docCount = new DocModel().getDocListByID(userID).Count;
 
             return View();
         }

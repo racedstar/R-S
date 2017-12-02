@@ -3,6 +3,7 @@
     background-image: url(img/Froncover/indexcover.png);
     background-repeat: no-repeat;
     background-position: center;
+    height:350px;
 }
 .jumbotron h1 {    
     color: white;
@@ -21,6 +22,22 @@
 /*系統內容*/
 .systemGroup {
     margin-top: 90px;
+}
+/*首頁大頭照*/
+.indexAccountCover {
+    background-color: white;
+    width: 200px;
+    height: 200px;
+    top: 300px;
+    left: 50px;
+    border-radius: 100%;
+}
+.indexAccountCover img{
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
 }
 
 /*上傳檔案介面*/
