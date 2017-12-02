@@ -66,7 +66,7 @@ namespace RioManager.Models
 
         public bool LoginCheck(string ID, string Password)
         {
-            Password = App_Code.Coding.Encrypt(Password);
+            Password = App_Code.Coding.stringToSHA512(Password);
             var data = (from o in db.Rio_Account
                         where o.ID == ID && o.Password == Password
                         select o).FirstOrDefault();

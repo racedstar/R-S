@@ -35,5 +35,15 @@ namespace RioManager.App_Code
             byte[] outputData = transform.TransformFinalBlock(cipherTextData, 0, cipherTextData.Length);
             return Encoding.Unicode.GetString(outputData);
         }
+
+        public static string stringToSHA512(string str)
+        {
+            SHA512 sha = new SHA512CryptoServiceProvider();
+            byte[] source = Encoding.Default.GetBytes(str);
+            source = sha.ComputeHash(source);
+            str = Convert.ToBase64String(source);
+
+            return str;
+        }
     }
 }

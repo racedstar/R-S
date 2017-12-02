@@ -41,9 +41,6 @@ namespace RioManager
 
             bundles.Add(new ScriptBundle("~/bundles/RioTools").Include(
                         "~/Scripts/RioTools.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/recaptcha").Include(
-            "~/Scripts/recaptcha.js"));
         }
     }
 }

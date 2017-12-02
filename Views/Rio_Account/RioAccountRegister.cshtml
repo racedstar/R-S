@@ -13,7 +13,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/fancybox")
-    @Scripts.Render("~/bundles/recaptcha")
+    <script type="text/javascript" src='https://www.google.com/recaptcha/api.js'></script>
     @if (Session["UserID"] != null)
     {
         <script>

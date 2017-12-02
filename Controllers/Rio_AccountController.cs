@@ -68,7 +68,7 @@ namespace RioManager.Controllers
 
             rio_Account.ID = ID;
             rio_Account.Name = Name;
-            rio_Account.Password = App_Code.Coding.Encrypt(Password);
+            rio_Account.Password = App_Code.Coding.stringToSHA512(Password);
             rio_Account.AccountContent = AccountContent;
             rio_Account.Email = string.Empty;
             rio_Account.PicSN = 0;
@@ -121,7 +121,7 @@ namespace RioManager.Controllers
                 }
 
                 rio_Account.Name = Name;
-                rio_Account.Password = App_Code.Coding.Encrypt(Password);
+                rio_Account.Password = App_Code.Coding.stringToSHA512(Password);
                 rio_Account.AccountContent = AccountContent;
                 rio_Account.PicSN = PicSN;
 
@@ -206,7 +206,7 @@ namespace RioManager.Controllers
                 }
                 else
                 {
-                    ViewBag.Message = "請勾選我不是機器人";
+                    ModelState.AddModelError("reCAPTCHA", "請勾選我不是機器人");
                 }
             }
             return View();
@@ -258,7 +258,7 @@ namespace RioManager.Controllers
 
                         rio_Account.ID = ID;
                         rio_Account.Name = Name;
-                        rio_Account.Password = App_Code.Coding.Encrypt(Password);
+                        rio_Account.Password = App_Code.Coding.stringToSHA512(Password);
                         rio_Account.AccountContent = AccountContent;
                         rio_Account.Email = string.Empty;
                         rio_Account.PicSN = 0;
@@ -372,7 +372,6 @@ namespace RioManager.Controllers
             return RedirectToAction("UserSetting");
         }
 
-
         public ActionResult SelectCover()
         {
             string UserID = string.Empty;
@@ -384,5 +383,6 @@ namespace RioManager.Controllers
 
             return View();
         }
+
     }
 }
