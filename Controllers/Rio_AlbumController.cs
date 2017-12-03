@@ -164,32 +164,39 @@ namespace RioManager.Controllers
                 {
                     ID = Session["UserID"].ToString();
                 }
-                if (Request.QueryString.Get("s").ToString() == "0")
+                if (Request.QueryString.Get("s").ToString() == "0")//建立相簿時取得圖片
+                { 
                     ViewBag.getNotJoinPic = new PicModel().getUserPicByID(ID);
+                }
 
-                if(Request.QueryString.Get("s").ToString() == "1" && Request.QueryString.Get("as") != null)
+                if (Request.QueryString.Get("s").ToString() == "1" && Request.QueryString.Get("as") != null)//編輯相簿時取得圖片
                 {
                     int aSN = 0;
                     int.TryParse(Request.QueryString.Get("as").ToString(), out aSN);
 
-                    ViewBag.VwAlbum = new AlbumModel().getVwAlbum(aSN);
-                    ViewBag.getJoinPic = new AlbumJoinPicModel().getUpdateJoinPic(aSN);
-                    ViewBag.getNotJoinPic = new AlbumJoinPicModel().getUpdateNotJoinPic(aSN);
+                    ViewBag.VwAlbum = new AlbumModel().getVwAlbum(aSN);//相簿資料
+                    ViewBag.getJoinPic = new AlbumJoinPicModel().getUpdateJoinPic(aSN);//已加入相簿的圖片
+                    ViewBag.getNotJoinPic = new AlbumJoinPicModel().getUpdateNotJoinPic(aSN, ID);//未加入相簿的圖片
                 }
             }
-            return View(db.Rio_Album.ToList());
+            return View();
         }
 
         public ActionResult DeleteAlbum(int? SN)
         {
             int aSN = SN ?? 0;
+            string vid = string.Empty;
+            if (Request.QueryString.Get("vid") != null)
+            {
+                vid = Request.QueryString.Get("vid").ToString();
+            }
             if (aSN != 0)
             {
                 Rio_Album Album  = new AlbumModel().getAlbum(aSN);
                 Album.IsDelete = true;
                 new AlbumModel().Delete(Album);
             }
-            return Redirect("RioAlbumView");
+            return Redirect("RioAlbumView?vid=" + vid);
         }
 
         public ActionResult ZipAlbum()

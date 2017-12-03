@@ -31,7 +31,7 @@
         @{
             if (vid == UserID)
             {
-                <a class="btn btn-default" href="@Url.Action("DeleteAlbum","Rio_Album",new {SN= @aSN.ToString() })">刪除相簿</a>
+                <a class="btn btn-default" href="@Url.Action("DeleteAlbum","Rio_Album",new {SN= @aSN.ToString(),vid = @vid })">刪除相簿</a>
                 <a class="btn btn-default" data-fancybox data-type="iframe" data-src="CreateAlbum?s=1&as=@aSN" href="javascript:;">編輯相簿</a>
             }
             <a class="btn btn-default" href="@Url.Action("RioAlbumView","Rio_Album", new { vid = @vid })">相簿列表</a>

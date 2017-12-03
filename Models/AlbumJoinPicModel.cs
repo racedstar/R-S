@@ -9,19 +9,20 @@ namespace RioManager.Models
     {
         private Entities db = new Entities();
         //編輯相簿未與相簿關聯的圖片
-        public List<Rio_Pic> getUpdateNotJoinPic(int aSN)
+        public List<Rio_Pic> getUpdateNotJoinPic(int aSN, string ID)
         {
             var data = (from o in db.Rio_Pic
                         where !(from a in db.Vw_AlbumJoinPic
                                 where a.AlbumSN == aSN && a.PicIsEnable == true && a.PicIsDelete == false
                                 select a.PicSN).Contains(o.SN)
+                                && o.CreateID == ID
                                 && o.IsDelete == false
                         select o).ToList();
             return data;
         }
 
         //編輯相簿已與相簿關聯的圖片
-        public List<Vw_AlbumJoinPic> getUpdateJoinPic(int aSN)
+        public List<Vw_AlbumJoinPic> getUpdateJoinPic(int aSN )
         {
             var data = (from o in db.Vw_AlbumJoinPic
                         where o.AlbumSN == aSN && o.PicIsEnable == true && o.PicIsDelete == false
