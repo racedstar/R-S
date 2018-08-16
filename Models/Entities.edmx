@@ -289,6 +289,8 @@
           </Key>
           <Property Name="aSN" Type="int" />
           <Property Name="ID" Type="nvarchar(max)" />
+          <Property Name="PicPath" Type="nvarchar(max)" />
+          <Property Name="PicName" Type="nvarchar(max)" />
           <Property Name="SN" Type="int" Nullable="false" />
           <Property Name="AccountSN" Type="int" Nullable="false" />
           <Property Name="TrackSN" Type="int" Nullable="false" />
@@ -431,6 +433,8 @@
             <DefiningQuery>SELECT 
     [Vw_Notice].[aSN] AS [aSN], 
     [Vw_Notice].[ID] AS [ID], 
+    [Vw_Notice].[PicPath] AS [PicPath], 
+    [Vw_Notice].[PicName] AS [PicName], 
     [Vw_Notice].[SN] AS [SN], 
     [Vw_Notice].[AccountSN] AS [AccountSN], 
     [Vw_Notice].[TrackSN] AS [TrackSN], 
@@ -486,8 +490,8 @@
           <EntitySet Name="Rio_UserTrack" EntityType="Entity.Rio_UserTrack" />
           <EntitySet Name="Vw_UserTrack" EntityType="Entity.Vw_UserTrack" />
           <EntitySet Name="Rio_Notice" EntityType="Entity.Rio_Notice" />
-          <EntitySet Name="Vw_Notice" EntityType="Entity.Vw_Notice" />
           <EntitySet Name="Rio_Compression" EntityType="Entity.Rio_Compression" />
+          <EntitySet Name="Vw_Notice" EntityType="Entity.Vw_Notice" />
         </EntityContainer>
         <EntityType Name="Rio_Account">
           <Key>
@@ -769,24 +773,6 @@
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IsRead" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityType Name="Vw_Notice">
-          <Key>
-            <PropertyRef Name="SN" />
-            <PropertyRef Name="AccountSN" />
-            <PropertyRef Name="TrackSN" />
-            <PropertyRef Name="NoticeContent" />
-            <PropertyRef Name="CreateDate" />
-            <PropertyRef Name="IsRead" />
-          </Key>
-          <Property Name="aSN" Type="Int32" />
-          <Property Name="ID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SN" Type="Int32" Nullable="false" />
-          <Property Name="AccountSN" Type="Int32" Nullable="false" />
-          <Property Name="TrackSN" Type="Int32" Nullable="false" />
-          <Property Name="NoticeContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IsRead" Type="Boolean" Nullable="false" />
-        </EntityType>
         <EntityType Name="Rio_Compression">
           <Key>
             <PropertyRef Name="SN" />
@@ -801,6 +787,26 @@
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IsEnable" Type="Boolean" Nullable="false" />
           <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vw_Notice">
+          <Key>
+            <PropertyRef Name="SN" />
+            <PropertyRef Name="AccountSN" />
+            <PropertyRef Name="TrackSN" />
+            <PropertyRef Name="NoticeContent" />
+            <PropertyRef Name="CreateDate" />
+            <PropertyRef Name="IsRead" />
+          </Key>
+          <Property Name="aSN" Type="Int32" />
+          <Property Name="ID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SN" Type="Int32" Nullable="false" />
+          <Property Name="AccountSN" Type="Int32" Nullable="false" />
+          <Property Name="TrackSN" Type="Int32" Nullable="false" />
+          <Property Name="NoticeContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsRead" Type="Boolean" Nullable="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1072,20 +1078,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Vw_Notice">
-            <EntityTypeMapping TypeName="Entity.Vw_Notice">
-              <MappingFragment StoreEntitySet="Vw_Notice">
-                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="NoticeContent" ColumnName="NoticeContent" />
-                <ScalarProperty Name="TrackSN" ColumnName="TrackSN" />
-                <ScalarProperty Name="AccountSN" ColumnName="AccountSN" />
-                <ScalarProperty Name="SN" ColumnName="SN" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="aSN" ColumnName="aSN" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Rio_Compression">
             <EntityTypeMapping TypeName="Entity.Rio_Compression">
               <MappingFragment StoreEntitySet="Rio_Compression">
@@ -1099,6 +1091,22 @@
                 <ScalarProperty Name="Path" ColumnName="Path" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="SN" ColumnName="SN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vw_Notice">
+            <EntityTypeMapping TypeName="Entity.Vw_Notice">
+              <MappingFragment StoreEntitySet="Vw_Notice">
+                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="NoticeContent" ColumnName="NoticeContent" />
+                <ScalarProperty Name="TrackSN" ColumnName="TrackSN" />
+                <ScalarProperty Name="AccountSN" ColumnName="AccountSN" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+                <ScalarProperty Name="PicName" ColumnName="PicName" />
+                <ScalarProperty Name="PicPath" ColumnName="PicPath" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="aSN" ColumnName="aSN" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

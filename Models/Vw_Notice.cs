@@ -16,6 +16,8 @@ namespace RioManager.Models
     {
         public Nullable<int> aSN { get; set; }
         public string ID { get; set; }
+        public string PicPath { get; set; }
+        public string PicName { get; set; }
         public int SN { get; set; }
         public int AccountSN { get; set; }
         public int TrackSN { get; set; }

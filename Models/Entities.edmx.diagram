@@ -20,8 +20,8 @@
         <EntityTypeShape EntityType="Entity.Rio_UserTrack" Width="1.5" PointX="7.375" PointY="10.75" />
         <EntityTypeShape EntityType="Entity.Vw_UserTrack" Width="1.5" PointX="9.375" PointY="10.75" />
         <EntityTypeShape EntityType="Entity.Rio_Notice" Width="1.5" PointX="11.375" PointY="0.75" />
-        <EntityTypeShape EntityType="Entity.Vw_Notice" Width="1.5" PointX="11.375" PointY="3.75" />
         <EntityTypeShape EntityType="Entity.Rio_Compression" Width="1.5" PointX="11.375" PointY="7.75" />
+        <EntityTypeShape EntityType="Entity.Vw_Notice" Width="1.5" PointX="11.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

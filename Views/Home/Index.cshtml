@@ -1,16 +1,16 @@
 ﻿@{
     ViewBag.Title = "Home Page";
     var ID = "";
+    var vid = string.Empty;
     var userSetting = ViewBag.userSetting;
     var Title = "";
     var SubTitle = "Index";
     var img = "";
-    var vid = string.Empty;
     var userTrack = ViewBag.userTrack;
-    var userTrackText = "Track";    
+    var userTrackText = "Track";
     if (Context.Session["UserID"] != null)
     {
-        ID = Context.Session["UserID"].ToString();        
+        ID = Context.Session["UserID"].ToString();
     }
     if (Request.QueryString.Get("vid") != null)
     {

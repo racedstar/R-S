@@ -671,3 +671,20 @@
 .pagination-container ul li a{
     color:white;
 }
+
+/*通知*/
+.noticeDiv {
+    border-bottom: solid 1px;
+    border-color: darkgray;
+    margin-bottom:5px;
+}
+.noticeDiv img {
+    height: 50px;
+    width: 50px;
+    border-radius: 25px;
+    margin-right:10px;
+}
+.noticeDate {
+    text-align: right;
+    margin-bottom: 0px;
+}

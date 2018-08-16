@@ -40,7 +40,7 @@ namespace RioManager.Models
         public virtual DbSet<Rio_UserTrack> Rio_UserTrack { get; set; }
         public virtual DbSet<Vw_UserTrack> Vw_UserTrack { get; set; }
         public virtual DbSet<Rio_Notice> Rio_Notice { get; set; }
-        public virtual DbSet<Vw_Notice> Vw_Notice { get; set; }
         public virtual DbSet<Rio_Compression> Rio_Compression { get; set; }
+        public virtual DbSet<Vw_Notice> Vw_Notice { get; set; }
     }
 }

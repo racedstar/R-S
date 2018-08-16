@@ -3,11 +3,13 @@
     ViewBag.Title = "R-S_CompressionView";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
+    #region 變數宣告
     var isView = true;
     var mode = "V";
     var title = "CompressionView";
     var vid = string.Empty;
     var UserID = string.Empty;
+
     if (Request.QueryString.Get("vid") != null)
     {
         vid = Request.QueryString.Get("vid").ToString();
@@ -29,6 +31,7 @@
             title = "CompressionEdit";
         }
     }
+    #endregion
 }
 
 <div class="row topBar">
