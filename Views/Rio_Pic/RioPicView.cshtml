@@ -1,23 +1,27 @@
 ﻿@model IPagedList<RioManager.Models.Rio_Pic>
 
 @{
-    ViewBag.Title = "RioPicView";
+    ViewBag.Title = "R-S_PicView";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var isView = true;
+    var mode = "V";
     var title = "PicView";
     var vid = string.Empty;
-    var mode = "V";
     var UserID = string.Empty;
     var PicView = ViewBag.PicView;
     if (Request.QueryString.Get("vid") != null)
     {
         vid = Request.QueryString.Get("vid").ToString();
     }
+    else
+    {
+        Html.RenderAction("LoingChecked", "Rio_Account");
+    }
     if (Session["UserID"] != null)
     {
         UserID = Session["UserID"].ToString();
     }
-    if (Request.QueryString.Get("m") != null )
+    if (Request.QueryString.Get("m") != null)
     {
         mode = Request.QueryString.Get("m").ToString();
         if (mode == "E")
@@ -28,7 +32,7 @@
     }
 }
 
-<div class="topBar">
+<div class="row topBar">
     <div class="col-md-4">
         <h2>@title</h2>
     </div>
@@ -38,27 +42,27 @@
             {           
                 if (!isView)
                 {
-                    <input class="btn btn-default" type="button" id="fileDownload" value="多檔下載" onclick="zipFile('img')" />
-                    <input class="btn btn-default" type="button" id="imgReScaling" value="重置縮圖" onclick="location.href='@Url.Action("ReScaling", "Rio_Pic")'" />
-                    <input class="btn btn-default" type="button" id="deleteImg" value="刪除圖片" onclick="deleteFile('img')" />
-                    <input class="btn btn-default" type="button" id="cheangeEnable" value="改變啟用狀態" onclick="fileEnable('img')" />
-                    <a class="btn btn-default" href="@Url.Action("RioPicView" ,"Rio_Pic" ,new {vid = @vid ,m = "V" })">檢視模式</a>
+                    <input class="btn btn-success" type="button" id="fileDownload" value="多檔下載" onclick="zipFile('img')" />
+                    <input class="btn btn-warning" type="button" id="imgReScaling" value="重置縮圖" onclick="location.href='@Url.Action("ReScaling", "Rio_Pic")'" />
+                    <input class="btn btn-danger" type="button" id="deleteImg" value="刪除圖片" onclick="deleteFile('img')" />
+                    <input class="btn btn-warning" type="button" id="cheangeEnable" value="改變啟用狀態" onclick="fileEnable('img')" />
+                    <a class="btn btn-success" href="@Url.Action("RioPicView" ,"Rio_Pic" ,new {vid = @vid ,m = "V" })">檢視模式</a>
                 }
                 else
                 {
-                    <a class="btn btn-default" href="@Url.Action("RioPicView", "Rio_Pic" , new {vid = @vid ,m = "E"})">編輯模式</a>
+                    <a class="btn btn-success" href="@Url.Action("RioPicView", "Rio_Pic" , new {vid = @vid ,m = "E"})">編輯模式</a>
                 }
-                <a class="btn btn-default" data-fancybox data-type="iframe" data-src="/Tools/fmUpload?t=img" rel="" href="javascript:;">上傳圖片</a>
+                <a class="btn btn-primary" data-fancybox data-type="iframe" data-src="/Tools/fmUpload?t=img" rel="" href="javascript:;">上傳圖片</a>
             }
             else
             {
-                @Html.ActionLink("回" + vid + "的首頁","Index","Home",new { vid = @vid},new {@class= "btn btn-default"})
+                @Html.ActionLink("回" + vid + "的首頁","Index","Home",new { vid = @vid},new {@class= "btn btn-success" })
             }
         }
     </div>
 </div>
-<div class="container body-content">
-    <div class="form-group systemGroup">
+<div class="container systemContainer">
+    <div class="row form-group systemGroup">
         @{
 
             if (vid == UserID)//本人使用
@@ -67,13 +71,15 @@
                 {
                     foreach (var item in Model)
                     {
-                        var className = "col-md-3 thumbnail picViewDiv";
+                        var className = "thumbnail picViewDiv";
                         if (item.IsEnable == false)
                         {
-                            className = "col-md-3 thumbnail picViewDiv NotEnable";
+                            className = "thumbnail picViewDiv NotEnable";
                         }
-                        <div class="@className" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
-                            <a class="fancybox" data-fancybox="images" style="display:block;" rel="ligthbox" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>
+                        <div class="col-md-3">
+                            <div class="@className" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
+                                <a class="fancybox" data-fancybox="images" style="display:block;" rel="ligthbox" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>
+                            </div>
                         </div>
                     }
                 }
@@ -81,23 +87,27 @@
                 {
                     foreach (var item in Model)
                     {
-                        var className = "col-md-3 thumbnail picEditDiv";
+                        var className = "thumbnail picEditDiv";
                         if (item.IsEnable == false)
                         {
-                            className = "col-md-3 thumbnail picEditDiv NotEnable";
+                            className = "thumbnail picEditDiv NotEnable";
                         }
-                        <div id="@item.SN" class="@className" style="background-image:url(@item.PicPath/Scaling/@item.PicName);" onclick="selectDiv(event, '@className' ,'.picEditDiv')"></div>
+                        <div  class="col-md-3 ">
+                            <div id="@item.SN" class="@className" style="background-image:url(@item.PicPath/Scaling/@item.PicName);" onclick="selectDiv(event, '@className' ,'.picEditDiv')"></div>
+                        </div>
                     }
                 }
             }
-            else//觀光者
+            else//觀光客
             {
                 foreach (var item in Model)
                 {
                     if (item.IsEnable == true)
                     {
-                        <div class="col-md-3 thumbnail picViewDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
-                            <a class="fancybox" data-fancybox="images" style="display:block;" rel="ligthbox" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>
+                        <div class="col-md-3">
+                            <div class="thumbnail picViewDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
+                                <a class="fancybox" data-fancybox="images" style="display:block;" rel="ligthbox" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>
+                            </div>
                         </div>
                     }
                 }

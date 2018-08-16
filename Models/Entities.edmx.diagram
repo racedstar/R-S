@@ -9,13 +9,19 @@
         <EntityTypeShape EntityType="Entity.Rio_Album" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="Entity.Rio_AlbumJoinPic" Width="1.5" PointX="4.75" PointY="0.75" />
         <EntityTypeShape EntityType="Entity.Rio_Doc" Width="1.5" PointX="4.75" PointY="3.75" />
-        <EntityTypeShape EntityType="Entity.Rio_Pic" Width="1.5" PointX="0.75" PointY="5.75" />
-        <EntityTypeShape EntityType="Entity.Rio_SystemList" Width="1.5" PointX="6.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Entity.Vw_Account" Width="1.5" PointX="6.75" PointY="3.75" />
-        <EntityTypeShape EntityType="Entity.Vw_Album" Width="1.5" PointX="8.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Entity.Vw_AlbumJoinPic" Width="1.5" PointX="2.75" PointY="8.75" />
-        <EntityTypeShape EntityType="Entity.Rio_UserIndexSetting" Width="1.5" PointX="4.875" PointY="8.75" />
-        <EntityTypeShape EntityType="Entity.Vw_UserIndexSetting" Width="1.5" PointX="6.625" PointY="9.5" />
+        <EntityTypeShape EntityType="Entity.Rio_FBLogin" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="Entity.Rio_Pic" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Entity.Rio_SystemList" Width="1.5" PointX="6.75" PointY="5.75" />
+        <EntityTypeShape EntityType="Entity.Rio_UserIndexSetting" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Entity.Vw_Album" Width="1.5" PointX="2.75" PointY="8.75" />
+        <EntityTypeShape EntityType="Entity.Vw_AlbumJoinPic" Width="1.5" PointX="8.75" PointY="3.75" />
+        <EntityTypeShape EntityType="Entity.Vw_UserIndexSetting" Width="1.5" PointX="4.75" PointY="8.75" />
+        <EntityTypeShape EntityType="Entity.Vw_Account" Width="1.5" PointX="0.625" PointY="8.25" />
+        <EntityTypeShape EntityType="Entity.Rio_UserTrack" Width="1.5" PointX="7.375" PointY="10.75" />
+        <EntityTypeShape EntityType="Entity.Vw_UserTrack" Width="1.5" PointX="9.375" PointY="10.75" />
+        <EntityTypeShape EntityType="Entity.Rio_Notice" Width="1.5" PointX="11.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Entity.Vw_Notice" Width="1.5" PointX="11.375" PointY="3.75" />
+        <EntityTypeShape EntityType="Entity.Rio_Compression" Width="1.5" PointX="11.375" PointY="7.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

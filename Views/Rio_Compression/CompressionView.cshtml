@@ -1,0 +1,139 @@
+﻿@model IPagedList<RioManager.Models.Rio_Compression>
+@{
+    ViewBag.Title = "R-S_CompressionView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var isView = true;
+    var mode = "V";
+    var title = "CompressionView";
+    var vid = string.Empty;
+    var UserID = string.Empty;
+    if (Request.QueryString.Get("vid") != null)
+    {
+        vid = Request.QueryString.Get("vid").ToString();
+    }
+    else
+    {
+        Html.RenderAction("LoingChecked", "Rio_Account");
+    }
+    if (Session["UserID"] != null)
+    {
+        UserID = Session["UserID"].ToString();
+    }
+    if (Request.QueryString.Get("m") != null)
+    {
+        mode = Request.QueryString.Get("m").ToString();
+        if (mode == "E")
+        {
+            isView = false;
+            title = "CompressionEdit";
+        }
+    }
+}
+
+<div class="row topBar">
+    <div class="col-md-4">
+        <h2>@title</h2>
+    </div>
+    <div class="col-md-8 text-right" style="line-height:70px;">
+        @{
+            if (vid == UserID)
+            {
+                if (!isView)
+                {                                        
+                    <input class="btn btn-danger" type="button" id="deleteImg" value="刪除檔案" onclick="deleteFile('Compression')" />
+                    <input class="btn btn-warning" type="button" id="cheangeEnable" value="改變啟用狀態" onclick="fileEnable('Compression')" />
+                    <a class="btn btn-success" href="@Url.Action("CompressionView" ,"Rio_Compression" ,new {vid = @vid ,m = "V" })">檢視模式</a>
+                }
+                else
+                {
+                    <a class="btn btn-success" href="@Url.Action("CompressionView", "Rio_Compression" , new {vid = @vid ,m = "E"})">編輯模式</a>
+                }
+                <a class="btn btn-primary" data-fancybox data-type="iframe" data-src="/Tools/fmUpload?t=Compression" rel="" href="javascript:;">上傳壓縮檔</a>
+            }
+            else
+            {
+                @Html.ActionLink("回" + vid + "的首頁", "Index", "Home", new { vid = @vid }, new { @class = "btn btn-success" })
+            }
+        }
+    </div>
+</div>
+
+<div class="container systemContainer">
+    <div class="row form-group systemGroup">
+        @{            
+            if (isView)//View Mode
+            {
+                foreach (var item in Model)
+                {
+                    var className = " docViewDiv";
+                    var iconSrc = "";
+
+                    if (item.IsEnable == false)
+                    {
+                        className = " docViewDiv NotEnable";
+                    }
+
+                    if (item.Extension == "zip")
+                    {
+                        iconSrc = "../../Content/img/icon/zip.png";
+                    }
+                    else if (item.Extension == "7z")
+                    {
+                        iconSrc = "../../Content/img/icon/7zip.png";
+                    }
+                    else if (item.Extension == "rar")
+                    {
+                        iconSrc = "../../Content/img/icon/rar.png";
+                    }
+
+                    <div class="col-md-2 ">
+                        <div class="@className" style="background-image:url(@iconSrc)">
+                            <a href="@item.Path/@item.Name" title="@item.Name">
+                                <p>@item.Name</p>
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+            else//Edit Mode
+            {
+                foreach (var item in Model)
+                {
+                    var className = " docViewDiv";
+                    var iconSrc = "";
+
+                    if (item.IsEnable == false)
+                    {
+                        className = " docViewDiv NotEnable";
+                    }
+
+                    if (item.Extension == "zip")
+                    {
+                        iconSrc = "../../Content/img/icon/zip.png";
+                    }
+                    else if (item.Extension == "7z")
+                    {
+                        iconSrc = "../../Content/img/icon/7zip.png";
+                    }
+                    else if (item.Extension == "rar")
+                    {
+                        iconSrc = "../../Content/img/icon/rar.png";
+                    }
+
+                    <div  class="col-md-2">
+                        <div id="@item.SN" class="@className" style="background-image:url(@iconSrc)" onclick="selectDiv(event,'@className','.docViewDiv')">
+                            <p class="docViewP">@item.Name</p>
+                        </div>
+                    </div>
+                }
+            }            
+        }
+    </div>
+</div>
+
+<div class="container">
+    @Html.PagedListPager(Model, page => Url.Action("CompressionView", new { vid = @vid, m = mode, page }))
+    <p>End of content</p>
+</div>
+

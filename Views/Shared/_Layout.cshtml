@@ -1,63 +1,95 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RioManager</title>
+    <title>R-S</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/fancybox")    
+    @Scripts.Render("~/bundles/fancybox")
     @Scripts.Render("~/bundles/infinitescroll")
     @Scripts.Render("~/bundles/RioTools")
-    @{Html.RenderAction("LoingChecked", "Rio_Account"); }
-    @{ 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Emilys+Candy|Fredericka+the+Great|Galada|Rouge+Script|Yellowtail|Courgette" rel="stylesheet">
+    @*@{Html.RenderAction("LoingChecked", "Rio_Account"); }*@
+    @{
         var vid = string.Empty;
-        if(Session["UserID"] != null)
+        var accountID = string.Empty;
+        var notReadNoticeCount = 0;
+        var noticeTitle = "Notice";
+        if (Session["UserID"] != null)
         {
+            accountID = Session["UserID"].ToString();
             vid = Session["UserID"].ToString();
+            int.TryParse(Session["notReadNoticeCount"].ToString(), out notReadNoticeCount);
+            if (notReadNoticeCount > 0)
+            {
+                noticeTitle = "Notice(" + notReadNoticeCount + ")";
+            }
+        }
+
+        if (Request.QueryString.Get("vid") != null)
+        {
+            vid = Request.QueryString.Get("vid").ToString();
         }
     }
 </head>
-<body>    
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("RioStudioMVC", "Index", "Home", new { vid = @vid }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("首頁", "Index", "Home", new { vid = @vid },null)</li>                    
-                    @if (vid == "Rio")
-                    {
-                        <li>@Html.ActionLink("帳號", "Index", "Rio_Account")</li>
-                    }                                        
-                    <li>@Html.ActionLink("圖片", "RioPicView", "Rio_Pic", new { vid = @vid }, null)</li>
-                    <li>@Html.ActionLink("相簿", "RioAlbumView", "Rio_Album", new { vid = @vid }, null)</li>
-                    <li>@Html.ActionLink("文件", "RioDocView", "Rio_Doc", new { vid = @vid }, null)</li>
-                    <li>@Html.ActionLink("個人資料", "UserSetting", "Rio_Account", new { vid = @vid }, null)</li>
-                    <li>@Html.ActionLink("登出","Logout","Rio_Account")</li>
-                </ul>
-            </div>
-        </div>
-    </div>
+<body>
     <div class="">
+        <div id="mainMenu" class="navbar bg-secondary">
+            <div class="content">
+                <nav class="navbar-header navbar-dark">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    @Html.ActionLink("R-S", "Index", "Home", new { vid = @accountID }, new { @class = "navbar-brand" })
+                </nav>
+
+                @*電腦版*@
+                <div id="navbarSupportedContent" class="navbar-collapse collapse " >
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Home", "Index", "Home", new { vid = @vid },null)</li>                    
+                        @if (vid == "Rio")
+                        {
+                            <li>@Html.ActionLink("Account", "Index", "Rio_Account")</li>
+                        }                                        
+                        <li>@Html.ActionLink("Picture", "RioPicView", "Rio_Pic", new { vid = @vid }, null)</li>
+                        <li>@Html.ActionLink("Album", "RioAlbumView", "Rio_Album", new { vid = @vid }, null)</li>
+                        <li>@Html.ActionLink("Document", "RioDocView", "Rio_Doc", new { vid = @vid }, null)</li>
+                        <li>@Html.ActionLink("Compression", "CompressionView", "Rio_Compression", new { vid = @vid }, null)</li>
+                        <li>@Html.ActionLink("Explore", "AllUserLink", "Rio_Account")</li>
+                        <li><hr style="border-color:white" /></li> 
+                        @if(!accountID.Equals(string.Empty))
+                        {
+                            <li class="menuAccount">@Html.ActionLink("@"+@accountID, "Index", "Home", new { vid = @accountID }, new { @style = "color:white" })</li>
+                            <li>@Html.ActionLink("Setting", "UserSetting", "Rio_Account", new { vid = @vid }, null)</li>
+                            <li>@Html.ActionLink("Track", "userTrack", "Rio_Account")</li>
+                            <li>@Html.ActionLink(noticeTitle , "Index", "Rio_Notice")</li>
+                        }                    
+                        @if (accountID.Equals(string.Empty))
+                        {
+                            <li>@Html.ActionLink("Login", "Login", "Rio_Account")</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Logout", "Logout", "Rio_Account")</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>            
         @RenderBody()
         <hr />
-        <footer class="navbar navbar-inverse navbar-fixed-bottom">
+        @*<footer class="navbar navbar-inverse navbar-fixed-bottom">
             <div class="container">
                 <div class="navbar-btn">
                     <p style="color:white;">&copy; @DateTime.Now.Year - RioStudioMVC</p>
                 </div>
             </div>
-        </footer>
-    </div>    
+        </footer>*@
+    </div>
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

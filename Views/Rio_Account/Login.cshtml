@@ -1,6 +1,6 @@
 ﻿@model RioManager.Models.Rio_Account
 @{
-    ViewBag.Title = "Login";
+    ViewBag.Title = "R-S_Login";
     Layout = null;    
 }
 <!DOCTYPE html>
@@ -11,8 +11,12 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/fancybox")
-    @*@Scripts.Render("~/bundles/recaptcha")*@   
+    @Scripts.Render("~/bundles/RioFaceBookLogin")
+    @*@Scripts.Render("~/bundles/recaptcha")*@
     <script type="text/javascript" src='https://www.google.com/recaptcha/api.js'></script>
+    <script>
+
+    </script>
 </head>
 <body style="background:url('../../Content/img/Froncover/cover.png');background-repeat:no-repeat;background-attachment:fixed;background-size:cover;background-position:center;">    
     @using (Html.BeginForm())
@@ -25,40 +29,38 @@
                 <h4>Please sign in</h4>
                 <hr />
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-md-5" })
-                    <div class="col-md-2">
+                <div class="form-group justify-content-md-center">
+                    @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
                         @Html.TextBox("ID", null, htmlAttributes: new { @class = "form-control center" })
                     </div>
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-5" })
-                    <div class="col-md-2">
+                <div class="form-group justify-content-md-center">
+                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
                         @Html.Password("Password", null, htmlAttributes: new { @class = "form-control center text-box single-line" })
                         @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group justify-content-md-center">
                     <div class="col-md-12">
                         <div class="g-recaptcha center" data-sitekey="6LdrUTgUAAAAAHxN_vZgwLb3Fl72_a8U4GGeHzp1"></div>
                     </div>
-                    @Html.ValidationMessage("reCAPTCHA", new { @class="text-danger"})
+                    @Html.ValidationMessage("reCAPTCHA", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
                     <div class="col-md-12">
-                        <input type="submit" value="Login" class="btn btn-default" />
-                        <a class="btn btn-default" data-fancybox data-type="iframe" data-src="/Rio_Account/RioAccountRegister" href="javascript:;">Register</a>
+                        <input type="submit" value="Login" class="btn btn-success" />
+                        <a class="btn btn-info" data-fancybox data-type="iframe" data-src="/Rio_Account/RioAccountRegister" href="javascript:;">Register</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <fb:login-button scope="public_profile,email" onlogin="fb_login();"></fb:login-button>
                     </div>
                 </div>
             </div>
         </div>
-    }
-    <script>
-        console.log(@ViewBag.Message);
-    </script>       
-    @if (ViewBag.Message != null)
-    {
-
     }
 </body>
 

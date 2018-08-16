@@ -29,5 +29,6 @@ namespace RioManager.Models
         public string ModifyID { get; set; }
         public string ModifyName { get; set; }
         public System.DateTime ModifyDate { get; set; }
+        public bool IsFBAccount { get; set; }
     }
 }

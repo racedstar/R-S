@@ -1,21 +1,21 @@
-﻿@Styles.Render("~/Content/css")
-@Scripts.Render("~/bundles/modernizr")
+﻿@Scripts.Render("~/bundles/modernizr")
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/fancybox")
 @Scripts.Render("~/bundles/infinitescroll")
+@Styles.Render("~/Content/css")
 @Scripts.Render("~/bundles/RioTools")
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 @{
     Layout = null;
     var Pic = ViewBag.Pic;
-    var CoverSetting = "個人封面設定";
+    var CoverSetting = "User cover setting";
     if (Request.QueryString["t"] != null)
     {
         if (Request.QueryString["t"].ToString() == "Index")
         {
-            CoverSetting = "封面設定";
+            CoverSetting = "User cover setting";
         }
     }
-
 }
 
 <!DOCTYPE html>
@@ -26,20 +26,22 @@
     <title>SelectCover</title>
 </head>
 <body style="overflow:hidden;">
-    <div class="container">
-        <div class="col-md-6 text-left">
+    <div class="row">
+        <div class="col-md-4 text-left">
             <h2>@CoverSetting</h2>
         </div>
-        <div class="col-md-6 text-right">            
-            <input id="btnOk" style="margin-top: 10px;" data-fancybox-close class="btn btn-default" type="button" value="確定" onclick="updateCover()" />
+        <div class="col-md-8  text-right">
+            <a id="btnOk" style="margin-top: 10px;" data-fancybox-close class="btn btn-success" onclick="updateCover()">OK</a>
         </div>
     </div>
     <div class="body-content">
-        <div class="form-group selectCover">
-            @{                              
+        <div class="row form-group selectCover">
+            @{
                 foreach (var item in Pic)
                 {
-                    <div id="@item.SN" class="col-md-3 thumbnail picEditDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName);" onclick="radioSelectDiv(event,'col-md-3  thumbnail picEditDiv')"></div>
+                    <div class="col-md-2">
+                        <div id="@item.SN" class="picEditDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName);" onclick="radioSelectDiv(event,'picEditDiv')"></div>
+                    </div>
                 }
             }
         </div>

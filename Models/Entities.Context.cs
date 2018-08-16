@@ -29,12 +29,18 @@ namespace RioManager.Models
         public virtual DbSet<Rio_Album> Rio_Album { get; set; }
         public virtual DbSet<Rio_AlbumJoinPic> Rio_AlbumJoinPic { get; set; }
         public virtual DbSet<Rio_Doc> Rio_Doc { get; set; }
+        public virtual DbSet<Rio_FBLogin> Rio_FBLogin { get; set; }
         public virtual DbSet<Rio_Pic> Rio_Pic { get; set; }
         public virtual DbSet<Rio_SystemList> Rio_SystemList { get; set; }
-        public virtual DbSet<Vw_Account> Vw_Account { get; set; }
+        public virtual DbSet<Rio_UserIndexSetting> Rio_UserIndexSetting { get; set; }
         public virtual DbSet<Vw_Album> Vw_Album { get; set; }
         public virtual DbSet<Vw_AlbumJoinPic> Vw_AlbumJoinPic { get; set; }
-        public virtual DbSet<Rio_UserIndexSetting> Rio_UserIndexSetting { get; set; }
         public virtual DbSet<Vw_UserIndexSetting> Vw_UserIndexSetting { get; set; }
+        public virtual DbSet<Vw_Account> Vw_Account { get; set; }
+        public virtual DbSet<Rio_UserTrack> Rio_UserTrack { get; set; }
+        public virtual DbSet<Vw_UserTrack> Vw_UserTrack { get; set; }
+        public virtual DbSet<Rio_Notice> Rio_Notice { get; set; }
+        public virtual DbSet<Vw_Notice> Vw_Notice { get; set; }
+        public virtual DbSet<Rio_Compression> Rio_Compression { get; set; }
     }
 }

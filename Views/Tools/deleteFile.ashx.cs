@@ -28,6 +28,10 @@ namespace RioManager.Views.Tools
                         string[] docSN = HttpContext.Current.Request.Form["SN"].ToString().Split(',');
                         deleteDoc(docSN);
                         break;
+                    case "Compression":
+                        string[] CFSN = HttpContext.Current.Request.Form["SN"].ToString().Split(',');
+                        deleteCompression(CFSN);
+                        break;
                 }
             }
         }
@@ -69,14 +73,28 @@ namespace RioManager.Views.Tools
                     File.Delete(HttpContext.Current.Server.MapPath(Doc.DocPath + "\\" + Doc.DocName));
                 }
 
-                //刪除實體檔案縮圖
-                if (File.Exists(HttpContext.Current.Server.MapPath(Doc.DocPath + "\\Scaling\\" + Doc.DocName)))
+                //資料庫更新刪除標記           
+                Doc.IsDelete = true;
+                db.SaveChanges();
+            }
+        }
+
+        private void deleteCompression(string[] SNArray)
+        {
+            foreach (var data in SNArray)
+            {
+                int SN = 0;
+                int.TryParse(data.ToString(), out SN);
+
+                //刪除實體檔案
+                Rio_Compression CF = db.Rio_Compression.Find(SN);
+                if (File.Exists(HttpContext.Current.Server.MapPath(CF.Path + "\\" + CF.Name)))
                 {
-                    File.Delete(HttpContext.Current.Server.MapPath(Doc.DocPath + "\\Scaling\\" + Doc.DocName));
+                    File.Delete(HttpContext.Current.Server.MapPath(CF.Path + "\\" + CF.Name));
                 }
 
                 //資料庫更新刪除標記           
-                Doc.IsDelete = true;
+                CF.IsDelete = true;
                 db.SaveChanges();
             }
         }

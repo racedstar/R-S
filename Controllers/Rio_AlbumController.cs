@@ -130,12 +130,12 @@ namespace RioManager.Controllers
 
         public ActionResult RioAlbumView(int? page)
         {
-            string ID = Session["UserID"].ToString();
+            string ID = string.Empty;            
             if(Request.QueryString.Get("vid") != null)
             {
                 ID = Request.QueryString.Get("vid").ToString();
             }
-            var data = new AlbumModel().getUsertVwAlbumListByID(ID).OrderBy(o => o.SN);
+            var data = new AlbumModel().getUsertVwAlbumListByID(ID).OrderByDescending(o => o.CreateDate);
 
             var pageNumber = page ?? 1;
 
@@ -166,7 +166,7 @@ namespace RioManager.Controllers
                 }
                 if (Request.QueryString.Get("s").ToString() == "0")//建立相簿時取得圖片
                 { 
-                    ViewBag.getNotJoinPic = new PicModel().getUserPicByID(ID);
+                    ViewBag.getNotJoinPic = new PicModel().getUserPicByID(ID).OrderByDescending(o => o.CreateDate);
                 }
 
                 if (Request.QueryString.Get("s").ToString() == "1" && Request.QueryString.Get("as") != null)//編輯相簿時取得圖片
@@ -176,7 +176,7 @@ namespace RioManager.Controllers
 
                     ViewBag.VwAlbum = new AlbumModel().getVwAlbum(aSN);//相簿資料
                     ViewBag.getJoinPic = new AlbumJoinPicModel().getUpdateJoinPic(aSN);//已加入相簿的圖片
-                    ViewBag.getNotJoinPic = new AlbumJoinPicModel().getUpdateNotJoinPic(aSN, ID);//未加入相簿的圖片
+                    ViewBag.getNotJoinPic = new AlbumJoinPicModel().getUpdateNotJoinPic(aSN, ID).OrderByDescending(o => o.CreateDate);//未加入相簿的圖片
                 }
             }
             return View();

@@ -27,6 +27,10 @@ namespace RioManager.Views.Tools
                         string[] docSN = HttpContext.Current.Request.Form["SN"].ToString().Split(',');
                         changeEnableDoc(docSN);
                         break;
+                    case "Compression":
+                        string[] CFSN = HttpContext.Current.Request.Form["SN"].ToString().Split(',');
+                        changeEnableCompression(CFSN);
+                        break;
                 }
             }
         }
@@ -51,6 +55,7 @@ namespace RioManager.Views.Tools
                 new PicModel().Update(Pic);
             }
         }
+
         private void changeEnableDoc(string[] SNArray)
         {
             foreach (var data in SNArray)
@@ -68,6 +73,26 @@ namespace RioManager.Views.Tools
                     Doc.IsEnable = true;
                 }
                 new DocModel().Update(Doc);
+            }
+        }
+
+        private void changeEnableCompression(string[] SNArray)
+        {
+            foreach (var data in SNArray)
+            {
+                int SN = 0;
+                int.TryParse(data.ToString(), out SN);
+
+                Rio_Compression CF = db.Rio_Compression.Find(SN);
+                if (CF.IsEnable == true)
+                {
+                    CF.IsEnable = false;
+                }
+                else
+                {
+                    CF.IsEnable = true;
+                }
+                new CompressionModel().Update(CF);
             }
         }
 

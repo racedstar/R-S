@@ -31,6 +31,10 @@ namespace RioManager.Controllers
             {
                 Extension = RioManager.App_Code.WebConfig.UploadDocumentType;
             }
+            else if (UploadType.Equals("Compression"))
+            {
+                Extension = RioManager.App_Code.WebConfig.UploadCompressionType;
+            }
 
             ViewBag.UploadType = Extension;
 

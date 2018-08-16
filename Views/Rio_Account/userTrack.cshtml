@@ -1,0 +1,46 @@
+﻿@model IPagedList<RioManager.Models.Vw_UserTrack>
+
+@{
+    ViewBag.Title = "R-S_UserTrack";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var userTrackList = ViewBag.userTrackList;
+}
+
+<div class="container systemContainer">
+    <div class="topBar">
+        <h2>Track</h2>
+    </div>
+    <div class="row form-group systemGroup">
+        @{
+            foreach (var item in userTrackList)
+            {
+                <div class="col-md-4">
+                    <a href="@Url.Action("Index","Home", new { vid = @item.ID })">
+                        <div class="row accountLinkRow">
+                            <div class="col-sm-4 accoutCover">
+                                @if (item.PicSN != 0)
+                                {
+                                    <img src="@item.PicPath@item.PicName" />
+                                }
+                                else
+                                {
+                                    <img src="~/Content/img/icon/questionMark.png" />
+                                }
+                            </div>
+                            <div class="col-sm-8">
+                                <span>@item.ID</span><br />
+                                <span class="accountIntroduction">@item.AccountContent</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        }
+    </div>
+</div>
+<div class="container">
+    @Html.PagedListPager(Model, page => Url.Action("RioPicView", new { page }))    
+</div>
+
+
+

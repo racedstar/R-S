@@ -27,12 +27,9 @@ var dragPhoto = function (sourceID, ev) {
         else {
             if (data) {
                 document.getElementById(ev.target.id).appendChild(document.getElementById(data));
+                console.log(ev.target.id);
                 if (ev.target.id != "NotJoinedPic" && ev.target.id != "JoinedPic") {
                     $('#' + event.target.id).before(document.getElementById(data));
-                }
-                console.log(event.target.id);
-                if (ev.target.id === "NotJoinedPic") {
-                    checkIsFrontCover(data);//確認取消的圖片不是封面，若是封面就將封面清空
                 }
             }
         }
@@ -43,18 +40,23 @@ var dragPhoto = function (sourceID, ev) {
 var imgClick = function (ev) {
     var imgDivName = document.getElementById(ev.target.id).className,
         shiftRangeparentID = document.getElementById(ev.target.id).parentNode.id;
-    shiftRange = $("#" + shiftRangeparentID + " .createAlbumDiv").length,
+        shiftRange = $("#" + shiftRangeparentID + " .createAlbumDiv").length,
         isShiftSelect = false,
-        initialClassName = "col-md-3 text-center createAlbumDiv",
+        initialClassName = "col-md-3 createAlbumDiv",
         selected = document.getElementById(ev.target.id),
         allSelected = document.getElementsByClassName("col-md-3 text-center");
-
     //單選功能
     if (imgDivName.indexOf("Active") === -1) {
         selected.className = initialClassName + " Active";
+        
+        var createIcon = document.createElement("i");
+        createIcon.setAttribute("class", "fa fa-check-square-o");
+        createIcon.setAttribute("style", "font-size:48px;background-color:white;");
+        document.getElementById(ev.target.id).appendChild(createIcon);           
     }
     else {
         selected.className = initialClassName;
+        $("#" + ev.target.id).children().remove();
     }
 
     //Shift連續選取功能
@@ -62,13 +64,19 @@ var imgClick = function (ev) {
         if (ev.shiftKey) {
             for (var i = 0; i < shiftRange; i++) {
                 if (isShiftSelect === true) {
-                    if ($("#" + shiftRangeparentID + " .col-md-3.text-center.createAlbumDiv")[i].className.indexOf("Active") != -1) {
+                    if ($(".col-md-3.createAlbumDiv")[i].className.indexOf("Active") != -1) {
                         isShiftSelect = false;
                     }
-                    $("#" + shiftRangeparentID + " .col-md-3.text-center.createAlbumDiv")[i].className = initialClassName + " Active";
+                    $(".col-md-3.createAlbumDiv")[i].className = initialClassName + " Active";
+                    if ($(".col-md-3.createAlbumDiv")[i].id != ev.target.id) {
+                        var createIcon = document.createElement("i");
+                        createIcon.setAttribute("class", "fa fa-check-square-o");
+                        createIcon.setAttribute("style", "font-size:48px;background-color:white;");
+                        $("#" + $(".col-md-3.createAlbumDiv")[i].id).append(createIcon);
+                    }
 
                 }
-                else if ($("#" + shiftRangeparentID + " .col-md-3.text-center.createAlbumDiv")[i].className.indexOf("Active") != -1) {
+                else if ($(".col-md-3.createAlbumDiv")[i].className.indexOf("Active") != -1) {
                     isShiftSelect = true;
 
                 }
@@ -89,7 +97,8 @@ var multiImg = function (ev, divID) {
         if (ev.target.id != "NotJoinedPic" && ev.target.id != "JoinedPic") {
             $('#' + event.target.id).before(document.getElementById(data));
         }
-        document.getElementById(data).className = "col-md-3 text-center createAlbumDiv";
+        document.getElementById(data).className = "col-md-3 createAlbumDiv";
+        $('#' + data).children().remove();
     }
 }
 
@@ -103,14 +112,6 @@ var cloneDrop = function (ev){
     $("#frontCover").append("<div id='" + getID + "fronCover' style='background-image:url(" + imgSrc + ");height:80px;'></div>");//複製html到封面的div    
     frontCoverSN = getID;
 
-}
-
-//當圖片移除時，確認圖片封面 多檔不判斷((懶惰
-var checkIsFrontCover = function (data){
-    if (frontCoverSN === data){
-        $("#frontCover").empty();
-        frontCoverSN = "";
-    }
 }
 
 //取得Querystring  e.g. var s = QueryString("s");
@@ -139,28 +140,37 @@ var addimgArray = function () {
 }
 
 //存檔
-var SaveData = function (state) {
+var SaveData = function (state) {    
     var title = $("#txtTitle").val(),
         State = 'Create',
         s = "",
         imgIDArray = []
         IsEnable = $('#chkEnable')[0].checked;
 
-    if (frontCoverSN === "") {
-        alert("請選擇封面");
-        return false;
-        }
+
 
     if ($("#txtTitle").val() === "") {
         alert("相簿名稱不得空白")
         return false;
     }
 
-    imgIDArray = addimgArray();
-
     if (state === 1){//state=1為Update
         s = getQueryString("as");
         State = "Update&as=" + s;
+    }
+
+    imgIDArray = addimgArray();
+
+    if (frontCoverSN === "") {
+        alert("請選擇封面");
+        return false;
+    }
+
+    if (imgIDArray.indexOf(frontCoverSN) == -1) {        
+        $("#frontCover").empty();
+        frontCoverSN = "";
+        alert("封面不得選擇相簿內以外的圖片")
+        return false;
     }
 
     $.ajax({

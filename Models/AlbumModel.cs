@@ -65,6 +65,15 @@ namespace RioManager.Models
                         select o).ToList();
             return data;
         }
+
+        public List<Vw_Album> getPreViewAlbumListByID(string ID)
+        {
+            var data = (from o in db.Vw_Album
+                        where o.IsDelete == false && o.IsEnable == true && o.CreateID == ID
+                        select o).OrderByDescending(o => o.CreateDate).ToList();
+            data = data.Take(4).ToList();
+            return data;
+        }
         
         //刪除圖片後，取得所有有使用該圖片的當封面的相簿
         public List<Rio_Album> getAlbumByFrontCoverSN(int picSN)

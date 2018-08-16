@@ -1,35 +1,43 @@
 ﻿@model IPagedList<RioManager.Models.Vw_Album>
 @{
-    ViewBag.Title = "RioPicView";
+    ViewBag.Title = "R-S_AlbumView";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var vid = string.Empty;
-    var UserID = Session["UserID"].ToString();
+    var UserID = string.Empty;
+    if (Session["UserID"] != null)
+    {
+        UserID = Session["UserID"].ToString();
+    }
     if (Request.QueryString.Get("vid") != null)
     {
         vid = Request.QueryString.Get("vid").ToString();
     }
+    else
+    {
+        Html.RenderAction("LoingChecked", "Rio_Account");
+    }
 }
 
-<div class="topBar">
-    <div class="col-md-6">
+<div class="row topBar">
+    <div class="col-md-4">
         <h2>AlbumView</h2>
     </div>
-    <div class="col-md-6 text-right" style="line-height:70px;">
+    <div class="col-md-8 text-right" style="line-height:70px;">
         @{
             if (vid == UserID)
             {
-                <a class="btn btn-default" data-fancybox data-type="iframe" data-src="CreateAlbum?s=0" rel="" href="javascript:;">建立新相簿</a>
+                <a class="btn btn-primary" data-fancybox data-type="iframe" data-src="CreateAlbum?s=0" rel="" href="javascript:;">建立新相簿</a>
             }
             else
             {
-                @Html.ActionLink("回" + vid + "的首頁", "Index", "Home", new { vid = @vid }, new { @class = "btn btn-default" })
+                @Html.ActionLink("回" + vid + "的首頁", "Index", "Home", new { vid = @vid }, new { @class = "btn btn-success" })
             }
         }
     </div>
 </div>
 
-<div class="container body-content">
-    <div class="form-group systemGroup">
+<div class="container systemContainer">
+    <div class="row form-group systemGroup">
         @{
             var VwAlbum = @ViewBag.VwAlbum;
         }
@@ -38,15 +46,17 @@
             {
                 foreach (var item in VwAlbum)
                 {
-                    var className = "col-md-3 albumDiv";
+                    var className = "albumDiv";
                     if (item.IsEnable == false)
                     {
-                        className = "col-md-3 albumDiv NotEnable";
+                        className = "albumDiv NotEnable";
                     }
-                    <div id="@item.SN" class="@className" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
-                        <a href="@Url.Action("RioAlbumContent", "Rio_Album", new { vid = @vid, SN = @item.SN })">
-                            <p>@item.AlbumName</p>
-                        </a>
+                    <div id="@item.SN" class="col-md-3 " >
+                        <div class="@className" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
+                            <a href="@Url.Action("RioAlbumContent", "Rio_Album", new { vid = @vid, SN = @item.SN })">
+                                <p>@item.AlbumName</p>
+                            </a>
+                        </div>
                     </div>
                 }
             }
@@ -56,10 +66,12 @@
                 {
                     if (item.IsEnable == true)
                     {
-                        <div id="@item.SN" class="col-md-3 albumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
-                            <a href="@Url.Action("RioAlbumContent", "Rio_Album", new { vid = @vid, SN = @item.SN })">
-                                <p>@item.AlbumName</p>
-                            </a>
+                        <div id="@item.SN" class="col-md-3 " >
+                            <div class="albumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
+                                <a href="@Url.Action("RioAlbumContent", "Rio_Album", new { vid = @vid, SN = @item.SN })">
+                                    <p>@item.AlbumName</p>
+                                </a>
+                            </div>
                         </div>
                     }
                 }

@@ -31,6 +31,15 @@ namespace RioManager.App_Code
             }
             set { WebConfig._UploadDocumentType = value; }
         }
+        public static string UploadCompressionType
+        {
+            get
+            {
+                _UploadDocumentType = ConfigurationManager.AppSettings["UploadCompressionType"];
+                return _UploadDocumentType;
+            }
+            set { WebConfig._UploadDocumentType = value; }
+        }
         #endregion
 
         #region AES加密

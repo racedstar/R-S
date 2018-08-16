@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using PagedList;
+using RioManager.Models;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using RioManager.Models;
-using PagedList;
 
 namespace RioManager.Controllers
 {
@@ -140,7 +136,8 @@ namespace RioManager.Controllers
             {
                 ID = Request.QueryString.Get("vid").ToString();
             }
-            var data = new PicModel().getUserPicByID(ID).OrderBy(o => o.SN);
+            var data = new PicModel().getUserPicByID(ID).OrderByDescending(o => o.CreateDate);           
+            
             var pageNumeber = page ?? 1;
             var pageData = data.ToPagedList(pageNumeber, pageSize);
             

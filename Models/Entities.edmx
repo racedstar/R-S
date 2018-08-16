@@ -24,6 +24,7 @@
           <Property Name="ModifyID" Type="nvarchar(max)" Nullable="false" />
           <Property Name="ModifyName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="ModifyDate" Type="datetime" Nullable="false" />
+          <Property Name="IsFBAccount" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Rio_Album">
           <Key>
@@ -53,6 +54,21 @@
           <Property Name="PicSN" Type="int" Nullable="false" />
           <Property Name="Sort" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Rio_Compression">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Path" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Extension" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateSN" Type="int" Nullable="false" />
+          <Property Name="CreateID" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="IsEnable" Type="bit" Nullable="false" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Rio_Doc">
           <Key>
             <PropertyRef Name="SN" />
@@ -71,6 +87,27 @@
           <Property Name="ModifyDate" Type="datetime" />
           <Property Name="IsEnable" Type="bit" />
           <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="Rio_FBLogin">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountSN" Type="int" Nullable="false" />
+          <Property Name="Facebook_ID" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rio_Notice">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountSN" Type="int" Nullable="false" />
+          <Property Name="TrackSN" Type="int" Nullable="false" />
+          <Property Name="NoticeContent" Type="varchar(max)" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="IsRead" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Rio_Pic">
           <Key>
@@ -108,6 +145,14 @@
           <Property Name="Title" Type="nvarchar" MaxLength="50" />
           <Property Name="SubTitle" Type="nvarchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="Rio_UserTrack">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountSN" Type="int" Nullable="false" />
+          <Property Name="TrackAccountSN" Type="int" Nullable="false" />
+        </EntityType>
         <!--產生期間發現錯誤:
 警告 6002: 資料表/檢視 'RioBlog.dbo.Vw_Account' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
         <EntityType Name="Vw_Account">
@@ -127,6 +172,7 @@
             <PropertyRef Name="ModifyID" />
             <PropertyRef Name="ModifyName" />
             <PropertyRef Name="ModifyDate" />
+            <PropertyRef Name="IsFBAccount" />
           </Key>
           <Property Name="PicName" Type="nvarchar(max)" />
           <Property Name="PicPath" Type="nvarchar(max)" />
@@ -145,12 +191,18 @@
           <Property Name="ModifyID" Type="nvarchar(max)" Nullable="false" />
           <Property Name="ModifyName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="ModifyDate" Type="datetime" Nullable="false" />
+          <Property Name="IsFBAccount" Type="bit" Nullable="false" />
           <Property Name="CoverName" Type="nvarchar(max)" />
           <Property Name="CoverPicPath" Type="nvarchar(max)" />
           <Property Name="AccountSN" Type="int" />
           <Property Name="CoverSN" Type="int" />
           <Property Name="Title" Type="nvarchar" MaxLength="50" />
           <Property Name="SubTitle" Type="nvarchar" MaxLength="100" />
+          <Property Name="fbSN" Type="int" />
+          <Property Name="ASN" Type="int" />
+          <Property Name="fbEmail" Type="nvarchar" MaxLength="100" />
+          <Property Name="Facebook_ID" Type="nvarchar(max)" />
+          <Property Name="fbName" Type="nvarchar(max)" />
         </EntityType>
         <!--產生期間發現錯誤:
 警告 6002: 資料表/檢視 'RioBlog.dbo.Vw_Album' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
@@ -225,6 +277,26 @@
           <Property Name="JoinSort" Type="int" Nullable="false" />
         </EntityType>
         <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'RioBlog.dbo.Vw_Notice' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="Vw_Notice">
+          <Key>
+            <PropertyRef Name="SN" />
+            <PropertyRef Name="AccountSN" />
+            <PropertyRef Name="TrackSN" />
+            <PropertyRef Name="NoticeContent" />
+            <PropertyRef Name="CreateDate" />
+            <PropertyRef Name="IsRead" />
+          </Key>
+          <Property Name="aSN" Type="int" />
+          <Property Name="ID" Type="nvarchar(max)" />
+          <Property Name="SN" Type="int" Nullable="false" />
+          <Property Name="AccountSN" Type="int" Nullable="false" />
+          <Property Name="TrackSN" Type="int" Nullable="false" />
+          <Property Name="NoticeContent" Type="varchar(max)" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="IsRead" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--產生期間發現錯誤:
 警告 6002: 資料表/檢視 'RioBlog.dbo.Vw_UserIndexSetting' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
         <EntityType Name="Vw_UserIndexSetting">
           <Key>
@@ -237,14 +309,39 @@
           <Property Name="Title" Type="nvarchar" MaxLength="50" />
           <Property Name="SubTitle" Type="nvarchar" MaxLength="100" />
         </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'RioBlog.dbo.Vw_UserTrack' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="Vw_UserTrack">
+          <Key>
+            <PropertyRef Name="trackSN" />
+            <PropertyRef Name="AccountSN" />
+            <PropertyRef Name="TrackAccountSN" />
+          </Key>
+          <Property Name="SN" Type="int" />
+          <Property Name="ID" Type="nvarchar(max)" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="AccountContent" Type="nvarchar(max)" />
+          <Property Name="IsEnable" Type="bit" />
+          <Property Name="IsDelete" Type="bit" />
+          <Property Name="PicSN" Type="int" />
+          <Property Name="PicPath" Type="nvarchar(max)" />
+          <Property Name="PicName" Type="nvarchar(max)" />
+          <Property Name="trackSN" Type="int" Nullable="false" />
+          <Property Name="AccountSN" Type="int" Nullable="false" />
+          <Property Name="TrackAccountSN" Type="int" Nullable="false" />
+        </EntityType>
         <EntityContainer Name="EntityStoreContainer">
           <EntitySet Name="Rio_Account" EntityType="Self.Rio_Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rio_Album" EntityType="Self.Rio_Album" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rio_AlbumJoinPic" EntityType="Self.Rio_AlbumJoinPic" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rio_Compression" EntityType="Self.Rio_Compression" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rio_Doc" EntityType="Self.Rio_Doc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rio_FBLogin" EntityType="Self.Rio_FBLogin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rio_Notice" EntityType="Self.Rio_Notice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rio_Pic" EntityType="Self.Rio_Pic" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rio_SystemList" EntityType="Self.Rio_SystemList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rio_UserIndexSetting" EntityType="Self.Rio_UserIndexSetting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rio_UserTrack" EntityType="Self.Rio_UserTrack" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Vw_Account" EntityType="Self.Vw_Account" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [Vw_Account].[PicName] AS [PicName], 
@@ -264,12 +361,18 @@
     [Vw_Account].[ModifyID] AS [ModifyID], 
     [Vw_Account].[ModifyName] AS [ModifyName], 
     [Vw_Account].[ModifyDate] AS [ModifyDate], 
+    [Vw_Account].[IsFBAccount] AS [IsFBAccount], 
     [Vw_Account].[CoverName] AS [CoverName], 
     [Vw_Account].[CoverPicPath] AS [CoverPicPath], 
     [Vw_Account].[AccountSN] AS [AccountSN], 
     [Vw_Account].[CoverSN] AS [CoverSN], 
     [Vw_Account].[Title] AS [Title], 
-    [Vw_Account].[SubTitle] AS [SubTitle]
+    [Vw_Account].[SubTitle] AS [SubTitle], 
+    [Vw_Account].[fbSN] AS [fbSN], 
+    [Vw_Account].[ASN] AS [ASN], 
+    [Vw_Account].[fbEmail] AS [fbEmail], 
+    [Vw_Account].[Facebook_ID] AS [Facebook_ID], 
+    [Vw_Account].[fbName] AS [fbName]
     FROM [dbo].[Vw_Account] AS [Vw_Account]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="Vw_Album" EntityType="Self.Vw_Album" store:Type="Views" store:Schema="dbo">
@@ -324,6 +427,18 @@
     [Vw_AlbumJoinPic].[JoinSort] AS [JoinSort]
     FROM [dbo].[Vw_AlbumJoinPic] AS [Vw_AlbumJoinPic]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="Vw_Notice" EntityType="Self.Vw_Notice" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Vw_Notice].[aSN] AS [aSN], 
+    [Vw_Notice].[ID] AS [ID], 
+    [Vw_Notice].[SN] AS [SN], 
+    [Vw_Notice].[AccountSN] AS [AccountSN], 
+    [Vw_Notice].[TrackSN] AS [TrackSN], 
+    [Vw_Notice].[NoticeContent] AS [NoticeContent], 
+    [Vw_Notice].[CreateDate] AS [CreateDate], 
+    [Vw_Notice].[IsRead] AS [IsRead]
+    FROM [dbo].[Vw_Notice] AS [Vw_Notice]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="Vw_UserIndexSetting" EntityType="Self.Vw_UserIndexSetting" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [Vw_UserIndexSetting].[CoverName] AS [CoverName], 
@@ -333,6 +448,22 @@
     [Vw_UserIndexSetting].[Title] AS [Title], 
     [Vw_UserIndexSetting].[SubTitle] AS [SubTitle]
     FROM [dbo].[Vw_UserIndexSetting] AS [Vw_UserIndexSetting]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Vw_UserTrack" EntityType="Self.Vw_UserTrack" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Vw_UserTrack].[SN] AS [SN], 
+    [Vw_UserTrack].[ID] AS [ID], 
+    [Vw_UserTrack].[Name] AS [Name], 
+    [Vw_UserTrack].[AccountContent] AS [AccountContent], 
+    [Vw_UserTrack].[IsEnable] AS [IsEnable], 
+    [Vw_UserTrack].[IsDelete] AS [IsDelete], 
+    [Vw_UserTrack].[PicSN] AS [PicSN], 
+    [Vw_UserTrack].[PicPath] AS [PicPath], 
+    [Vw_UserTrack].[PicName] AS [PicName], 
+    [Vw_UserTrack].[trackSN] AS [trackSN], 
+    [Vw_UserTrack].[AccountSN] AS [AccountSN], 
+    [Vw_UserTrack].[TrackAccountSN] AS [TrackAccountSN]
+    FROM [dbo].[Vw_UserTrack] AS [Vw_UserTrack]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -344,13 +475,19 @@
           <EntitySet Name="Rio_Album" EntityType="Entity.Rio_Album" />
           <EntitySet Name="Rio_AlbumJoinPic" EntityType="Entity.Rio_AlbumJoinPic" />
           <EntitySet Name="Rio_Doc" EntityType="Entity.Rio_Doc" />
+          <EntitySet Name="Rio_FBLogin" EntityType="Entity.Rio_FBLogin" />
           <EntitySet Name="Rio_Pic" EntityType="Entity.Rio_Pic" />
           <EntitySet Name="Rio_SystemList" EntityType="Entity.Rio_SystemList" />
-          <EntitySet Name="Vw_Account" EntityType="Entity.Vw_Account" />
+          <EntitySet Name="Rio_UserIndexSetting" EntityType="Entity.Rio_UserIndexSetting" />
           <EntitySet Name="Vw_Album" EntityType="Entity.Vw_Album" />
           <EntitySet Name="Vw_AlbumJoinPic" EntityType="Entity.Vw_AlbumJoinPic" />
-          <EntitySet Name="Rio_UserIndexSetting" EntityType="Entity.Rio_UserIndexSetting" />
           <EntitySet Name="Vw_UserIndexSetting" EntityType="Entity.Vw_UserIndexSetting" />
+          <EntitySet Name="Vw_Account" EntityType="Entity.Vw_Account" />
+          <EntitySet Name="Rio_UserTrack" EntityType="Entity.Rio_UserTrack" />
+          <EntitySet Name="Vw_UserTrack" EntityType="Entity.Vw_UserTrack" />
+          <EntitySet Name="Rio_Notice" EntityType="Entity.Rio_Notice" />
+          <EntitySet Name="Vw_Notice" EntityType="Entity.Vw_Notice" />
+          <EntitySet Name="Rio_Compression" EntityType="Entity.Rio_Compression" />
         </EntityContainer>
         <EntityType Name="Rio_Account">
           <Key>
@@ -371,6 +508,7 @@
           <Property Name="ModifyID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ModifyName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ModifyDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsFBAccount" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Rio_Album">
           <Key>
@@ -419,6 +557,16 @@
           <Property Name="IsEnable" Type="Boolean" />
           <Property Name="IsDelete" Type="Boolean" />
         </EntityType>
+        <EntityType Name="Rio_FBLogin">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountSN" Type="Int32" Nullable="false" />
+          <Property Name="Facebook_ID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="Rio_Pic">
           <Key>
             <PropertyRef Name="SN" />
@@ -446,44 +594,11 @@
           <Property Name="URL" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SystemName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Vw_Account">
+        <EntityType Name="Rio_UserIndexSetting">
           <Key>
-            <PropertyRef Name="SN" />
-            <PropertyRef Name="ID" />
-            <PropertyRef Name="Name" />
-            <PropertyRef Name="Password" />
-            <PropertyRef Name="AccountContent" />
-            <PropertyRef Name="Email" />
-            <PropertyRef Name="PicSN" />
-            <PropertyRef Name="IsEnable" />
-            <PropertyRef Name="IsDelete" />
-            <PropertyRef Name="CreateID" />
-            <PropertyRef Name="CreateName" />
-            <PropertyRef Name="CreateDate" />
-            <PropertyRef Name="ModifyID" />
-            <PropertyRef Name="ModifyName" />
-            <PropertyRef Name="ModifyDate" />
+            <PropertyRef Name="AccountSN" />
           </Key>
-          <Property Name="PicName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PicPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SN" Type="Int32" Nullable="false" />
-          <Property Name="ID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AccountContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PicSN" Type="Int32" Nullable="false" />
-          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
-          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
-          <Property Name="CreateID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CreateName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ModifyID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ModifyName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ModifyDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CoverName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CoverPicPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AccountSN" Type="Int32" />
+          <Property Name="AccountSN" Type="Int32" Nullable="false" />
           <Property Name="CoverSN" Type="Int32" />
           <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SubTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
@@ -556,15 +671,6 @@
           <Property Name="JoinSN" Type="Int32" Nullable="false" />
           <Property Name="JoinSort" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="Rio_UserIndexSetting">
-          <Key>
-            <PropertyRef Name="AccountSN" />
-          </Key>
-          <Property Name="AccountSN" Type="Int32" Nullable="false" />
-          <Property Name="CoverSN" Type="Int32" />
-          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SubTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="Vw_UserIndexSetting">
           <Key>
             <PropertyRef Name="AccountSN" />
@@ -576,6 +682,126 @@
           <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SubTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="Vw_Account">
+          <Key>
+            <PropertyRef Name="SN" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Password" />
+            <PropertyRef Name="AccountContent" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="PicSN" />
+            <PropertyRef Name="IsEnable" />
+            <PropertyRef Name="IsDelete" />
+            <PropertyRef Name="CreateID" />
+            <PropertyRef Name="CreateName" />
+            <PropertyRef Name="CreateDate" />
+            <PropertyRef Name="ModifyID" />
+            <PropertyRef Name="ModifyName" />
+            <PropertyRef Name="ModifyDate" />
+            <PropertyRef Name="IsFBAccount" />
+          </Key>
+          <Property Name="PicName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SN" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AccountContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicSN" Type="Int32" Nullable="false" />
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="CreateID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifyID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsFBAccount" Type="Boolean" Nullable="false" />
+          <Property Name="CoverName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CoverPicPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AccountSN" Type="Int32" />
+          <Property Name="CoverSN" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SubTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="fbSN" Type="Int32" />
+          <Property Name="ASN" Type="Int32" />
+          <Property Name="fbEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Facebook_ID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="fbName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Rio_UserTrack">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountSN" Type="Int32" Nullable="false" />
+          <Property Name="TrackAccountSN" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vw_UserTrack">
+          <Key>
+            <PropertyRef Name="trackSN" />
+            <PropertyRef Name="AccountSN" />
+            <PropertyRef Name="TrackAccountSN" />
+          </Key>
+          <Property Name="SN" Type="Int32" />
+          <Property Name="ID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AccountContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsEnable" Type="Boolean" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="PicSN" Type="Int32" />
+          <Property Name="PicPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PicName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="trackSN" Type="Int32" Nullable="false" />
+          <Property Name="AccountSN" Type="Int32" Nullable="false" />
+          <Property Name="TrackAccountSN" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rio_Notice">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountSN" Type="Int32" Nullable="false" />
+          <Property Name="TrackSN" Type="Int32" Nullable="false" />
+          <Property Name="NoticeContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsRead" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vw_Notice">
+          <Key>
+            <PropertyRef Name="SN" />
+            <PropertyRef Name="AccountSN" />
+            <PropertyRef Name="TrackSN" />
+            <PropertyRef Name="NoticeContent" />
+            <PropertyRef Name="CreateDate" />
+            <PropertyRef Name="IsRead" />
+          </Key>
+          <Property Name="aSN" Type="Int32" />
+          <Property Name="ID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SN" Type="Int32" Nullable="false" />
+          <Property Name="AccountSN" Type="Int32" Nullable="false" />
+          <Property Name="TrackSN" Type="Int32" Nullable="false" />
+          <Property Name="NoticeContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsRead" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rio_Compression">
+          <Key>
+            <PropertyRef Name="SN" />
+          </Key>
+          <Property Name="SN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Path" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Extension" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateSN" Type="Int32" Nullable="false" />
+          <Property Name="CreateID" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsEnable" Type="Boolean" Nullable="false" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -585,6 +811,7 @@
           <EntitySetMapping Name="Rio_Account">
             <EntityTypeMapping TypeName="Entity.Rio_Account">
               <MappingFragment StoreEntitySet="Rio_Account">
+                <ScalarProperty Name="IsFBAccount" ColumnName="IsFBAccount" />
                 <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
                 <ScalarProperty Name="ModifyName" ColumnName="ModifyName" />
                 <ScalarProperty Name="ModifyID" ColumnName="ModifyID" />
@@ -653,6 +880,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Rio_FBLogin">
+            <EntityTypeMapping TypeName="Entity.Rio_FBLogin">
+              <MappingFragment StoreEntitySet="Rio_FBLogin">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Facebook_ID" ColumnName="Facebook_ID" />
+                <ScalarProperty Name="AccountSN" ColumnName="AccountSN" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Rio_Pic">
             <EntityTypeMapping TypeName="Entity.Rio_Pic">
               <MappingFragment StoreEntitySet="Rio_Pic">
@@ -682,32 +920,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Vw_Account">
-            <EntityTypeMapping TypeName="Entity.Vw_Account">
-              <MappingFragment StoreEntitySet="Vw_Account">
+          <EntitySetMapping Name="Rio_UserIndexSetting">
+            <EntityTypeMapping TypeName="Entity.Rio_UserIndexSetting">
+              <MappingFragment StoreEntitySet="Rio_UserIndexSetting">
                 <ScalarProperty Name="SubTitle" ColumnName="SubTitle" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="CoverSN" ColumnName="CoverSN" />
                 <ScalarProperty Name="AccountSN" ColumnName="AccountSN" />
-                <ScalarProperty Name="CoverPicPath" ColumnName="CoverPicPath" />
-                <ScalarProperty Name="CoverName" ColumnName="CoverName" />
-                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
-                <ScalarProperty Name="ModifyName" ColumnName="ModifyName" />
-                <ScalarProperty Name="ModifyID" ColumnName="ModifyID" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="CreateName" ColumnName="CreateName" />
-                <ScalarProperty Name="CreateID" ColumnName="CreateID" />
-                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
-                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
-                <ScalarProperty Name="PicSN" ColumnName="PicSN" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="AccountContent" ColumnName="AccountContent" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="SN" ColumnName="SN" />
-                <ScalarProperty Name="PicPath" ColumnName="PicPath" />
-                <ScalarProperty Name="PicName" ColumnName="PicName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -767,16 +986,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Rio_UserIndexSetting">
-            <EntityTypeMapping TypeName="Entity.Rio_UserIndexSetting">
-              <MappingFragment StoreEntitySet="Rio_UserIndexSetting">
-                <ScalarProperty Name="SubTitle" ColumnName="SubTitle" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="CoverSN" ColumnName="CoverSN" />
-                <ScalarProperty Name="AccountSN" ColumnName="AccountSN" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Vw_UserIndexSetting">
             <EntityTypeMapping TypeName="Entity.Vw_UserIndexSetting">
               <MappingFragment StoreEntitySet="Vw_UserIndexSetting">
@@ -786,6 +995,110 @@
                 <ScalarProperty Name="AccountSN" ColumnName="AccountSN" />
                 <ScalarProperty Name="CoverPicPath" ColumnName="CoverPicPath" />
                 <ScalarProperty Name="CoverName" ColumnName="CoverName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vw_Account">
+            <EntityTypeMapping TypeName="Entity.Vw_Account">
+              <MappingFragment StoreEntitySet="Vw_Account">
+                <ScalarProperty Name="fbName" ColumnName="fbName" />
+                <ScalarProperty Name="Facebook_ID" ColumnName="Facebook_ID" />
+                <ScalarProperty Name="fbEmail" ColumnName="fbEmail" />
+                <ScalarProperty Name="ASN" ColumnName="ASN" />
+                <ScalarProperty Name="fbSN" ColumnName="fbSN" />
+                <ScalarProperty Name="SubTitle" ColumnName="SubTitle" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CoverSN" ColumnName="CoverSN" />
+                <ScalarProperty Name="AccountSN" ColumnName="AccountSN" />
+                <ScalarProperty Name="CoverPicPath" ColumnName="CoverPicPath" />
+                <ScalarProperty Name="CoverName" ColumnName="CoverName" />
+                <ScalarProperty Name="IsFBAccount" ColumnName="IsFBAccount" />
+                <ScalarProperty Name="ModifyDate" ColumnName="ModifyDate" />
+                <ScalarProperty Name="ModifyName" ColumnName="ModifyName" />
+                <ScalarProperty Name="ModifyID" ColumnName="ModifyID" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateName" ColumnName="CreateName" />
+                <ScalarProperty Name="CreateID" ColumnName="CreateID" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+                <ScalarProperty Name="PicSN" ColumnName="PicSN" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="AccountContent" ColumnName="AccountContent" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+                <ScalarProperty Name="PicPath" ColumnName="PicPath" />
+                <ScalarProperty Name="PicName" ColumnName="PicName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rio_UserTrack">
+            <EntityTypeMapping TypeName="Entity.Rio_UserTrack">
+              <MappingFragment StoreEntitySet="Rio_UserTrack">
+                <ScalarProperty Name="TrackAccountSN" ColumnName="TrackAccountSN" />
+                <ScalarProperty Name="AccountSN" ColumnName="AccountSN" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vw_UserTrack">
+            <EntityTypeMapping TypeName="Entity.Vw_UserTrack">
+              <MappingFragment StoreEntitySet="Vw_UserTrack">
+                <ScalarProperty Name="TrackAccountSN" ColumnName="TrackAccountSN" />
+                <ScalarProperty Name="AccountSN" ColumnName="AccountSN" />
+                <ScalarProperty Name="trackSN" ColumnName="trackSN" />
+                <ScalarProperty Name="PicName" ColumnName="PicName" />
+                <ScalarProperty Name="PicPath" ColumnName="PicPath" />
+                <ScalarProperty Name="PicSN" ColumnName="PicSN" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+                <ScalarProperty Name="AccountContent" ColumnName="AccountContent" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rio_Notice">
+            <EntityTypeMapping TypeName="Entity.Rio_Notice">
+              <MappingFragment StoreEntitySet="Rio_Notice">
+                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="NoticeContent" ColumnName="NoticeContent" />
+                <ScalarProperty Name="TrackSN" ColumnName="TrackSN" />
+                <ScalarProperty Name="AccountSN" ColumnName="AccountSN" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vw_Notice">
+            <EntityTypeMapping TypeName="Entity.Vw_Notice">
+              <MappingFragment StoreEntitySet="Vw_Notice">
+                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="NoticeContent" ColumnName="NoticeContent" />
+                <ScalarProperty Name="TrackSN" ColumnName="TrackSN" />
+                <ScalarProperty Name="AccountSN" ColumnName="AccountSN" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="aSN" ColumnName="aSN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rio_Compression">
+            <EntityTypeMapping TypeName="Entity.Rio_Compression">
+              <MappingFragment StoreEntitySet="Rio_Compression">
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreateName" ColumnName="CreateName" />
+                <ScalarProperty Name="CreateID" ColumnName="CreateID" />
+                <ScalarProperty Name="CreateSN" ColumnName="CreateSN" />
+                <ScalarProperty Name="Extension" ColumnName="Extension" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SN" ColumnName="SN" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

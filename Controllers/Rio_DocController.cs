@@ -135,7 +135,7 @@ namespace RioManager.Controllers
             {
                 ID = Request.QueryString.Get("vid").ToString();
             }
-            ViewBag.getAllDoc = new DocModel().getDocListByID(ID).OrderBy(o =>o.SN).ToPagedList(pageNumber,24);
+            ViewBag.getAllDoc = new DocModel().getDocListByID(ID).OrderByDescending(o =>o.CreateDate).ToPagedList(pageNumber,24);
             return View(db.Rio_Doc.ToList());
         }       
     }

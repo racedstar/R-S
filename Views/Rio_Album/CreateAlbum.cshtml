@@ -26,10 +26,11 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/createAlbum")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body class="">
     <div class="body-content"> 
-        <div class="container">
+        <div class="row">
             <div class="col-md-6">
                 <div id="frontCover" class="frontCover" ondrop="cloneDrop(event)" ondragover="allowDrop(event)">
                     @if (AlbumSN != 0)
@@ -44,12 +45,12 @@
                 啟用：<input type="checkbox" id="chkEnable" checked="@VwAlbumEnable" />
             </div>
             <div class="col-md-6 text-right">
-                <input id="createAlbumBtn" data-fancybox-close class="btn btn-default"  type="button" value="建立相簿" onclick="SaveData(0)" style="display:@createBtn;"  />
-                <input id="updateAlbumBtn" data-fancybox-close class="btn btn-default" type="button" value="修改相簿" onclick="SaveData(1)" style="display:@updateBtn;"/>
+                <input id="createAlbumBtn" data-fancybox-close class="btn btn-success"  type="button" value="建立相簿" onclick="SaveData(0)" style="display:@createBtn;"  />
+                <input id="updateAlbumBtn" data-fancybox-close class="btn btn-success" type="button" value="修改相簿" onclick="SaveData(1)" style="display:@updateBtn;"/>
             </div>
         </div>
-        <div class="col-md-12 createAlbumBottom">
-            <div  id="NotJoinedPic" class="col-md-6" ondrop="dragPhoto('JoinedPic',event)" ondragover="allowDrop(event)">
+        <div class="row createAlbumBottom">
+            <div  id="NotJoinedPic" class="col-md-6 row" ondrop="dragPhoto('JoinedPic',event)" ondragover="allowDrop(event)">
                 @{
                     var notJoinData = @ViewBag.getNotJoinPic;
                 }                
@@ -57,11 +58,11 @@
                 {
                     foreach (var item in notJoinData)
                     {
-                    <div id="@item.SN" class="col-md-3 text-center createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)"  onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)"></div>
+                    <div id="@item.SN" class="col-md-3 createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)"  onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)"></div>
                     }
                 }
             </div>
-            <div id="JoinedPic" class="col-md-6" ondrop="dragPhoto('NotJoinedPic',event)" ondragover="allowDrop(event)">
+            <div id="JoinedPic" class="col-md-6 row" ondrop="dragPhoto('NotJoinedPic',event)" ondragover="allowDrop(event)">
                 @{ 
                     var joinData = ViewBag.getJoinPic;
                 }
@@ -69,7 +70,7 @@
                 {
                     foreach (var item in joinData)
                     {
-                        <div id="@item.PicSN" class="col-md-3 text-center createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" ondrop="dragPhoto('sort',event)" ondragover="allowDrop(event)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)" onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)"></div>
+                        <div id="@item.PicSN" class="col-md-3 createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" ondrop="dragPhoto('sort',event)" ondragover="allowDrop(event)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)" onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)"></div>
                     }
                 }
             </div>

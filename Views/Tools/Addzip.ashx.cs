@@ -21,7 +21,7 @@ namespace RioManager.Views.Tools
                 string[] SN = HttpContext.Current.Request.Form.Get("SN").ToString().Split(',');
                 string zipPath = HttpContext.Current.Server.MapPath("~/Upload//zip//" + type);
                 string downloadUrl = string.Empty;
-                List<string> zipFileNamePath = new List<string>();                
+                List<string> zipFileNamePath = new List<string>();
 
                 if (type == "img")
                 {

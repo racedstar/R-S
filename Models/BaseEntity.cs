@@ -8,18 +8,18 @@ using System.Data.Linq;
 namespace RioManager.Models
 {
     [Serializable]
-    public class BaseEntity<DB,Entity>
-        where DB : DataContext, new()
+    public class BaseEntity<Entity>        
         where Entity : class
-    {        
+    {
+        
         public static IEnumerable<Entity> Insert(params Entity[] Record)
-
         {
+            Entities db = new Entities();
+
             if (Record == null)
             {
                 return null;
-            }
-
+            }            
             //防呆長度等於0
             if (Record.Length == 0)
             {
@@ -28,16 +28,15 @@ namespace RioManager.Models
 
             IEnumerable<Entity> returnValue = default(IEnumerable<Entity>);
 
-            using (DB db = new DB())
-            {
+            
+            
                 try
-                {
-                    var queryentity = db.GetTable<Entity>();
+                {                    
+                    //db
+                    //returnValue = Record.AsEnumerable();
+                    //queryentity.InsertAllOnSubmit(returnValue);
 
-                    returnValue = Record.AsEnumerable();
-                    queryentity.InsertAllOnSubmit(returnValue);
-
-                    db.SubmitChanges();
+                    //db.SubmitChanges();
                 }
                 catch (NotSupportedException)
                 {
@@ -61,8 +60,7 @@ namespace RioManager.Models
                     {
                         db.Dispose();
                     }
-                }
-            }                
+                }            
             return returnValue;
         }
     }

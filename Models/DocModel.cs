@@ -48,6 +48,15 @@ namespace RioManager.Models
             return data;
         }
 
+        public List<Rio_Doc> getPreviewDocListByID(string ID)
+        {
+            var data = (from o in db.Rio_Doc
+                        where o.CreateID == ID && o.IsEnable == true && o.IsDelete == false
+                        select o).OrderByDescending(o => o.CreateDate).ToList();
+            data = data.Take(4).ToList();
+            return data;
+        }
+
         public List<Rio_Doc> getZipDoc(string[] SN)//取得要被壓縮的檔案
         {
             var data = (from o in db.Rio_Doc

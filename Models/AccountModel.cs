@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using RioManager.Models;
-using System.Data.Entity.Validation;
-using System.Data.Linq;
 
 
 
 namespace RioManager.Models
 {
-    public class AccountModel : Controller
+    public class AccountModel
     {
         private Entities db = new Entities();
         
@@ -39,12 +31,19 @@ namespace RioManager.Models
             return data;
         }
 
-        public Vw_Account getAccount(int SN)
+        public Vw_Account getVwAccount(int SN)
         {
             var data = (from o in db.Vw_Account
                         where o.SN == SN && o.IsEnable == true && o.IsDelete == false
                         select o).FirstOrDefault();
-            //ViewBag.picPath = data.PicPath + data.PicName;
+            return data;
+        }
+
+        public Vw_Account getVwAccountByFBEmail(string email)
+        {
+            var data = (from o in db.Vw_Account
+                        where o.fbEmail == email
+                        select o).FirstOrDefault();
             return data;
         }
 
@@ -64,27 +63,23 @@ namespace RioManager.Models
             return data;
         }
 
-        public bool LoginCheck(string ID, string Password)
+        public int LoginCheck(string ID, string Password)
         {
             Password = App_Code.Coding.stringToSHA512(Password);
             var data = (from o in db.Rio_Account
                         where o.ID == ID && o.Password == Password
-                        select o).FirstOrDefault();
+                        select o.SN).FirstOrDefault();
 
-            if (data != null)
-            {
-                return true;
-            }
-            return false;
+            return data;
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
     }
 }

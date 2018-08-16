@@ -1,39 +1,46 @@
-﻿@model RioManager.Models.Rio_Account
+﻿@model IPagedList<RioManager.Models.Vw_Account>
 
 @{
-    ViewBag.Title = "View";
+    ViewBag.Title = "R-S_Explore";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var VwAccount = ViewBag.VwAccount;
 }
 
-<div class="container">
-    <div class="col-md-12">
-        <h2>所有使用者連結</h2>
+<div class="container systemContainer">
+    <div class="topBar">
+        <h2>Explore</h2>
     </div>
-    <div class="body-content">
-        <div claa="form-group">
-            @{
-                foreach (var item in VwAccount)
-                {
-                    //var Album = ViewBag.VwAlbumCount();
-                    //var Pic = ViewBag.VwPicCount();
-                    //var Doc = ViewBag.VwDocCount();
-                    <div class="col-md-6">
-                        <a href="@Url.Action("Index","Home", new { vid = @item.ID })">
-                            <div class="col-md-6 AccoutCover" style="background-image:url('@item.PicPath@item.PicName')"></div>
-                            <div class="col-md-6">
-                                <p>ID：@item.ID</p>
-                                <p>介紹：@item.AccountContent</p>
-                                @*<p>相簿數量：</p>
-                                <p>圖片數量：</p>
-                                <p>文件數量：</p>*@
+    <div class="row form-group systemGroup">
+        @{
+            foreach (var item in VwAccount)
+            {
+                <div class="col-md-4">
+                    <a href="@Url.Action("Index","Home", new { vid = @item.ID })">
+                        <div class="row accountLinkRow">
+                            <div class="col-sm-4 accoutCover">
+                                @if (item.PicSN != 0)
+                                {
+                                    <img src="@item.PicPath@item.PicName" />
+                                }
+                                else
+                                {
+                                    <img src="~/Content/img/icon/questionMark.png" />
+                                }
                             </div>
-                        </a>
-                    </div>
-                }
+                            <div class="col-sm-8">
+                                <span>@item.ID</span><br />
+                                <span class="accountIntroduction">@item.AccountContent</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             }
-        </div>
+        }
     </div>
+</div>
+<div class="container">
+    @Html.PagedListPager(Model, page => Url.Action("RioPicView", new { page }))
+    <p>End of content</p>
 </div>
 
 

@@ -1,9 +1,16 @@
-﻿/*首頁封面*/
+﻿.divHomeIndexContent {
+    flex-direction: column;
+    top: 0;
+    left: 0px;
+    padding-left: 12rem;
+}
+/*首頁封面*/
 .jumbotron {
     background-image: url(img/Froncover/indexcover.png);
     background-repeat: no-repeat;
     background-position: center;
-    height:350px;
+    border-radius: inherit;
+    height: 350px;
 }
 .jumbotron h1 {    
     color: white;
@@ -11,34 +18,396 @@
 .jumbotron p {
     color: #fff3de;
 }
-/*上方功能列*/
-.topBar {
-    position: fixed;
-    width: 100%;
-    z-index: 1;
-    background-color: white;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+.container h4 {
+    font-family: Courier New;
 }
-/*系統內容*/
-.systemGroup {
-    margin-top: 90px;
+@media (min-width: 1280px) {
+    .systemGroup {
+        margin-top: 90px;
+    }
+
+    #mainMenu {
+        text-align: center;
+        position: fixed;
+        /*position:inherit;*/
+        top: 0;
+        left: 0;
+        display: flex;
+        width: 12rem;
+        height: 100vh;
+        padding: .5rem 1rem;
+        flex-direction: column;
+        z-index: 1030;
+    }
+
+    .navbar-expand-lg {
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+    }
+
+    .navbar-expand-lg .navbar-toggler {
+        display: none;
+    }
+
+    .navbar-expand-lg .navbar-collapse {
+        display: flex !important;
+        flex-basis: auto;
+    }
+
+    .navbar-collapse {
+        display: flex;
+        align-items: flex-start;
+        flex-grow: 0;
+        width: 100%;
+        margin-bottom: auto;
+    }
+
+    .navbar-collapse .navbar-nav {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .nav li a {
+        color: #00ffc4;
+        font-family: Courier New;
+    }
+
+    .navbar-brand {
+        color: white;
+        font-family: Emilys Candy;
+        font-size: 85px;
+    }
+
+    .navbar-toggler{
+        display:none;
+    }
+
+    /*上方功能列*/
+    .topBar {
+        top: 0;
+        position: fixed;
+        z-index: 1020;
+        background-color: white;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        margin-left: 0px;
+        right: 0px;
+        width: 100%;
+        padding-left: 12rem;
+    }
+
+   .topBar h2 {
+       padding-left: 20px;
+       font-family: Courier New;
+       color: #50ce65;
+   }
+
+
+    /*首頁*/
+    .container {
+        padding-left: 100px;
+    }
+
+    .systemContainer {
+        padding-left: 12rem;
+    }
+    .indexAccountCover {
+        background-color: white;
+        width: 200px;
+        height: 200px;
+        top: 300px;
+        left: 50px;
+        border-radius: 100%;
+    }
+    .indexAccountCover img{
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 200px;
+        height: 200px;
+        border-radius: 100%;
+    }
+    .indexTrack {
+        position: absolute;
+        top: 280px;
+        left: 500px;
+    }
+
+    /*Album System*/
+    .albumDiv a p {
+        position: absolute;
+        left: 25px;
+        bottom: 5px;
+        color: #51d3da;
+        width: 60%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 0px;
+        font-family: Microsoft JhengHei; /*微軟正黑體*/
+        font-weight: bold; /*粗體*/
+    }
+
+    /*Document System*/
+    .docViewDiv p {
+        position: absolute;
+        left: 15px;
+        bottom: -10px;
+        width: 90%;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 0px;
+        text-align: center;
+    }
 }
-/*首頁大頭照*/
-.indexAccountCover {
-    background-color: white;
-    width: 200px;
-    height: 200px;
-    top: 300px;
-    left: 50px;
-    border-radius: 100%;
+
+@media (min-width: 720px) and (max-width: 1199px) {
+    .divHomeIndexContent {
+        padding-left: 0rem;
+    }
+
+    .systemGroup {
+        margin-top: 250px;
+    }
+
+    /*Menu*/
+    #mainMenu {
+        z-index: 1040;
+        position: fixed;
+        top: 0px;
+        width: 100%;
+    }
+
+    .navbar-collapse {
+        align-items: flex-start;
+        flex-grow: 0;
+        width: 100%;
+        margin-bottom: auto;
+    }
+
+        .navbar-collapse .navbar-nav {
+            flex-direction: column;
+            width: 100%;
+        }
+
+    .nav li a {
+        color: #00ffc4;
+        font-family: Courier New;
+    }
+
+    .navbar-brand {
+        color: white;
+        font-family: Emilys Candy;
+        font-size: 40px;
+    }
+
+    /*上方功能列*/
+    .topBar {
+        position: fixed;
+        z-index: 1020;
+        background-color: white;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        width: 103%;
+        top: 89px;
+    }
+
+    .topBar h2 {
+        padding-left: 20px;
+        font-family: Courier New;
+        color: #50ce65;
+    }
+
+    /*首頁*/
+    .container {
+        padding-left: 0px;
+    }
+
+    .systemContainer {
+        padding-left: 0rem;
+    }
+    .indexAccountCover {
+        background-color: white;
+        width: 200px;
+        height: 200px;
+        top: 300px;
+        left: 50px;
+        border-radius: 100%;
+    }
+    .indexAccountCover img{
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 200px;
+        height: 200px;
+        border-radius: 100%;
+    }
+    .indexTrack {
+        position: absolute;
+        top: 250px;
+        left: 250px;
+    }
+
+    /*Album System*/
+    .albumDiv a p {
+        position: absolute;
+        left: 160px;
+        bottom: 5px;
+        color: #51d3da;
+        width: 60%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 0px;
+        font-family: Microsoft JhengHei; /*微軟正黑體*/
+        font-weight: bold; /*粗體*/
+    }
+
+    /*Document System*/
+    .docViewDiv p {
+        position: absolute;
+        left: 200px;
+        bottom: -10px;
+        width: 28%;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: cornsilk;
+    }
 }
-.indexAccountCover img{
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 200px;
-    height: 200px;
-    border-radius: 100%;
+
+@media (min-width: 360px) and (max-width: 719px) {
+    .divHomeIndexContent {
+        padding-left: 0rem;
+    }
+
+    .systemGroup {
+        margin-top: 250px;
+    }
+
+    /*Menu*/
+    #mainMenu {
+        z-index: 1040;
+        position: fixed;
+        top: 0px;
+        width: 100%;
+    }
+
+    .navbar-collapse {
+        align-items: flex-start;
+        flex-grow: 0;
+        width: 100%;
+        margin-bottom: auto;
+    }
+
+        .navbar-collapse .navbar-nav {
+            flex-direction: column;
+            width: 100%;
+        }
+
+    .nav li a {
+        color: #00ffc4;
+        font-family: Courier New;
+    }
+
+    .navbar-brand {
+        color: white;
+        font-family: Emilys Candy;
+        font-size: 40px;
+    }
+
+    /*上方功能列*/
+    .topBar {
+        position: fixed;
+        z-index: 1020;
+        background-color: white;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        width: 103%;
+        top: 89px;
+    }
+
+    .topBar h2 {
+        padding-left: 20px;
+        font-family: Courier New;
+        color: #50ce65;
+    }
+
+    /*首頁*/
+    .container {
+        padding-left: 0px;
+    }
+
+    .systemContainer {
+        padding-left: 0rem;
+    }
+    .indexAccountCover {
+        background-color: white;
+        width: 150px;
+        height: 150px;
+        top: 300px;
+        left: 50px;
+        border-radius: 100%;
+    }
+
+    .indexAccountCover img {
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 150px;
+        height: 150px;
+        border-radius: 100%;
+    }
+    .indexTrack {
+        position: absolute;
+        top: 300px;
+        left: 65px;
+    }
+
+    /*Album System*/
+    .albumDiv a p {
+        position: absolute;
+        left: 110px;
+        bottom: 5px;
+        color: #51d3da;
+        width: 60%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 0px;
+        font-family: Microsoft JhengHei; /*微軟正黑體*/
+        font-weight: bold; /*粗體*/
+    }
+
+    /*Document System*/
+    .docViewDiv p {
+        position: absolute;
+        left: 110px;
+        bottom: -10px;
+        width: 40%;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color:cornsilk;
+        /*margin-bottom: 0px;*/
+    }
 }
+
+/*首頁系統div*/
+.homeDiv {
+    border: solid;
+    border-radius: 25px;
+    border-color: #d0d0d0;
+    margin: 10px 0 10px 0;
+}
+.homeDiv a {
+    display: block;
+    height: 94px;
+    color:black;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;    
+    font-family: Microsoft JhengHei; /*微軟正黑體*/
+}
+
 
 /*上傳檔案介面*/
 #UploadArea {
@@ -98,19 +467,6 @@
     height: 165px;
     padding-bottom: 20px;
 }
-.albumDiv a p {
-    position: absolute;
-    left:25px;
-    bottom: 5px;
-    color:khaki;
-    width: 60%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin: 0px;
-    font-family:Microsoft JhengHei;/*微軟正黑體*/
-    font-weight:bold;/*粗體*/
-}
 .albumDiv span{
     bottom:-5px;
 }
@@ -148,6 +504,13 @@
 .createAlbumBottom{
     padding-top:20px;
 }
+.Active {
+    /*background: rgba(255, 0, 0, 0.16);
+    background-image:url(../Content/img/icon/select.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;*/
+}
 #NotJoinedPic {
     border: dotted 2px;
     height: 75vh;
@@ -158,12 +521,6 @@
     border-left: inherit;
     height: 75vh;
     overflow-y: scroll;    
-}
-.Active {
-    background: rgba(255, 0, 0, 0.16);
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center center;
 }
 #txtTitle{
     display: inline-block;
@@ -186,18 +543,19 @@
 
 /*文件檢視*/
 .docViewDiv {
-    display:block;
+    display: block;
     height: 160px;
     cursor: pointer;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
-    margin-bottom: 35px;
+    /*margin-bottom: 35px;*/
 }
 .docViewDiv a {
     display: block;
     height: 160px;
-    padding-bottom:20px;
+    padding-bottom:20px;    
+    text-align: center;
 }
 .docViewDiv .docViewA p {
     display: block;
@@ -206,20 +564,11 @@
     bottom: -25px;
     width: 90%;
 }
-.docViewDiv p {
-    position: absolute;
-    left: 15px;
-    bottom: -25px;
-    width: 90%;
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin: 0px;
-}
 
 /*圖片系統*/
 .picEditDiv {
+    border: outset;
+    border-radius: 7px;
     margin-bottom: 10px;
     height: 165px;
     background-repeat: no-repeat;
@@ -227,11 +576,16 @@
     background-position: center center;
 }
 .picViewDiv {
+    border: ridge;
+    border-radius: 7px;
     margin-bottom: 10px;
     height: 165px;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
+}
+.picViewDiv:hover{
+    border:outset;
 }
 .picViewDiv a{
     display:block;
@@ -242,23 +596,20 @@
 }
 
 /*所有使用者連結*/
-.AccoutCover {
-    height: 165px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center center;
+.accountLinkRow {
+    margin-bottom: 20px;
+}
+.accoutCover img {
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+}
+.accountIntroduction{
+    color:black;
+    font-size:small;
 }
 
-/*選擇個人照*/
-.selectCover {
-    height: 650px;
-    overflow-y: scroll;
-}
-.coverImg {
-    display: block;
-    margin-bottom: 10px;
-}
-/*個人資料設定驗籤*/
+/*個人資料設定*/
 .settingTitle {
     display: inline-block;
     margin-top: 5px;
@@ -271,11 +622,52 @@
 .bookMarkSelect {
     background-color: white;
 }
+.markDiv{
+    color:white;
+    margin-bottom:20px;
+}
+.settingContent h4{
+    font-family: Emilys Candy;
+}
+.settingContent {
+    font-family: Courier New;
+}
+
+/*選擇個人照*/
+.selectCover {
+    height: 650px;
+    overflow-y: scroll;
+}
+
+.coverImg {
+    display: block;
+    margin-bottom: 10px;
+}
+
+/*MENU*/
+.menuAccount {
+    color: white;
+    border: solid;
+    border-radius: 14px;
+    background: #2e4356;
+    border-color: #2e4356;
+}
+.menuAccount a{
+    color:white;
+}
 
 /*通用*/
 .center {
-    margin: 0 auto;    
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/*系統分頁連節*/
+.pagination-container{
+    color:white;
+}
+.pagination-container ul li a{
+    color:white;
 }

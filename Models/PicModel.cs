@@ -51,13 +51,22 @@ namespace RioManager.Models
                         where o.IsDelete == false
                         select o).ToList();
             return data;
-        }
+        }        
 
         public List<Rio_Pic> getUserPicByID(string ID)
         {
             var data = (from o in db.Rio_Pic
                         where o.IsDelete == false && o.CreateID == ID
                         select o).ToList();
+            return data;
+        }
+
+        public List<Rio_Pic> getPreViewPicListByID(string ID)
+        {
+            var data = (from o in db.Rio_Pic
+                        where o.CreateID == ID && o.IsEnable == true && o.IsDelete == false
+                        select o).OrderByDescending(o => o.CreateDate).ToList();
+            data = data.Take(4).ToList();
             return data;
         }
 

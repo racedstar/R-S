@@ -22,32 +22,42 @@ namespace RioManager.Views.Tools
             {
                 #region 變數宣告
                 string[] picSN = HttpContext.Current.Request.Form["imgSN"].ToString().Split(',');
+                string Title = HttpContext.Current.Request.Form["Title"].ToString();
+                string userID = context.Session["UserID"].ToString();
+                string State = HttpContext.Current.Request.QueryString.Get("State").ToString();
+
+                int userSN = 0;                
+                int AlbumSN = 0;
                 int frontCoverSN = 0;
                 int.TryParse(HttpContext.Current.Request.Form["frontCover"].ToString(), out frontCoverSN);
-                string Title = string.Empty;
-                Title = HttpContext.Current.Request.Form["Title"].ToString();
-                string userID = context.Session["UserID"].ToString();
-                int AlbumSN = 0;
+                int.TryParse(context.Session["UserSN"].ToString(), out userSN);
+                
                 bool IsEnable = false;
+
                 if (HttpContext.Current.Request.Form["isEnable"] != null)
+                { 
                     bool.TryParse(HttpContext.Current.Request.Form["isEnable"].ToString(), out IsEnable);
-
-
+                }
                 #endregion
+
                 #region 判斷路線
-                if (HttpContext.Current.Request.QueryString.Get("State") == "Create")
+                if (State.Equals("Create"))
                 { 
                     AlbumSN = AddAlbum(frontCoverSN, Title, IsEnable, userID);
                     joinAlbum(picSN, AlbumSN);
+                    setDBNotice(userSN, userID, Title, "更新了");
                 }
-                if(HttpContext.Current.Request.QueryString.Get("State") == "Update" && HttpContext.Current.Request.QueryString.Get("as") != null)
+
+                if(State.Equals("Update") && HttpContext.Current.Request.QueryString.Get("as") != null)
                 {
-                    int.TryParse(HttpContext.Current.Request.QueryString.Get("as").ToString(), out AlbumSN);
-                    
+                    int.TryParse(HttpContext.Current.Request.QueryString.Get("as").ToString(), out AlbumSN);                    
+
                     updateAlbum(AlbumSN,frontCoverSN, Title, IsEnable, userID);
                     new AlbumJoinPicModel().deleteJoinAlbum(AlbumSN);
                     joinAlbum(picSN, AlbumSN);
+                    setDBNotice(userSN, userID, Title, "更新了");
                 }
+                
                 #endregion
             }
             else if(HttpContext.Current.Request.QueryString.Get("State") != null && HttpContext.Current.Request.QueryString.Get("State").ToString().Equals("delete"))
@@ -57,6 +67,7 @@ namespace RioManager.Views.Tools
             }
         }
 
+        //新增相簿
         private int AddAlbum(int frontCoverSN,string Title,bool IsEnable,string userID)
         {
             Rio_Album Album = new Rio_Album();
@@ -79,8 +90,9 @@ namespace RioManager.Views.Tools
             new AlbumModel().Insert(Album);
             
             return Album.SN;
-        } //新增相簿
+        }
 
+        //編輯相簿
         private void updateAlbum(int SN,int frontCoverSN, string Title,bool IsEnable, string userID)
         {
             Rio_Album Album = new AlbumModel().getAlbum(SN);
@@ -94,8 +106,9 @@ namespace RioManager.Views.Tools
             Album.ModifyDate = timeNow;
 
             new AlbumModel().Update(Album);
-        }//編輯相簿
+        }
 
+        //寫入相簿與圖片關聯
         private void joinAlbum(string[] picSN,int AlbumSN)
         {
             int sort = 0;
@@ -111,9 +124,10 @@ namespace RioManager.Views.Tools
                 joined.Sort = sort;
                 new AlbumJoinPicModel().joinAlbum(joined);
             }
-        }//寫入相簿與圖片關聯
+        }
 
-        private void deleteAlbum(string[] deleteAlbumSN)//刪除相簿
+        //刪除相簿
+        private void deleteAlbum(string[] deleteAlbumSN)
         {
             int SN = 0;
             foreach (var item in deleteAlbumSN)
@@ -124,6 +138,23 @@ namespace RioManager.Views.Tools
                 new Rio_AlbumController().Edit(Album);
             }
         }
+
+        private void setDBNotice(int userSN, string userID, string albumTitle ,string action)
+        {
+            List<Vw_UserTrack> userTrackList = new UserTrackModel().getTrackerListBySN(userSN);
+            
+            foreach(var item in userTrackList)
+            {
+                Rio_Notice notice = new Rio_Notice();
+                notice.AccountSN = userSN;
+                notice.TrackSN = item.AccountSN;
+                notice.NoticeContent = "已" + action + albumTitle + "相簿";
+                notice.CreateDate = DateTime.Now;
+
+                new NoticeModel().Insert(notice);
+            }
+        }
+
 
         public bool IsReusable
         {

@@ -96,9 +96,14 @@ var selectDiv = function (ev, docInitialClass, docInitialjQueryClass) {
 
     if (Div.indexOf("Active") === -1) {
         selected.className = docInitialClass + " Active";
+        var createIcon = document.createElement("i");
+        createIcon.setAttribute("class", "fa fa-check-square-o");
+        createIcon.setAttribute("style", "font-size:48px;background-color:white;");
+        document.getElementById(ev.target.id).appendChild(createIcon);        
     }
     else {
         selected.className = docInitialClass;
+        $("#" + ev.target.id).children('.fa').remove();
     }
 
     if (ev.shiftKey) {
@@ -106,10 +111,15 @@ var selectDiv = function (ev, docInitialClass, docInitialjQueryClass) {
         for (var i = 0; i < shiftRange; i++) {
             if (isShiftSelect === true) {
                 if ($(docInitialjQueryClass)[i].className.indexOf("Active") != -1) {
-                    isShiftSelect = false;
+                    isShiftSelect = false;                    
                 }
-                $(docInitialjQueryClass)[i].className = docInitialClass + " Active";
-
+                $(docInitialjQueryClass)[i].className = docInitialClass + " Active";                
+                if ($(docInitialjQueryClass)[i].id != ev.target.id) {
+                    var createIcon = document.createElement("i");
+                    createIcon.setAttribute("class", "fa fa-check-square-o");
+                    createIcon.setAttribute("style", "font-size:48px;background-color:white;");
+                    $("#" + $(docInitialjQueryClass)[i].id).append(createIcon);                    
+                }
             }
             else if ($(docInitialjQueryClass)[i].className.indexOf("Active") != -1) {
                 isShiftSelect = true;
@@ -121,16 +131,21 @@ var selectDiv = function (ev, docInitialClass, docInitialjQueryClass) {
 
 //use System selectCover
 var radioSelectDiv = function (ev, docInitialClass) {
-    var count = document.getElementsByClassName('col-md-3  thumbnail picEditDiv Active').length;
+    var count = document.getElementsByClassName('picEditDiv Active').length;
     if (ev.target.className.indexOf("Active") != -1) {
         ev.target.className = docInitialClass;
+        $('#' + ev.target.id).children().remove();
     }
     else {
         for (i = 0; i < count; i++) {            
-            document.getElementsByClassName(docInitialClass + ' Active')[i].className = 'col-md-3 thumbnail picEditDiv';
+            document.getElementsByClassName(docInitialClass + ' Active')[i].className = 'picEditDiv';            
         }
-        
+        $('.' + docInitialClass).children().remove();
         ev.target.className += " Active";
+        var createIcon = document.createElement("i");
+        createIcon.setAttribute("class", "fa fa-check-square-o");
+        createIcon.setAttribute("style", "font-size:48px;background-color:white;");
+        document.getElementById(ev.target.id).appendChild(createIcon);
     }
 }
 
@@ -206,7 +221,7 @@ var zipFile = function (type) {
 //更新個人照
 var updateCover = function () {
 
-    var SN = document.getElementsByClassName('col-md-3 thumbnail picEditDiv Active')[0].id    
+    var SN = document.getElementsByClassName('picEditDiv Active')[0].id    
     var type = getQueryString('t');
     $.ajax({
         type: 'post',
@@ -256,8 +271,33 @@ var fileEnable = function (type) {
 //頁簽
 var bookMark = function (ev,divID) {
 
-    $('.settingBookMark').removeClass('bookMarkSelect');
-    $('#' + ev.target.id).addClass('bookMarkSelect');
+    $('#AccountSetting').removeClass();
+    $('#IndexSetting').removeClass();
+    $('#' + ev.target.id).addClass('btn btn-info');
+    $('#' + ev.target.id).siblings().addClass('btn btn-secondary');
     $('.settingContent').hide();
     $('#' + divID).show();
+}
+
+var userTrack = function () {
+    var vid = getQueryString('vid');    
+    $.ajax({
+        type: 'post',
+        cache: false,
+        traditional: true,
+        url: '../Tools/trackUser.ashx?vid=' + vid,
+        dataType: 'html',
+        success: function (data) { //成功時                                        
+            //$('#btnUserTrack').            
+            if (data == 'True') {
+                $('#btnUserTrack').val('UnTrack');
+            }
+            else {
+                $('#btnUserTrack').val('Track');
+            }            
+        },
+        error: function () {  //失敗時
+            alert("存檔失敗");
+        }
+    });
 }

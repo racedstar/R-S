@@ -22,12 +22,19 @@ namespace RioManager.Controllers
         // GET: Rio_Account
         public ActionResult Index(int? page)
         {
-            var data = db.Rio_Account.Where(o => o.IsDelete == false).OrderBy(o => o.SN);
+            if(HttpContext.Session["UserID"] != null)
+            {
+                if(HttpContext.Session["UserID"].ToString() == "Rio")
+                { 
+                    var data = db.Rio_Account.Where(o => o.IsDelete == false).OrderBy(o => o.SN);
 
-            var pageNumber = page ?? 1;
+                    var pageNumber = page ?? 1;
 
-            var pageData = data.ToPagedList(pageNumber, pageSize);
-            return View(pageData);
+                    var pageData = data.ToPagedList(pageNumber, pageSize);
+                    return View(pageData);
+                }
+            }
+            return RedirectToAction("Login");
         }
 
         // GET: Rio_Account/Details/5
@@ -39,7 +46,7 @@ namespace RioManager.Controllers
             }
             int SN = 0;
             int.TryParse(id.ToString(), out SN);
-            Vw_Account rio_Account = new AccountModel().getAccount(SN);
+            Vw_Account rio_Account = new AccountModel().getVwAccount(SN);
             if (rio_Account == null)
             {
                 return HttpNotFound();
@@ -96,7 +103,7 @@ namespace RioManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Rio_Account rio_Account = db.Rio_Account.Find(id);
-            rio_Account.Password = App_Code.Coding.Decrypt(rio_Account.Password);
+            rio_Account.Password = string.Empty;
             if (rio_Account == null)
             {
                 return HttpNotFound();
@@ -177,7 +184,7 @@ namespace RioManager.Controllers
         #region 登入、登出、註冊
         public ActionResult Login(string ID, string Password)
         {
-            if (HttpContext.Session["UserID"] != null && HttpContext.Session["IsLogin"] != null)
+            if (HttpContext.Session["UserID"] != null && HttpContext.Session["UserSN"] != null)
             {
                 return RedirectToAction("Index","Home",new { vid = HttpContext.Session["UserID"].ToString() });
             }
@@ -195,11 +202,12 @@ namespace RioManager.Controllers
 
                 if (status == true)
                 {
-                    bool LoginCheck = new AccountModel().LoginCheck(ID, Password);
-                    if (ModelState.IsValid && LoginCheck)
+                    int accountSN = 0;
+                    int.TryParse(new AccountModel().LoginCheck(ID, Password).ToString(), out accountSN);
+                    if (ModelState.IsValid && accountSN != 0)
                     {
-                        HttpContext.Session["UserID"] = ID;
-                        HttpContext.Session["IsLogin"] = "true";
+                        HttpContext.Session["UserSN"] = accountSN;
+                        HttpContext.Session["UserID"] = ID;                        
                         return RedirectToAction("Index", "Home", new { vid = HttpContext.Session["UserID"].ToString() });
                     }
                     ModelState.AddModelError("Password", "帳號密碼錯誤，請重新輸入");
@@ -287,43 +295,47 @@ namespace RioManager.Controllers
             return View();
         }
         #endregion
-
-        #region 使用者自行設定個人資料
+        [HttpGet]
+        //[ValidateAntiForgeryToken]
+        #region 使用者自行設定個人資料        
         public ActionResult UserSetting()
         {
             string UserID = string.Empty;
             if (Session["UserID"] != null)
             {
                 UserID = Session["UserID"].ToString();
-            }
-            #region 個人資料設定            
-            Vw_Account Account = new AccountModel().getVwAccountByID(UserID);
-            Account.Password = string.Empty;
-            ViewBag.Account = Account;
-            #endregion
+                #region 個人資料設定            
+                Vw_Account Account = new AccountModel().getVwAccountByID(UserID);
+                Account.Password = string.Empty;
+                ViewBag.Account = Account;
+                #endregion
 
-            #region 首頁資料設定
-            int SN = new AccountModel().getAccountByID(UserID).SN;
-            if (new UserIndexSettingMode().getUserIndexSettingBySN(SN) != null)
-            {
-                ViewBag.IndexSetting = new UserIndexSettingMode().getVwUserIndexSettingBySN(SN);
-            }
-            else
-            {
-                Rio_UserIndexSetting userSetting = new Rio_UserIndexSetting();
-                userSetting.AccountSN = SN;
-                userSetting.Title = UserID;
-                userSetting.SubTitle = "Index";
-                userSetting.CoverSN = 0;
+                #region 首頁資料設定
+                int SN = new AccountModel().getAccountByID(UserID).SN;
+                if (new UserIndexSettingMode().getUserIndexSettingBySN(SN) != null)
+                {
+                    ViewBag.IndexSetting = new UserIndexSettingMode().getVwUserIndexSettingBySN(SN);
+                }
+                else
+                {
+                    Rio_UserIndexSetting userSetting = new Rio_UserIndexSetting();
+                    userSetting.AccountSN = SN;
+                    userSetting.Title = UserID;
+                    userSetting.SubTitle = "Index";
+                    userSetting.CoverSN = 0;
 
-                new UserIndexSettingMode().Insert(userSetting);
-                ViewBag.IndexSetting = new UserIndexSettingMode().getVwUserIndexSettingBySN(SN);
+                    new UserIndexSettingMode().Insert(userSetting);
+                    ViewBag.IndexSetting = new UserIndexSettingMode().getVwUserIndexSettingBySN(SN);
+                }
+                #endregion
+                return View();
             }
-            #endregion
-            return View();
+
+            return RedirectToAction("Login");
         }
 
         [HttpPost]
+        //[ValidateAntiForgeryToken]
         public ActionResult UserSetting(string Password, string Name, string AccountContent)
         {
             string UserID = string.Empty;
@@ -345,6 +357,7 @@ namespace RioManager.Controllers
             return RedirectToAction("UserSetting");
         }
         [HttpPost]
+        //[ValidateAntiForgeryToken]
         public ActionResult IndexSetting(string Title, string SubTitle)
         {
             string UserID = string.Empty;
@@ -375,16 +388,36 @@ namespace RioManager.Controllers
         #endregion
 
         //所有使用者連結
-        public ActionResult AllUserLink()
-        {
-            ViewBag.VwAccount = new AccountModel().getAccountList();
+        public ActionResult AllUserLink(int? page)
+        {            
             ViewBag.VwAlbumCount = new AlbumModel().getUserVwAlbumList();
             ViewBag.VwPicCount = new PicModel().getAllPic();
             ViewBag.VwDocCount = new DocModel().getAllDoc();
+            
+            var data = new AccountModel().getAccountList();
+            var pageNumeber = page ?? 1;
+            var pageData = data.ToPagedList(pageNumeber, pageSize);
 
-            return View();
+            ViewBag.VwAccount = pageData;
+
+
+            return View(pageData);
         }
 
-        
+        public ActionResult userTrack(int? page)
+        {
+            if (Session["UserSN"] != null)
+            { 
+                int SN = 0;
+                int.TryParse(Session["UserSN"].ToString(), out SN);
+                var data = new UserTrackModel().getUserTrackListBySN(SN);
+
+                var pageNumeber = page ?? 1;
+                var pageData = data.ToPagedList(pageNumeber, pageSize);
+                ViewBag.userTrackList = pageData;
+                return View(pageData);
+            }
+            return View();
+        }
     }
 }

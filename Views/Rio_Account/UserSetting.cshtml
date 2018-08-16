@@ -1,35 +1,24 @@
 ﻿@model RioManager.Models.Rio_Account
-
+@*@{Html.RenderAction("LoingChecked", "Rio_Account"); }*@
 @{
-    ViewBag.Title = "UserSetting";
+    ViewBag.Title = "R-S_UserSetting";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var Account = ViewBag.Account;
     var IndexSetting = ViewBag.IndexSetting;
 }
-<div class="container">
-    <ul>
-        <li class="settingTitle">
-            <a id="AccountSetting" class="settingBookMark bookMarkSelect" onclick="bookMark(event,'divAccountSetting')">個人資料設定</a>
-        </li>
-        <li class="settingTitle">
-            <a id="IndexSetting" class="settingBookMark" onclick="bookMark(event,'divIndexSetting')">首頁設定</a>
-        </li>
-    </ul>
+
+<div class="container systemContainer">
+    <div class="markDiv">
+        <a id="AccountSetting" class="btn btn-info" onclick="bookMark(event,'divAccountSetting')">個人資料設定</a>
+        <a id="IndexSetting" class="btn btn-secondary" onclick="bookMark(event,'divIndexSetting')">首頁設定</a>
+    </div>
     <div id="divAccountSetting" class="settingContent" style="display:block;">
         @using (Html.BeginForm("UserSetting", "Rio_Account"))
         {
             @Html.AntiForgeryToken()
-
             <div class="form-horizontal">
                 <h4>AccountSetting</h4>
                 <hr />
-
-                <div class="form-group">
-                    <label class="control-label col-md-2">ID</label>
-                    <div class="col-md-10">
-                        <label id="ID">@Account.ID</label>
-                    </div>
-                </div>
 
                 <div class="form-group">
                     <label class="control-label col-md-2">Password</label>
@@ -56,13 +45,13 @@
                     <label class="control-label col-md-2">Cover</label>
                     <div class="col-md-10">
                         <img class="coverImg" src="@Account.PicPath/Scaling/@Account.PicName" />
-                        <a class="btn btn-default" data-fancybox data-type="iframe" data-src="SelectCover?t=Account" href="javascript;">設定個人封面</a>
+                        <a class="btn btn-primary" data-fancybox data-type="iframe" data-src="SelectCover?t=Account" href="javascript;">設定個人封面</a>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Save" class="btn btn-default" />
+                        <input type="submit" value="Save" class="btn btn-success" />
                     </div>
                 </div>
             </div>
@@ -71,7 +60,7 @@
 
     <div id="divIndexSetting" class="settingContent" style="display:none;">
         @using (Html.BeginForm("IndexSetting", "Rio_Account"))
-        {
+        {            
             @Html.AntiForgeryToken()
             <div class="form-horizontal">
                 <h4>IndexSetting</h4>
@@ -95,16 +84,21 @@
                     <label class="control-label col-md-2">IndexCover</label>
                     <div class="col-md-10">
                         <img class="coverImg" src="@IndexSetting.CoverPicPath/Scaling/@IndexSetting.CoverName" />
-                        <a class="btn btn-default" data-fancybox data-type="iframe" data-src="SelectCover?t=Index" href="javascript;">設定首頁封面</a>
+                        <a class="btn btn-primary" data-fancybox data-type="iframe" data-src="SelectCover?t=Index" href="javascript;">設定首頁封面</a>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Save" class="btn btn-default" />
+                        <input type="submit" value="Save" class="btn btn-success" />
                     </div>
                 </div>
             </div>
         }
     </div>
 </div>
+<style>
+    body{
+        overflow:hidden;
+    }
+</style>

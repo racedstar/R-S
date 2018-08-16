@@ -15,15 +15,23 @@ namespace RioManager.Views.Tools
     public class fmUpload : IHttpHandler, IRequiresSessionState
     {
         string ID = string.Empty;
+        int userSN = 0;
         public void ProcessRequest(HttpContext context)
         {
             context.Response.ContentType = "text/plain";
             if(context.Session["UserID"] !=null)
             { 
                 ID = context.Session["UserID"].ToString();
-                string UploadType = string.Empty;
-                UploadType = context.Request.QueryString["t"].ToString();
-                SaveData(UploadType);
+                int.TryParse(context.Session["UserSN"].ToString(), out userSN);
+                string upLoadType = string.Empty;
+                upLoadType = context.Request.QueryString["t"].ToString();
+                SaveData(upLoadType);
+
+                if (!HttpContext.Current.Request.QueryString.Get("count").Equals("0"))
+                {                                        
+                    string sumCount = HttpContext.Current.Request.QueryString.Get("count");
+                    setDBNotice(userSN, upLoadType, sumCount);
+                }
             }
         }
 
@@ -44,12 +52,12 @@ namespace RioManager.Views.Tools
             }
             return tempName;
         }
-        private void SaveData(string UploadType)//存檔
+        private void SaveData(string upLoadType)//存檔
         {
             int fileCount = HttpContext.Current.Request.Files.Count;
             if (fileCount > 0)
             {
-                string savePath = HttpContext.Current.Server.MapPath(("~/Upload/" + ID + "/" + UploadType + "/"));
+                string savePath = HttpContext.Current.Server.MapPath(("~/Upload/" + ID + "/" + upLoadType + "/"));
                 string fileName = string.Empty;
                 HttpPostedFile UploadFile = HttpContext.Current.Request.Files[0];
 
@@ -61,22 +69,26 @@ namespace RioManager.Views.Tools
                 fileName = CheckName(fileName, fileName, savePath, 0);
                 UploadFile.SaveAs(savePath + fileName);
 
-                if (UploadType.Equals("img"))
+                if (upLoadType.Equals("img"))
                 {
                     App_Code.ImageTools.Scaling(fileName, savePath);
-                    setDBimg(fileName, UploadType);
+                    setDBimg(fileName, upLoadType);
                 }
-                else if (UploadType.Equals("Doc"))
+                else if (upLoadType.Equals("Doc"))
                 {
-                    setDBDoc(fileName, UploadType);
+                    setDBDoc(fileName, upLoadType);
+                }
+                else if (upLoadType.Equals("Compression"))
+                {
+                    setDBCompression(fileName, upLoadType);
                 }
             }
         }
-        private void setDBimg(string fileName, string UploadType)
+        private void setDBimg(string fileName, string upLoadType)
         {
             Rio_Pic Pic = new Rio_Pic();
             Pic.PicName = fileName;
-            Pic.PicPath = "/Upload/" + ID + "/" + UploadType + "/";
+            Pic.PicPath = "/Upload/" + ID + "/" + upLoadType + "/";
             Pic.PicContent = string.Empty;
             Pic.HitCount = 0;
             Pic.CreateID = ID;
@@ -84,8 +96,7 @@ namespace RioManager.Views.Tools
             Pic.ModifyID = ID;
             Pic.ModifyName = ID;
 
-            DateTime dt = DateTime.Now; ;
-            DateTime.TryParse(dt.ToString("yyyy-MM-dd"), out dt);
+            DateTime dt = DateTime.Now;
             Pic.CreateDate = dt;
             Pic.ModifyDate = dt;
 
@@ -110,10 +121,55 @@ namespace RioManager.Views.Tools
             Doc.ModifyName = ID;
 
             DateTime dt = DateTime.Now; ;
-            DateTime.TryParse(dt.ToString("yyyy-MM-dd"), out dt);
             Doc.CreateDate = dt;
             Doc.ModifyDate = dt;
             new Rio_DocController().Create(Doc);
+        }
+
+        private void setDBCompression(string fileName, string upLoadType)
+        {
+            Rio_Compression CF = new Rio_Compression();
+            CF.Name = fileName;
+            CF.Path = "/Upload/" + ID + "/" + upLoadType + "/";
+            CF.Extension = fileName.Split('.')[fileName.Split('.').Length - 1];
+            CF.CreateSN = userSN;
+            CF.CreateID = ID;
+            CF.CreateName = ID;
+            CF.CreateDate = DateTime.Now;
+            CF.IsEnable = true;
+            CF.IsDelete = false;
+
+            new CompressionModel().Insert(CF);            
+        }
+
+        private void setDBNotice(int userSN,string upLoadType, string sumCount)
+        {
+            List<Vw_UserTrack> userTrackList = new UserTrackModel().getTrackerListBySN(userSN);
+            string type = string.Empty;
+
+            switch (upLoadType)
+            {
+                case "img":
+                    type = " 張圖片";
+                    break;
+                case "Doc":
+                    type = " 件文件";
+                    break;
+                case "Compression":
+                    type = "個壓縮檔";
+                    break;
+            }
+
+            foreach (var item in userTrackList)
+            {
+                Rio_Notice notice = new Rio_Notice();
+                notice.AccountSN = userSN;
+                notice.TrackSN = item.AccountSN;
+                notice.NoticeContent = "已上傳 " + sumCount + type;
+                notice.CreateDate = DateTime.Now;
+
+                new NoticeModel().Insert(notice);
+            }
         }
     }
 }
