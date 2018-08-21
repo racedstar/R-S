@@ -65,72 +65,41 @@
 <div class="container systemContainer">
     <div class="row form-group systemGroup">
         @{            
-            if (isView)//View Mode
+            foreach (var item in Model)
             {
-                foreach (var item in Model)
+                var className = " docViewDiv";
+                var iconSrc = "";
+
+                if (item.IsEnable == false)
                 {
-                    var className = " docViewDiv";
-                    var iconSrc = "";
+                    className = " docViewDiv NotEnable";
+                }
 
-                    if (item.IsEnable == false)
-                    {
-                        className = " docViewDiv NotEnable";
-                    }
+                if (item.Extension == "zip")
+                {
+                    iconSrc = "../../Content/img/icon/zip.png";
+                }
+                else if (item.Extension == "7z")
+                {
+                    iconSrc = "../../Content/img/icon/7zip.png";
+                }
+                else if (item.Extension == "rar")
+                {
+                    iconSrc = "../../Content/img/icon/rar.png";
+                }
 
-                    if (item.Extension == "zip")
-                    {
-                        iconSrc = "../../Content/img/icon/zip.png";
-                    }
-                    else if (item.Extension == "7z")
-                    {
-                        iconSrc = "../../Content/img/icon/7zip.png";
-                    }
-                    else if (item.Extension == "rar")
-                    {
-                        iconSrc = "../../Content/img/icon/rar.png";
-                    }
-
-                    <div class="col-md-2 ">
-                        <div class="@className" style="background-image:url(@iconSrc)">
+                <div class="col-md-2 ">
+                    <div id="@item.SN" class="@className" style="background-image:url(@iconSrc)">
+                        @if (isView)
+                        {
                             <a href="@item.Path/@item.Name" title="@item.Name">
                                 <p>@item.Name</p>
                             </a>
-                        </div>
+                        }
+
                     </div>
-                }
-            }
-            else//Edit Mode
-            {
-                foreach (var item in Model)
-                {
-                    var className = " docViewDiv";
-                    var iconSrc = "";
-
-                    if (item.IsEnable == false)
-                    {
-                        className = " docViewDiv NotEnable";
-                    }
-
-                    if (item.Extension == "zip")
-                    {
-                        iconSrc = "../../Content/img/icon/zip.png";
-                    }
-                    else if (item.Extension == "7z")
-                    {
-                        iconSrc = "../../Content/img/icon/7zip.png";
-                    }
-                    else if (item.Extension == "rar")
-                    {
-                        iconSrc = "../../Content/img/icon/rar.png";
-                    }
-
-                    <div  class="col-md-2">
-                        <div id="@item.SN" class="@className" style="background-image:url(@iconSrc)" onclick="selectDiv(event,'@className','.docViewDiv')">
-                            <p class="docViewP">@item.Name</p>
-                        </div>
-                    </div>
-                }
-            }            
+                </div>
+            }                      
         }
     </div>
 </div>

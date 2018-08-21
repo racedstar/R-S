@@ -49,20 +49,20 @@ namespace RioManager.Models
             return data;
         }
 
-        public List<Vw_Album> getAllVwAlbumList()
+        public List<Vw_Album> getUserAllVwAlbumList(string ID)
         {
             var data = (from o in db.Vw_Album
-                        where o.IsDelete == false
+                        where o.CreateID == ID && o.IsDelete == false
                         select o).ToList();
 
             return data;
         }
 
-        public List<Vw_Album> getUsertVwAlbumListByID(string ID)
+        public List<Vw_Album> getUsertVwAlbumEnableListByID(string ID)
         {
             var data = (from o in db.Vw_Album
-                        where o.IsDelete == false && o.CreateID == ID
-                        select o).ToList();
+                        where o.IsEnable == true && o.IsDelete == false && o.CreateID == ID
+                        select o).OrderByDescending(o => o.CreateDate).ToList();
             return data;
         }
 

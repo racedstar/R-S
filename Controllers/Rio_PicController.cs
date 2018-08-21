@@ -1,4 +1,5 @@
 ﻿using PagedList;
+using System.Collections.Generic;
 using RioManager.Models;
 using System.Data;
 using System.Linq;
@@ -128,30 +129,49 @@ namespace RioManager.Controllers
         public ActionResult RioPicView(int? page)
         {
             string ID = string.Empty;
+            List<Rio_Pic> data = new List<Rio_Pic>();
+
             if (Session["UserID"] != null)
             {
                 ID = Session["UserID"].ToString();
+                data = new PicModel().getUserAllPicByID(ID);
             }
+
             if (Request.QueryString.Get("vid") != null)
             {
                 ID = Request.QueryString.Get("vid").ToString();
+                data = new PicModel().getUserPicEnableByID(ID);
             }
-            var data = new PicModel().getUserPicByID(ID).OrderByDescending(o => o.CreateDate);           
-            
+
+            if (Session["UserID"] != null && Request.QueryString.Get("vid") != null)
+            {
+                if (Session["UserID"].ToString().Equals(Request.QueryString.Get("vid")))
+                {
+                    ID = Session["UserID"].ToString();
+                    data = new PicModel().getUserAllPicByID(ID);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Rio_Account", null);
+            }
+
             var pageNumeber = page ?? 1;
-            var pageData = data.ToPagedList(pageNumeber, pageSize);
-            
-            ViewBag.PicView = data.Where(o => o.IsEnable == true).ToPagedList(pageNumeber, pageSize);
+            var pageData = data.ToPagedList(pageNumeber, pageSize);                        
 
             return View(pageData);
         }
 
         public ActionResult ReScaling()//重製縮圖
         {
-            if(new PicModel().getAllPic() != null)
+            if(Session["UserID"] != null)
             { 
-                string Message = App_Code.ImageTools.ReScaling(new PicModel().getAllPic());
-                Response.Write(App_Code.JS.Alert(Message));
+                string ID = Session["UserID"].ToString();
+                if (new PicModel().getUserAllPicByID(ID) != null)
+                { 
+                    string Message = App_Code.ImageTools.ReScaling(new PicModel().getUserAllPicByID(ID));
+                    Response.Write(App_Code.JS.Alert(Message));
+                }
             }
             return RedirectToAction("RioPicView", "Rio_Pic", new {m="E"});
         }

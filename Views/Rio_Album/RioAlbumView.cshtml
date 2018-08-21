@@ -39,12 +39,7 @@
 <div class="container systemContainer">
     <div class="row form-group systemGroup">
         @{
-            var VwAlbum = @ViewBag.VwAlbum;
-        }
-        @{
-            if (vid == UserID)
-            {
-                foreach (var item in VwAlbum)
+                foreach (var item in Model)
                 {
                     var className = "albumDiv";
                     if (item.IsEnable == false)
@@ -58,24 +53,7 @@
                             </a>
                         </div>
                     </div>
-                }
-            }
-            else
-            {
-                foreach (var item in VwAlbum)
-                {
-                    if (item.IsEnable == true)
-                    {
-                        <div id="@item.SN" class="col-md-3 " >
-                            <div class="albumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
-                                <a href="@Url.Action("RioAlbumContent", "Rio_Album", new { vid = @vid, SN = @item.SN })">
-                                    <p>@item.AlbumName</p>
-                                </a>
-                            </div>
-                        </div>
-                    }
-                }
-            }
+                }            
         }
     </div>
 </div>

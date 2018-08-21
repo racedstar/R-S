@@ -28,9 +28,9 @@ namespace RioManager.Controllers
                 ViewBag.indexAccountCover = rioAccount.PicPath + rioAccount.PicName;
 
                 //系統相簿、圖片、文件總數
-                ViewBag.albumCount = new AlbumModel().getUsertVwAlbumListByID(userID).Where(o => o.IsEnable == true).Count();
-                ViewBag.picCount = new PicModel().getUserPicByID(userID).Where(o => o.IsEnable == true).Count();
-                ViewBag.docCount = new DocModel().getDocListByID(userID).Where(o => o.IsEnable == true).Count();
+                ViewBag.albumCount = new AlbumModel().getUsertVwAlbumEnableListByID(userID).Where(o => o.IsEnable == true).Count();
+                ViewBag.picCount = new PicModel().getUserPicEnableByID(userID).Count();
+                ViewBag.docCount = new DocModel().getUserDocEnableListByID(userID).Count();
 
                 //系統預覽
                 ViewBag.preViewAlbum = new AlbumModel().getPreViewAlbumListByID(userID);

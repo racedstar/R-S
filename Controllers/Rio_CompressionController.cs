@@ -22,6 +22,19 @@ namespace RioManager.Controllers
             string ID = string.Empty;
             List<Rio_Compression> data = new List<Rio_Compression>();
 
+            if (Session["UserID"] != null)
+            {
+                int.TryParse(Session["UserSN"].ToString(), out userSN);
+                data = new CompressionModel().getCompressionByUserSN(userSN);
+            }
+
+            if (Request.QueryString.Get("vid") != null)
+            {
+                ID = Request.QueryString.Get("vid");
+                userSN = new AccountModel().getAccountByID(ID).SN;
+                data = new CompressionModel().getCompressionClientByUserSN(userSN);
+            }
+
             if (Request.QueryString.Get("vid") != null && Session["UserID"] != null)
             {
                 if (Request.QueryString.Get("vid") == Session["UserID"].ToString())
@@ -29,17 +42,6 @@ namespace RioManager.Controllers
                     int.TryParse(Session["UserSN"].ToString(), out userSN);
                     data = new CompressionModel().getCompressionByUserSN(userSN);
                 }
-            }
-            else if (Request.QueryString.Get("vid") != null)
-            {
-                ID = Request.QueryString.Get("vid");
-                userSN = new AccountModel().getAccountByID(ID).SN;
-                data = new CompressionModel().getCompressionClientByUserSN(userSN);
-            }
-            else if (Session["UserID"] != null)
-            {
-                int.TryParse(Session["UserSN"].ToString(), out userSN);
-                data = new CompressionModel().getCompressionByUserSN(userSN);
             }
             else
             {

@@ -130,18 +130,38 @@ namespace RioManager.Controllers
 
         public ActionResult RioAlbumView(int? page)
         {
-            string ID = string.Empty;            
-            if(Request.QueryString.Get("vid") != null)
+            string ID = string.Empty;
+            List<Vw_Album> data = new List<Vw_Album>();
+
+            if (Session["UserID"] != null)
+            {
+                ID = Session["UserID"].ToString();
+                data = new AlbumModel().getUserAllVwAlbumList(ID);
+            }
+
+            if (Request.QueryString.Get("vid") != null)
             {
                 ID = Request.QueryString.Get("vid").ToString();
+                data = new AlbumModel().getUsertVwAlbumEnableListByID(ID);
             }
-            var data = new AlbumModel().getUsertVwAlbumListByID(ID).OrderByDescending(o => o.CreateDate);
+
+            if (Session["UserID"] != null && Request.QueryString.Get("vid") != null)
+            {
+                if (Session["UserID"].ToString().Equals(Request.QueryString.Get("vid")))
+                {
+                    ID = Session["UserID"].ToString();
+                    data = new AlbumModel().getUserAllVwAlbumList(ID);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Rio_Account", null);
+            }            
 
             var pageNumber = page ?? 1;
 
             var pageData = data.ToPagedList(pageNumber, 20);
-
-            ViewBag.VwAlbum = pageData;
+            
             return View(pageData);
         }
 
@@ -166,7 +186,7 @@ namespace RioManager.Controllers
                 }
                 if (Request.QueryString.Get("s").ToString() == "0")//建立相簿時取得圖片
                 { 
-                    ViewBag.getNotJoinPic = new PicModel().getUserPicByID(ID).OrderByDescending(o => o.CreateDate);
+                    ViewBag.getNotJoinPic = new PicModel().getUserPicEnableByID(ID);
                 }
 
                 if (Request.QueryString.Get("s").ToString() == "1" && Request.QueryString.Get("as") != null)//編輯相簿時取得圖片

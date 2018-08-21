@@ -31,22 +31,23 @@ namespace RioManager.Models
         }
         #endregion
 
-        public List<Rio_Doc> getAllDoc()
-        {
-            var data = (from o in db.Rio_Doc
-                        where o.IsDelete == false
-                        select o).ToList();
-
-            return data;
-        }
-
-        public List<Rio_Doc> getDocListByID(string ID)
+        public List<Rio_Doc> getUserAllDocByID(string ID)
         {
             var data = (from o in db.Rio_Doc
                         where o.CreateID == ID && o.IsDelete == false
                         select o).ToList();
+
             return data;
         }
+
+        public List<Rio_Doc> getUserDocEnableListByID(string ID)
+        {
+            var data = (from o in db.Rio_Doc
+                        where  o.CreateID == ID && o.IsEnable == true && o.IsDelete == false
+                        select o).OrderByDescending(o => o.CreateDate).ToList();
+            return data;
+        }
+        
 
         public List<Rio_Doc> getPreviewDocListByID(string ID)
         {

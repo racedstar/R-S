@@ -1,8 +1,7 @@
-﻿@model IEnumerable<RioManager.Models.Rio_Doc>
+﻿@model IPagedList<RioManager.Models.Rio_Doc>
 @{
     ViewBag.Title = "R-S_DocView";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    PagedList.IPagedList<RioManager.Models.Rio_Doc> getAllDoc = (PagedList.IPagedList<RioManager.Models.Rio_Doc>)ViewBag.getAllDoc;
     var mode = "V";
     var title = "DocView";
     var isView = true;
@@ -24,10 +23,6 @@
     if (Request.QueryString.Get("vid") != null)
     {
         vid = Request.QueryString.Get("vid").ToString();
-    }
-    else
-    {
-        Html.RenderAction("LoingChecked", "Rio_Account");
     }
 }
 
@@ -61,119 +56,51 @@
 <div class="container systemContainer">
     <div class="row form-group systemGroup">
         @{
-            if (vid == UserID)//本人使用
-            {
-                if (isView)//View Mode
+                foreach (var item in Model)
                 {
-                    foreach (var item in getAllDoc)
+                    var imgSrc = "";
+                    var className = "docViewDiv";
+                    if (@item.Extension == "docx" || @item.Extension == "doc")
                     {
-                        var imgSrc = "";
-                        var className = "docViewDiv";
-                        if (@item.Extension == "docx" || @item.Extension == "doc")
-                        {
-                            imgSrc = "../../Content/img/icon/doc.ico";
-                        }
-                        else if (@item.Extension == "xlsx" || @item.Extension == "xls")
-                        {
-                            imgSrc = "../../Content/img/icon/xls.ico";
-                        }
-                        else if (@item.Extension == "pptx" || @item.Extension == "ppt")
-                        {
-                            imgSrc = "../../Content/img/icon/ppt.ico";
-                        }
-                        else if (@item.Extension == "pdf")
-                        {
-                            imgSrc = "../../Content/img/icon/pdf.ico";
-                        }
+                        imgSrc = "../../Content/img/icon/doc.ico";
+                    }
+                    else if (@item.Extension == "xlsx" || @item.Extension == "xls")
+                    {
+                        imgSrc = "../../Content/img/icon/xls.ico";
+                    }
+                    else if (@item.Extension == "pptx" || @item.Extension == "ppt")
+                    {
+                        imgSrc = "../../Content/img/icon/ppt.ico";
+                    }
+                    else if (@item.Extension == "pdf")
+                    {
+                        imgSrc = "../../Content/img/icon/pdf.ico";
+                    }
 
-                        if (item.IsEnable == false)
-                        {
-                            className = className + " NotEnable";
-                        }
-                        <div class="col-md-2 ">
-                            <div class="@className" style="background-image:url(@imgSrc)">
+                    if (item.IsEnable == false)
+                    {
+                        className = className + " NotEnable";
+                    }
+                    <div class="col-md-2 ">
+                        <div id="@item.SN" class="@className" style="background-image:url(@imgSrc)">
+                            @if (isView)
+                            {
                                 <a href="@item.DocPath/@item.DocName" title="@item.DocName">
                                     <p>@item.DocName</p>
                                 </a>
-                            </div>
+                            }
+                            else
+                            {
+                                <p>@item.DocName</p>
+                            }
                         </div>
-                    }
-                }
-                else//Edit Mode
-                {
-                    foreach (var item in getAllDoc)
-                    {
-                        var imgSrc = "";
-                        var className = "docViewDiv";
-                        if (@item.Extension == "docx" || @item.Extension == "doc")
-                        {
-                            imgSrc = "../../Content/img/icon/doc.ico";
-                        }
-                        else if (@item.Extension == "xlsx" || @item.Extension == "xls")
-                        {
-                            imgSrc = "../../Content/img/icon/xls.ico";
-                        }
-                        else if (@item.Extension == "pptx" || @item.Extension == "ppt")
-                        {
-                            imgSrc = "../../Content/img/icon/ppt.ico";
-                        }
-                        else if (@item.Extension == "pdf")
-                        {
-                            imgSrc = "../../Content/img/icon/pdf.ico";
-                        }
-
-                        if (item.IsEnable == false)
-                        {
-                            className = className + " NotEnable";
-                        }
-
-                        <div class="col-md-2">
-                            <div id="@item.SN"  class="@className" style="background-image:url(@imgSrc)" onclick="selectDiv(event,'@className','.docViewDiv')">
-                                <p class="docViewP">@item.DocName</p>
-                            </div>
-                        </div>
-                    }
-                }
-            }
-            else
-            {
-                foreach (var item in getAllDoc)//觀光客模式
-                {
-                    if (item.IsEnable == true)
-                    {
-                        var imgSrc = "";
-                        var className = " ";
-                        if (@item.Extension == "docx" || @item.Extension == "doc")
-                        {
-                            imgSrc = "../../Content/img/icon/doc.ico";
-                        }
-                        else if (@item.Extension == "xlsx" || @item.Extension == "xls")
-                        {
-                            imgSrc = "../../Content/img/icon/xls.ico";
-                        }
-                        else if (@item.Extension == "pptx" || @item.Extension == "ppt")
-                        {
-                            imgSrc = "../../Content/img/icon/ppt.ico";
-                        }
-                        else if (@item.Extension == "pdf")
-                        {
-                            imgSrc = "../../Content/img/icon/pdf.ico";
-                        }
-
-                        <div class="col-md-2">
-                            <div class="docViewDiv" style="background-image:url(@imgSrc)">
-                                <a href="@item.DocPath/@item.DocName" title="@item.DocName">
-                                    <p>@item.DocName</p>
-                                </a>
-                            </div>
-                        </div>
-                    }
+                    </div>
                 }
             }
         }
     </div>
 </div>
 <div class="container">
-    @Html.PagedListPager(getAllDoc, page => Url.Action("RioDocView", new { vid = @vid, m = mode, page }))
+    @Html.PagedListPager(Model, page => Url.Action("RioDocView", new { vid = @vid, m = mode, page }))
     <p>End of content</p>
 </div>

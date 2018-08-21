@@ -131,12 +131,37 @@ namespace RioManager.Controllers
         {
             int pageNumber = page ?? 1;
             string ID = string.Empty;
-            if(Request.QueryString.Get("vid") != null)
+            List<Rio_Doc> data = new List<Rio_Doc>();
+
+            if (Session["UserID"] != null)
+            {
+                ID = Session["UserID"].ToString();
+                data = new DocModel().getUserAllDocByID(ID);
+            }
+
+            if (Request.QueryString.Get("vid") != null)
             {
                 ID = Request.QueryString.Get("vid").ToString();
+                data = new DocModel().getUserDocEnableListByID(ID);
             }
-            ViewBag.getAllDoc = new DocModel().getDocListByID(ID).OrderByDescending(o =>o.CreateDate).ToPagedList(pageNumber,24);
-            return View(db.Rio_Doc.ToList());
+
+            if (Session["UserID"] != null && Request.QueryString.Get("vid") != null)
+            {
+                if (Session["UserID"].ToString().Equals(Request.QueryString.Get("vid")))
+                {
+                    ID = Session["UserID"].ToString();
+                    data = new DocModel().getUserAllDocByID(ID);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Rio_Account", null);
+            }
+
+            var pageNumeber = page ?? 1;
+            var pageData = data.ToPagedList(pageNumeber, 24);
+
+            return View(pageData);
         }       
     }
 }

@@ -45,19 +45,19 @@ namespace RioManager.Models
         }
         #endregion
 
-        public List<Rio_Pic> getAllPic()
+        public List<Rio_Pic> getUserAllPicByID(string ID)
         {
             var data = (from o in db.Rio_Pic
-                        where o.IsDelete == false
-                        select o).ToList();
+                        where o.CreateID == ID && o.IsDelete == false
+                        select o).OrderByDescending(o => o.CreateDate).ToList();
             return data;
         }        
 
-        public List<Rio_Pic> getUserPicByID(string ID)
+        public List<Rio_Pic> getUserPicEnableByID(string ID)
         {
             var data = (from o in db.Rio_Pic
-                        where o.IsDelete == false && o.CreateID == ID
-                        select o).ToList();
+                        where o.IsEnable == true && o.IsDelete == false && o.CreateID == ID
+                        select o).OrderByDescending(o => o.CreateDate).ToList();
             return data;
         }
 

@@ -7,15 +7,11 @@
     var mode = "V";
     var title = "PicView";
     var vid = string.Empty;
+    var defaultClassName = "picViewDiv";
     var UserID = string.Empty;
-    var PicView = ViewBag.PicView;
     if (Request.QueryString.Get("vid") != null)
     {
         vid = Request.QueryString.Get("vid").ToString();
-    }
-    else
-    {
-        Html.RenderAction("LoingChecked", "Rio_Account");
     }
     if (Session["UserID"] != null)
     {
@@ -28,6 +24,7 @@
         {
             isView = false;
             title = "PicEdit";
+            defaultClassName = "picEditDiv";
         }
     }
 }
@@ -64,54 +61,22 @@
 <div class="container systemContainer">
     <div class="row form-group systemGroup">
         @{
-
-            if (vid == UserID)//本人使用
+            foreach (var item in Model)
             {
-                if (isView)//View Mode
+                var className = defaultClassName;
+                if (item.IsEnable == false)
                 {
-                    foreach (var item in Model)
-                    {
-                        var className = "thumbnail picViewDiv";
-                        if (item.IsEnable == false)
+                    className = className + " NotEnable";
+                }
+                <div class="col-md-3">
+                    <div id="@item.SN" class="@className" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="selectDiv(event,'@className','.picEditDiv')">
+                        @if (isView)
                         {
-                            className = "thumbnail picViewDiv NotEnable";
-                        }
-                        <div class="col-md-3">
-                            <div class="@className" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
-                                <a class="fancybox" data-fancybox="images" style="display:block;" rel="ligthbox" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>
-                            </div>
-                        </div>
-                    }
-                }
-                else//Edit Mode
-                {
-                    foreach (var item in Model)
-                    {
-                        var className = "thumbnail picEditDiv";
-                        if (item.IsEnable == false)
-                        {
-                            className = "thumbnail picEditDiv NotEnable";
-                        }
-                        <div  class="col-md-3 ">
-                            <div id="@item.SN" class="@className" style="background-image:url(@item.PicPath/Scaling/@item.PicName);" onclick="selectDiv(event, '@className' ,'.picEditDiv')"></div>
-                        </div>
-                    }
-                }
-            }
-            else//觀光客
-            {
-                foreach (var item in Model)
-                {
-                    if (item.IsEnable == true)
-                    {
-                        <div class="col-md-3">
-                            <div class="thumbnail picViewDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
-                                <a class="fancybox" data-fancybox="images" style="display:block;" rel="ligthbox" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>
-                            </div>
-                        </div>
-                    }
-                }
-            }            
+                            <a class="fancybox" data-fancybox="images" style="display:block;" rel="ligthbox" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>
+                        }                             
+                    </div>
+                </div>
+            }                                  
         }
     </div>
 </div>

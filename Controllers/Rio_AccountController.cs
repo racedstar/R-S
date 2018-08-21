@@ -381,7 +381,7 @@ namespace RioManager.Controllers
             {
                 UserID = Session["UserID"].ToString();
             }
-            ViewBag.Pic = new PicModel().getUserPicByID(UserID);
+            ViewBag.Pic = new PicModel().getUserPicEnableByID(UserID);
 
             return View();
         }
@@ -391,8 +391,8 @@ namespace RioManager.Controllers
         public ActionResult AllUserLink(int? page)
         {            
             ViewBag.VwAlbumCount = new AlbumModel().getUserVwAlbumList();
-            ViewBag.VwPicCount = new PicModel().getAllPic();
-            ViewBag.VwDocCount = new DocModel().getAllDoc();
+            //ViewBag.VwPicCount = new PicModel().getAllPic();
+            //ViewBag.VwDocCount = new DocModel().getAllDoc();
             
             var data = new AccountModel().getAccountList();
             var pageNumeber = page ?? 1;
