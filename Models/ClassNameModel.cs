@@ -7,7 +7,19 @@ namespace RioManager.Models
 {
     public class ClassNameModel
     {
+        public string TopBar { get; set; }
+        public string SysContainer { get; set; }
+        public string DataClass { get; set; }
 
+        public static ClassNameModel getPictureClassName()
+        {
+            ClassNameModel cn = new ClassNameModel();
+            cn.TopBar = "topBar";
+            cn.SysContainer = "systemContainer";
+            cn.DataClass = "picViewDivNew";
+
+            return cn;
+        }
     }
 
     public enum pictureClassName

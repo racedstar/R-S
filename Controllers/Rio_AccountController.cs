@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using PagedList;
+using RioManager.Models;
+using System;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using RioManager.Models;
-using PagedList;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace RioManager.Controllers
 {

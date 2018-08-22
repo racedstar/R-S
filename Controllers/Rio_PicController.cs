@@ -129,8 +129,7 @@ namespace RioManager.Controllers
         public ActionResult RioPicView(int? page)
         {
             string ID = string.Empty;
-            string title = "PicView";
-            int classNumber = 0;
+            string title = "PicView";            
             bool isUser = false;
 
             if (Request.QueryString.Get("m") != null)
@@ -140,17 +139,10 @@ namespace RioManager.Controllers
                     title = "PicEdit";
                 }
             }
-
             ViewBag.title = title;
 
-            if (Request.QueryString.Get("c") != null)
-            {
-                int.TryParse(Request.QueryString.Get("c"), out classNumber);
-            }
-
-            pictureClassName className = (pictureClassName)classNumber;
-            ViewBag.className = className;
-
+            ClassNameModel cn = ClassNameModel.getPictureClassName();
+            ViewBag.className = cn;
 
             #region getData
             List<Rio_Pic> data = new List<Rio_Pic>();

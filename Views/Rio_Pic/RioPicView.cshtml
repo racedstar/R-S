@@ -5,10 +5,9 @@
     var isView = true;
     var mode = "V";
     var title = ViewBag.title;
-    var defaultClassName = ViewBag.className;
+    var className = ViewBag.className;
     var isUser = ViewBag.isUser;
     var vid = string.Empty;
-    var aaa = "O";
     if (Request.QueryString.Get("vid") != null)
     {
         vid = Request.QueryString.Get("vid").ToString();
@@ -19,7 +18,7 @@
     }
 }
 
-<div class="row topBar">
+<div class="row @className.TopBar">
     <div class="col-md-4">
         <h2>@title</h2>
     </div>
@@ -48,18 +47,18 @@
         }
     </div>
 </div>
-<div class="container systemContainer">
+<div class="container @className.SysContainer">
     <div class="row form-group systemGroup">
         @{
             foreach (var item in Model)
             {
-                var className = defaultClassName;
+                var dataClassName = className.DataClass;
                 if (item.IsEnable == false)
                 {
-                    className = className + " NotEnable";
+                    dataClassName = className.DataClass + " NotEnable";
                 }
                 <div class="col-md-3">
-                    <div id="@item.SN" class="@className" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="selectDiv(event,'@className','.picEditDiv')">
+                    <div id="@item.SN" class="@dataClassName" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="selectDiv(event,'@dataClassName','.picEditDiv')">
                         @if (isView)
                         {
                             <a class="fancybox" data-fancybox="images" style="display:block;" rel="ligthbox" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>
@@ -71,6 +70,6 @@
     </div>
 </div>
 <div class="container">
-    @Html.PagedListPager(Model, page => Url.Action("RioPicView", new { vid = @vid,m = @mode,CN = @aaa, page }))    
+    @Html.PagedListPager(Model, page => Url.Action("RioPicView", new { vid = @vid,m = @mode, page }))    
     <p>End of content</p>
 </div>
