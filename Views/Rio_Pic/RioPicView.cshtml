@@ -1,31 +1,21 @@
 ﻿@model IPagedList<RioManager.Models.Rio_Pic>
 
-@{
-    ViewBag.Title = "R-S_PicView";
+@{    
     Layout = "~/Views/Shared/_Layout.cshtml";
     var isView = true;
     var mode = "V";
-    var title = "PicView";
+    var title = ViewBag.title;
+    var defaultClassName = ViewBag.className;
+    var isUser = ViewBag.isUser;
     var vid = string.Empty;
-    var defaultClassName = "picViewDiv";
-    var UserID = string.Empty;
+    var aaa = "O";
     if (Request.QueryString.Get("vid") != null)
     {
         vid = Request.QueryString.Get("vid").ToString();
     }
-    if (Session["UserID"] != null)
-    {
-        UserID = Session["UserID"].ToString();
-    }
     if (Request.QueryString.Get("m") != null)
     {
         mode = Request.QueryString.Get("m").ToString();
-        if (mode == "E")
-        {
-            isView = false;
-            title = "PicEdit";
-            defaultClassName = "picEditDiv";
-        }
     }
 }
 
@@ -35,9 +25,9 @@
     </div>
     <div class="col-md-8 text-right" style="line-height:70px;">                
         @{
-            if (vid == UserID)
+            if (isUser)
             {           
-                if (!isView)
+                if (mode.Equals("E"))
                 {
                     <input class="btn btn-success" type="button" id="fileDownload" value="多檔下載" onclick="zipFile('img')" />
                     <input class="btn btn-warning" type="button" id="imgReScaling" value="重置縮圖" onclick="location.href='@Url.Action("ReScaling", "Rio_Pic")'" />
@@ -81,6 +71,6 @@
     </div>
 </div>
 <div class="container">
-    @Html.PagedListPager(Model, page => Url.Action("RioPicView", new { vid = @vid, m = mode, page }))
+    @Html.PagedListPager(Model, page => Url.Action("RioPicView", new { vid = @vid,m = @mode,CN = @aaa, page }))    
     <p>End of content</p>
 </div>

@@ -129,8 +129,31 @@ namespace RioManager.Controllers
         public ActionResult RioPicView(int? page)
         {
             string ID = string.Empty;
-            List<Rio_Pic> data = new List<Rio_Pic>();
+            string title = "PicView";
+            int classNumber = 0;
+            bool isUser = false;
 
+            if (Request.QueryString.Get("m") != null)
+            {
+                if (Request.QueryString.Get("m").Equals("E"))
+                {
+                    title = "PicEdit";
+                }
+            }
+
+            ViewBag.title = title;
+
+            if (Request.QueryString.Get("c") != null)
+            {
+                int.TryParse(Request.QueryString.Get("c"), out classNumber);
+            }
+
+            pictureClassName className = (pictureClassName)classNumber;
+            ViewBag.className = className;
+
+
+            #region getData
+            List<Rio_Pic> data = new List<Rio_Pic>();
             if (Session["UserID"] != null)
             {
                 ID = Session["UserID"].ToString();
@@ -148,6 +171,7 @@ namespace RioManager.Controllers
                 if (Session["UserID"].ToString().Equals(Request.QueryString.Get("vid")))
                 {
                     ID = Session["UserID"].ToString();
+                    isUser = true;
                     data = new PicModel().getUserAllPicByID(ID);
                 }
             }
@@ -155,9 +179,10 @@ namespace RioManager.Controllers
             {
                 return RedirectToAction("Login", "Rio_Account", null);
             }
-
             var pageNumeber = page ?? 1;
-            var pageData = data.ToPagedList(pageNumeber, pageSize);                        
+            var pageData = data.ToPagedList(pageNumeber, pageSize);
+            ViewBag.isUser = isUser;
+            #endregion
 
             return View(pageData);
         }
