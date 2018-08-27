@@ -2,20 +2,11 @@
 
 @{    
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var isView = true;
-    var mode = "V";
-    var title = ViewBag.title;
+    string mode = ViewBag.mode;
+    string title = ViewBag.title;
+    string vid = ViewBag.vid;
+    bool isUser = ViewBag.isUser;
     var className = ViewBag.className;
-    var isUser = ViewBag.isUser;
-    var vid = string.Empty;
-    if (Request.QueryString.Get("vid") != null)
-    {
-        vid = Request.QueryString.Get("vid").ToString();
-    }
-    if (Request.QueryString.Get("m") != null)
-    {
-        mode = Request.QueryString.Get("m").ToString();
-    }
 }
 
 <div class="row @className.TopBar">
@@ -59,7 +50,7 @@
                 }
                 <div class="col-md-3">
                     <div id="@item.SN" class="@dataClassName" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="selectDiv(event,'@dataClassName','.picEditDiv')">
-                        @if (isView)
+                        @if (!mode.Equals("E"))
                         {
                             <a class="fancybox" data-fancybox="images" style="display:block;" rel="ligthbox" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>
                         }                             
@@ -70,6 +61,5 @@
     </div>
 </div>
 <div class="container">
-    @Html.PagedListPager(Model, page => Url.Action("RioPicView", new { vid = @vid,m = @mode, page }))    
-    <p>End of content</p>
+    @Html.PagedListPager(Model, page => Url.Action("RioPicView", new { vid = @vid,m = @mode, page }))        
 </div>

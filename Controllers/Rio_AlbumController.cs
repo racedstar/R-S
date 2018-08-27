@@ -131,6 +131,7 @@ namespace RioManager.Controllers
         public ActionResult RioAlbumView(int? page)
         {
             string ID = string.Empty;
+            bool isUser = false;
             List<Vw_Album> data = new List<Vw_Album>();
 
             if (Session["UserID"] != null)
@@ -151,17 +152,21 @@ namespace RioManager.Controllers
                 {
                     ID = Session["UserID"].ToString();
                     data = new AlbumModel().getUserAllVwAlbumList(ID);
+                    isUser = true;
                 }
             }
             else
             {
                 return RedirectToAction("Login", "Rio_Account", null);
-            }            
+            }
+
+            ViewBag.vid = ID;
+            ViewBag.isUser = isUser;
 
             var pageNumber = page ?? 1;
-
             var pageData = data.ToPagedList(pageNumber, 20);
-            
+            ViewBag.className = ClassNameModel.getClassName("albumView");
+
             return View(pageData);
         }
 
@@ -169,36 +174,64 @@ namespace RioManager.Controllers
         {
             int aSN = SN ?? 0;                                                           
             int pageNumber = page ?? 1;
+            string userID = string.Empty;
+            bool isUser = false;
+            Vw_Album va = new Vw_Album();            
 
-            ViewBag.VwAlbum = new AlbumModel().getVwAlbum(aSN);
-            ViewBag.getJoinPic = new AlbumJoinPicModel().getUpdateJoinPic(aSN).OrderBy(o => o.JoinSort).ToPagedList(pageNumber, 20);                            
+            if (aSN == 0 || Request.QueryString.Get("vid") == null)
+            {
+                return RedirectToAction("Login", "Rio_Account", null);
+            }
+
+            if (Session["UserID"] != null)
+            {
+                userID = Session["UserID"].ToString();
+            }           
+
+            if (Request.QueryString.Get("vid").Equals(userID))
+            {
+                isUser = true;
+            }
+
+            va = new AlbumModel().getVwAlbum(aSN);
+
+            if (isUser && va.IsEnable == false)
+            {
+                return RedirectToAction("RioAlbumView", "Rio_Album", new { vid = Request.QueryString.Get("vid") });
+            }
+
+            
+            ViewBag.aSN = aSN;
+            ViewBag.VwAlbum = va;
+            ViewBag.isUser = isUser;
+            ViewBag.vid = Request.QueryString.Get("vid");
+            ViewBag.className = ClassNameModel.getClassName("albumContent");
+            ViewBag.getJoinPic = new AlbumJoinPicModel().getUpdateJoinPic(aSN).ToPagedList(pageNumber, 20);                            
             return View(db.Rio_Album.ToList());
         }
 
-        public ActionResult CreateAlbum()
+        public ActionResult CreateAlbum(int? s, int? aSN)
         {
-            if(Request.QueryString.Get("s") != null)
+            string ID = string.Empty;
+            int status = s ?? 0;
+            int albumSN = aSN ?? 0;
+            if (Session["UserID"] != null)
             {
-                string ID = string.Empty;
-                if (Session["UserID"] != null)
-                {
-                    ID = Session["UserID"].ToString();
-                }
-                if (Request.QueryString.Get("s").ToString() == "0")//建立相簿時取得圖片
-                { 
-                    ViewBag.getNotJoinPic = new PicModel().getUserPicEnableByID(ID);
-                }
-
-                if (Request.QueryString.Get("s").ToString() == "1" && Request.QueryString.Get("as") != null)//編輯相簿時取得圖片
-                {
-                    int aSN = 0;
-                    int.TryParse(Request.QueryString.Get("as").ToString(), out aSN);
-
-                    ViewBag.VwAlbum = new AlbumModel().getVwAlbum(aSN);//相簿資料
-                    ViewBag.getJoinPic = new AlbumJoinPicModel().getUpdateJoinPic(aSN);//已加入相簿的圖片
-                    ViewBag.getNotJoinPic = new AlbumJoinPicModel().getUpdateNotJoinPic(aSN, ID).OrderByDescending(o => o.CreateDate);//未加入相簿的圖片
-                }
+                ID = Session["UserID"].ToString();
             }
+            if (status == 0)//建立相簿時取得圖片
+            { 
+                ViewBag.getNotJoinPic = new PicModel().getUserPicEnableByID(ID);
+            }
+
+            if (status == 1 && albumSN != 0)//編輯相簿時取得圖片
+            {                    
+                ViewBag.VwAlbum = new AlbumModel().getVwAlbum(albumSN);//相簿資料
+                ViewBag.getJoinPic = new AlbumJoinPicModel().getUpdateJoinPic(albumSN);//已加入相簿的圖片
+                ViewBag.getNotJoinPic = new AlbumJoinPicModel().getUpdateNotJoinPic(albumSN, ID).OrderByDescending(o => o.CreateDate);//未加入相簿的圖片
+            }
+
+            ViewBag.aSN = albumSN;            
             return View();
         }
 

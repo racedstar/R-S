@@ -11,40 +11,83 @@ namespace RioManager.Models
         public string SysContainer { get; set; }
         public string DataClass { get; set; }
 
-        public static ClassNameModel getPictureClassName()
+        public static ClassNameModel getClassName(string systemName)
+        {
+            ClassNameModel cn = new ClassNameModel();
+            switch (systemName)
+            {
+                case "pic":
+                    cn = getPictureClassName();
+                    break;
+                case "albumView":
+                    cn = getAlbumViewClassName();
+                    break;
+                case "albumContent":
+                    cn = getAlbumContentClassName();
+                    break;
+                case "doc":
+                    cn = getDocumentClassName();
+                    break;
+                case "compression":
+                    cn = getCompressionClassName();
+                    break;
+                default:
+
+                    break;
+            }
+
+            return cn;
+        }
+
+        private static ClassNameModel getPictureClassName()
         {
             ClassNameModel cn = new ClassNameModel();
             cn.TopBar = "topBar";
             cn.SysContainer = "systemContainer";
-            cn.DataClass = "picViewDivNew";
+            cn.DataClass = "picViewDiv";
+
+            return cn;
+        }
+
+        private static ClassNameModel getDocumentClassName()
+        {
+            ClassNameModel cn = new ClassNameModel();
+            cn.TopBar = "topBar";
+            cn.SysContainer = "systemContainer";
+            cn.DataClass = "docViewDiv";
+
+            return cn;
+        }
+
+        private static ClassNameModel getAlbumViewClassName()
+        {
+            ClassNameModel cn = new ClassNameModel();
+            cn.TopBar = "topBar";
+            cn.SysContainer = "systemContainer";
+            cn.DataClass = "albumDiv";
+
+            return cn;
+        }
+
+        private static ClassNameModel getAlbumContentClassName()
+        {
+            ClassNameModel cn = new ClassNameModel();
+            cn.TopBar = "topBar";
+            cn.SysContainer = "systemContainer";
+            cn.DataClass = "picViewDiv";
+
+            return cn;
+        }
+
+        private static ClassNameModel getCompressionClassName()
+        {
+            ClassNameModel cn = new ClassNameModel();
+            cn.TopBar = "topBar";
+            cn.SysContainer = "systemContainer";
+            cn.DataClass = "docViewDiv";
 
             return cn;
         }
     }
 
-    public enum pictureClassName
-    {
-        picViewDiv,
-        picViewDivNew
-    }
-
-    public enum albumClassName
-    {
-
-    }
-
-    public enum docClassName
-    {
-
-    }
-
-    public enum CompressionClassName
-    {
-
-    }
-
-    public enum notice
-    {
-
-    }
 }

@@ -48,9 +48,9 @@ namespace RioManager.Views.Tools
                     setDBNotice(userSN, userID, Title, "更新了");
                 }
 
-                if(State.Equals("Update") && HttpContext.Current.Request.QueryString.Get("as") != null)
+                if(State.Equals("Update") && HttpContext.Current.Request.QueryString.Get("aSN") != null)
                 {
-                    int.TryParse(HttpContext.Current.Request.QueryString.Get("as").ToString(), out AlbumSN);                    
+                    int.TryParse(HttpContext.Current.Request.QueryString.Get("aSN").ToString(), out AlbumSN);                    
 
                     updateAlbum(AlbumSN,frontCoverSN, Title, IsEnable, userID);
                     new AlbumJoinPicModel().deleteJoinAlbum(AlbumSN);

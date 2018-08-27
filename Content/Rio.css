@@ -581,17 +581,8 @@
     margin-bottom: 10px;
     height: 165px;
     background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center center;
-}
-.picViewDivNew {
-    border: ridge;
-    border-radius: 7px;
-    margin-bottom: 10px;
-    height: 165px;
-    background-repeat: no-repeat;    
-    background-position: center center;
     background-size: cover;
+    background-position: center center;
 }
 
 .picViewDiv:hover {

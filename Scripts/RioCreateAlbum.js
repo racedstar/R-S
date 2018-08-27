@@ -155,8 +155,8 @@ var SaveData = function (state) {
     }
 
     if (state === 1){//state=1為Update
-        s = getQueryString("as");
-        State = "Update&as=" + s;
+        s = getQueryString("aSN");
+        State = "Update&aSN=" + s;
     }
 
     imgIDArray = addimgArray();

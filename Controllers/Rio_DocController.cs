@@ -131,7 +131,22 @@ namespace RioManager.Controllers
         {
             int pageNumber = page ?? 1;
             string ID = string.Empty;
-            List<Rio_Doc> data = new List<Rio_Doc>();
+            string title = "DocView";
+            string mode = "V";
+            bool isUser = false;            
+            List <Rio_Doc> data = new List<Rio_Doc>();
+            ClassNameModel cn = ClassNameModel.getClassName("doc");
+
+            if (Request.QueryString.Get("m") != null)
+            {
+                if (Request.QueryString.Get("m").Equals("E"))
+                {
+                    title = "DocEdit";
+                    mode = "E";
+                }
+            }
+
+            ViewBag.title = title;
 
             if (Session["UserID"] != null)
             {
@@ -151,12 +166,18 @@ namespace RioManager.Controllers
                 {
                     ID = Session["UserID"].ToString();
                     data = new DocModel().getUserAllDocByID(ID);
+                    isUser = true;
                 }
             }
             else
             {
                 return RedirectToAction("Login", "Rio_Account", null);
             }
+            
+            ViewBag.mode = mode;
+            ViewBag.vid = ID;
+            ViewBag.isUser = isUser;
+            ViewBag.className = cn;
 
             var pageNumeber = page ?? 1;
             var pageData = data.ToPagedList(pageNumeber, 24);

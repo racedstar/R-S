@@ -19,8 +19,20 @@ namespace RioManager.Controllers
         {
             int pageSize = 20;
             int userSN = 0;
+            bool isUser = false;
             string ID = string.Empty;
+            string mode = "V";
+            string title = "CompressionView";
             List<Rio_Compression> data = new List<Rio_Compression>();
+
+            if(Request.QueryString.Get("m") != null)
+            {
+                if (Request.QueryString.Get("m").Equals("E"))
+                {
+                    title = "CompressionEdit";
+                }
+
+            }
 
             if (Session["UserID"] != null)
             {
@@ -41,12 +53,19 @@ namespace RioManager.Controllers
                 {
                     int.TryParse(Session["UserSN"].ToString(), out userSN);
                     data = new CompressionModel().getCompressionByUserSN(userSN);
+                    isUser = true;
                 }
             }
             else
             {
                 return RedirectToAction("Login", "Rio_Account", null);
             }
+
+            ViewBag.vid = ID;
+            ViewBag.mode = mode;
+            ViewBag.title = title;
+            ViewBag.isUser = isUser;
+            ViewBag.className = ClassNameModel.getClassName("compression");
 
             var pageNumeber = page ?? 1;
             var pageData = data.ToPagedList(pageNumeber, pageSize);            

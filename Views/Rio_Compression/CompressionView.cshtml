@@ -2,47 +2,24 @@
 @{
     ViewBag.Title = "R-S_CompressionView";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
     #region 變數宣告
-    var isView = true;
-    var mode = "V";
-    var title = "CompressionView";
-    var vid = string.Empty;
-    var UserID = string.Empty;
-
-    if (Request.QueryString.Get("vid") != null)
-    {
-        vid = Request.QueryString.Get("vid").ToString();
-    }
-    else
-    {
-        Html.RenderAction("LoingChecked", "Rio_Account");
-    }
-    if (Session["UserID"] != null)
-    {
-        UserID = Session["UserID"].ToString();
-    }
-    if (Request.QueryString.Get("m") != null)
-    {
-        mode = Request.QueryString.Get("m").ToString();
-        if (mode == "E")
-        {
-            isView = false;
-            title = "CompressionEdit";
-        }
-    }
+    string mode = "V";
+    string title = "CompressionView";
+    string vid = ViewBag.vid;
+    bool isUser = ViewBag.isUser;
+    var className = ViewBag.className;
     #endregion
 }
 
-<div class="row topBar">
+<div class="row @className.TopBar">
     <div class="col-md-4">
         <h2>@title</h2>
     </div>
     <div class="col-md-8 text-right" style="line-height:70px;">
         @{
-            if (vid == UserID)
+            if (isUser)
             {
-                if (!isView)
+                if (mode.Equals("E"))
                 {                                        
                     <input class="btn btn-danger" type="button" id="deleteImg" value="刪除檔案" onclick="deleteFile('Compression')" />
                     <input class="btn btn-warning" type="button" id="cheangeEnable" value="改變啟用狀態" onclick="fileEnable('Compression')" />
@@ -62,12 +39,12 @@
     </div>
 </div>
 
-<div class="container systemContainer">
+<div class="container @className.SysContainer">
     <div class="row form-group systemGroup">
         @{            
             foreach (var item in Model)
             {
-                var className = " docViewDiv";
+                var dataClass = className.DataClass;
                 var iconSrc = "";
 
                 if (item.IsEnable == false)
@@ -89,14 +66,17 @@
                 }
 
                 <div class="col-md-2 ">
-                    <div id="@item.SN" class="@className" style="background-image:url(@iconSrc)">
-                        @if (isView)
+                    <div id="@item.SN" class="@dataClass" style="background-image:url(@iconSrc)" onclick="selectDiv(event,'@dataClass','.@dataClass')">
+                        @if (mode.Equals("V"))
                         {
                             <a href="@item.Path/@item.Name" title="@item.Name">
                                 <p>@item.Name</p>
                             </a>
                         }
-
+                        else
+                        {
+                            <p>@item.Name</p>
+                        }
                     </div>
                 </div>
             }                      
@@ -105,7 +85,6 @@
 </div>
 
 <div class="container">
-    @Html.PagedListPager(Model, page => Url.Action("CompressionView", new { vid = @vid, m = mode, page }))
-    <p>End of content</p>
+    @Html.PagedListPager(Model, page => Url.Action("CompressionView", new { vid = @vid, m = mode, page }))    
 </div>
 

@@ -1,39 +1,21 @@
 ﻿@model IPagedList<RioManager.Models.Rio_Doc>
-@{
-    ViewBag.Title = "R-S_DocView";
+@{    
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var mode = "V";
-    var title = "DocView";
-    var isView = true;
-    var vid = string.Empty;
-    var UserID = string.Empty;
-    if (Request.QueryString.Get("m") != null)
-    {
-        mode = Request.QueryString.Get("m").ToString();
-        if (mode == "E")
-        {
-            isView = false;
-            title = "DocEdit";
-        }
-    }
-    if (Session["UserID"] != null)
-    {
-        UserID = Session["UserID"].ToString();
-    }
-    if (Request.QueryString.Get("vid") != null)
-    {
-        vid = Request.QueryString.Get("vid").ToString();
-    }
+    string mode = ViewBag.mode;
+    string title = ViewBag.title;
+    string vid = ViewBag.vid;
+    bool isUser = ViewBag.isUser;
+    var className = ViewBag.className;
 }
 
-<div class="row topBar">
+<div class="row @className.TopBar">
     <div class="col-md-4">
         <h2>@title</h2>
     </div>
     <div class="col-md-8 text-right" style="line-height:70px;">
         @{
-            if(vid == UserID) { 
-                if (isView)
+            if(isUser) { 
+                if (!mode.Equals("E"))
                 {
                     <a id="btnEdit" class="btn btn-success" href="@Url.Action("RioDocView","Rio_Doc", new {vid=@vid, m="E"})">編輯模式</a>
                 }
@@ -47,19 +29,19 @@
                 <a id="btnUpload" class="btn btn-primary" data-fancybox data-type="iframe" data-src="/Tools/fmUpload?t=Doc" href="javascript:;">上傳文件</a>
             }
             else
-            {
+            {                
                 @Html.ActionLink("回" + vid + "的首頁", "Index", "Home", new { vid = @vid }, new { @class = "btn btn-success" })
             }
         }    
     </div>
 </div>
-<div class="container systemContainer">
+<div class="container @className.SysContainer">
     <div class="row form-group systemGroup">
         @{
                 foreach (var item in Model)
                 {
                     var imgSrc = "";
-                    var className = "docViewDiv";
+                    var dataClassName = className.DataClass;
                     if (@item.Extension == "docx" || @item.Extension == "doc")
                     {
                         imgSrc = "../../Content/img/icon/doc.ico";
@@ -79,11 +61,11 @@
 
                     if (item.IsEnable == false)
                     {
-                        className = className + " NotEnable";
+                        dataClassName = dataClassName + " NotEnable";
                     }
                     <div class="col-md-2 ">
-                        <div id="@item.SN" class="@className" style="background-image:url(@imgSrc)">
-                            @if (isView)
+                        <div id="@item.SN" class="@dataClassName" style="background-image:url(@imgSrc)" onclick="selectDiv(event,'@dataClassName','.@dataClassName')">
+                            @if (mode.Equals("V"))
                             {
                                 <a href="@item.DocPath/@item.DocName" title="@item.DocName">
                                     <p>@item.DocName</p>
@@ -96,11 +78,9 @@
                         </div>
                     </div>
                 }
-            }
-        }
+            }        
     </div>
 </div>
 <div class="container">
-    @Html.PagedListPager(Model, page => Url.Action("RioDocView", new { vid = @vid, m = mode, page }))
-    <p>End of content</p>
+    @Html.PagedListPager(Model, page => Url.Action("RioDocView", new { vid = @vid, m = mode, page }))    
 </div>

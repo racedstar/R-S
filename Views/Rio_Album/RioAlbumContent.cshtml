@@ -2,43 +2,24 @@
 @{
     ViewBag.Title = "R-S_AlbumContent";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var vid = string.Empty;
-    var aSN = "0";
-    var UserID = string.Empty;
+    string vid = ViewBag.vid;
+    int aSN = ViewBag.aSN;
+    bool isUser = ViewBag.isUser;
     var VwAlbum = ViewBag.VwAlbum;
-    if (Session["UserID"] != null)
-    {
-        UserID = Session["UserID"].ToString();
-    }
-    if (Request.QueryString.Get("SN") != null)
-    {
-        aSN = Request.QueryString.Get("SN").ToString();
-    }
-    if (Request.QueryString.Get("vid") != null)
-    {
-        vid = Request.QueryString.Get("vid").ToString();
-    }
-    else
-    {
-        Html.RenderAction("LoingChecked", "Rio_Account");
-    }
-    if (vid != UserID && VwAlbum.IsEnable == false)
-    {
-        Response.Redirect(Url.Action("RioAlbumView", "Rio_Album" ,new { vid = @vid}));
-    }
+    var className = ViewBag.className;
     PagedList.IPagedList<RioManager.Models.Vw_AlbumJoinPic> JoinPic = (PagedList.IPagedList<RioManager.Models.Vw_AlbumJoinPic>)ViewBag.getJoinPic;
 }
 
-<div class="row topBar">
+<div class="row @className.TopBar">
     <div class="col-md-4">
         <h2>@VwAlbum.AlbumName</h2>
     </div>
     <div class="col-md-8 text-right" style="line-height:70px;">
         @{
-            if (vid == UserID)
+            if (isUser)
             {
                 <a class="btn btn-danger" href="@Url.Action("DeleteAlbum","Rio_Album",new {SN= @aSN.ToString(),vid = @vid })">刪除相簿</a>
-                <a class="btn btn-primary" data-fancybox data-type="iframe" data-src="CreateAlbum?s=1&as=@aSN" href="javascript:;">編輯相簿</a>
+                <a class="btn btn-primary" data-fancybox data-type="iframe" data-src="CreateAlbum?s=1&aSN=@aSN" href="javascript:;">編輯相簿</a>
             }
             <a class="btn btn-success" href="@Url.Action("RioAlbumView","Rio_Album", new { vid = @vid })">相簿列表</a>
             <a class="btn btn-success" href="@Url.Action("ZipAlbum","Rio_Album",new {SN= @aSN.ToString() })">相簿下載</a>
@@ -46,7 +27,7 @@
     </div>
 </div>
 
-<div class="container systemContainer">
+<div class="container @className.SysContainer">
     <div class="row form-group systemGroup">
         @{
             if (JoinPic != null)
@@ -54,7 +35,7 @@
                 foreach (var item in JoinPic)
                 {
                     <div class="col-md-3">
-                        <div class="picViewDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
+                        <div class="@className.DataClass" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
                             <a data-fancybox="images" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>
                         </div>
                     </div>
@@ -65,6 +46,5 @@
 </div>
 
 <div class="container">
-    @Html.PagedListPager(JoinPic, page => Url.Action("RioAlbumContent", new { vid = @vid, SN = aSN, page }))
-    <p>End of content</p>
+    @Html.PagedListPager(JoinPic, page => Url.Action("RioAlbumContent", new { vid = @vid, SN = aSN, page }))    
 </div>

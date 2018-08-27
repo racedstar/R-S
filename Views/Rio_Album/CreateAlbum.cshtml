@@ -1,18 +1,15 @@
 ﻿
 @{
     Layout = null;
-    int AlbumSN = 0;
+    int AlbumSN = ViewBag.aSN;
     var VwAlbumName = string.Empty;
     var VwAlbumEnable = true;
-    if (@Request.QueryString["as"] != null) {
-        int.TryParse(@Request.QueryString["as"].ToString().ToString(),out AlbumSN);
-    }
     var createBtn = "inline";
     var updateBtn = "none";
     if(AlbumSN != 0) {
         createBtn = "none";
         updateBtn = "inline";
-        VwAlbumName = @ViewBag.VwAlbum.AlbumName;
+        VwAlbumName = ViewBag.VwAlbum.AlbumName;
         VwAlbumEnable = ViewBag.VwAlbum.IsEnable;
     }
 }

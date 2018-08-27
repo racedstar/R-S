@@ -2,29 +2,18 @@
 @{
     ViewBag.Title = "R-S_AlbumView";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var vid = string.Empty;
-    var UserID = string.Empty;
-    if (Session["UserID"] != null)
-    {
-        UserID = Session["UserID"].ToString();
-    }
-    if (Request.QueryString.Get("vid") != null)
-    {
-        vid = Request.QueryString.Get("vid").ToString();
-    }
-    else
-    {
-        Html.RenderAction("LoingChecked", "Rio_Account");
-    }
+    string vid = ViewBag.vid;
+    var isUser = ViewBag.isUser;
+    var className = ViewBag.className;
 }
 
-<div class="row topBar">
+<div class="row @className.TopBar">
     <div class="col-md-4">
         <h2>AlbumView</h2>
     </div>
     <div class="col-md-8 text-right" style="line-height:70px;">
         @{
-            if (vid == UserID)
+            if (isUser)
             {
                 <a class="btn btn-primary" data-fancybox data-type="iframe" data-src="CreateAlbum?s=0" rel="" href="javascript:;">建立新相簿</a>
             }
@@ -36,28 +25,27 @@
     </div>
 </div>
 
-<div class="container systemContainer">
+<div class="container @className.SysContainer">
     <div class="row form-group systemGroup">
-        @{
-                foreach (var item in Model)
+        @{ 
+            foreach(var item in Model)
+            {
+                var dataClass = className.DataClass;
+                if (item.IsEnable == false)
                 {
-                    var className = "albumDiv";
-                    if (item.IsEnable == false)
-                    {
-                        className = "albumDiv NotEnable";
-                    }
-                    <div id="@item.SN" class="col-md-3 " >
-                        <div class="@className" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
-                            <a href="@Url.Action("RioAlbumContent", "Rio_Album", new { vid = @vid, SN = @item.SN })">
-                                <p>@item.AlbumName</p>
-                            </a>
-                        </div>
+                    dataClass = dataClass + " NotEnable";
+                }
+                <div id="@item.SN" class="col-md-3 " >
+                    <div class="@dataClass" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
+                        <a href="@Url.Action("RioAlbumContent", "Rio_Album", new { vid = @vid, SN = @item.SN })">
+                            <p>@item.AlbumName</p>
+                        </a>
                     </div>
-                }            
+                </div>
+            }
         }
     </div>
 </div>
 <div class="container">
-    @Html.PagedListPager(Model, page => Url.Action("RioAlbumView", new { vid = @vid, page }))
-    <p>End of content</p>
+    @Html.PagedListPager(Model, page => Url.Action("RioAlbumView", new { vid = @vid, page }))    
 </div>

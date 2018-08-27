@@ -26,7 +26,7 @@ namespace RioManager.Models
         {
             var data = (from o in db.Vw_AlbumJoinPic
                         where o.AlbumSN == aSN && o.PicIsEnable == true && o.PicIsDelete == false
-                        select o).ToList();
+                        select o).OrderBy(o => o.JoinSort).ToList();
 
             return data;
         }
