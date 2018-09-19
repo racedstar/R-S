@@ -42,10 +42,9 @@ function getUserInfo(fbToken) {
         //self.location = 'fbLogin?id=' + response.id + '&name=' + response.name + '&email=' + response.email;        
         $.ajax({
             type: 'POST',
-            url: '../Tools/fbLogin.ashx?id=' + response.id + '&name=' + response.name + '&email=' + response.email,
+            url: '/Rio_Account/fbLogin?id=' + response.id + '&name=' + response.name + '&email=' + response.email,                        
             async: false,
-            contentType: false,
-            processData: false,
+            data: { id: response.id, name: response.name, email: response.email },
             success: function (data) {         //成功時
                 history.go(0);
             },

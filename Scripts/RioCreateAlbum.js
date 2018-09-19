@@ -26,8 +26,7 @@ var dragPhoto = function (sourceID, ev) {
         }
         else {
             if (data) {
-                document.getElementById(ev.target.id).appendChild(document.getElementById(data));
-                console.log(ev.target.id);
+                document.getElementById(ev.target.id).appendChild(document.getElementById(data));                
                 if (ev.target.id != "NotJoinedPic" && ev.target.id != "JoinedPic") {
                     $('#' + event.target.id).before(document.getElementById(data));
                 }
@@ -143,10 +142,9 @@ var addimgArray = function () {
 var SaveData = function (state) {    
     var title = $("#txtTitle").val(),
         State = 'Create',
-        s = "",
+        SN = "",
         imgIDArray = []
         IsEnable = $('#chkEnable')[0].checked;
-
 
 
     if ($("#txtTitle").val() === "") {
@@ -154,9 +152,8 @@ var SaveData = function (state) {
         return false;
     }
 
-    if (state === 1){//state=1為Update
-        s = getQueryString("aSN");
-        State = "Update&aSN=" + s;
+    if (state == 'UpdateAlbum'){
+        SN = getQueryString("aSN");        
     }
 
     imgIDArray = addimgArray();
@@ -172,25 +169,25 @@ var SaveData = function (state) {
         alert("封面不得選擇相簿內以外的圖片")
         return false;
     }
+    
 
     $.ajax({
         type: "post",
         cache: false,
-        traditional: true,
-        url: "../Tools/albumSystem.ashx?state=" + State ,  //將資料丟到這個頁面
-        dataType: "html",
-        data: { imgSN: imgIDArray, frontCover: frontCoverSN, Title: title,isEnable:IsEnable },
+        traditional: true,        
+        url: "../Rio_Album/" + state,
+        data: { imgSN: imgIDArray, frontCover: frontCoverSN, Title: title, isEnable: IsEnable, AlbumSN: SN},
         success: function (data) {//成功時
             if (state === 0){
-                alert("相簿建立成功");
+                alert(data);
             }
             else if (state === 1){
-                alert("相簿更新成功");
+                alert(data);
             }
             parent.$.fancybox.close();//callback 關閉建立頁面，且讓原頁面重新整理
         },
         error: function () {  //失敗時
-            alert("Create Error");
+            alert("Error");
         }
     });
 }

@@ -22,8 +22,8 @@
                 else
                 {
                     <input id="fileDownload" class="btn btn-success" type="button"  value="多檔下載" onclick="zipFile('doc')" />
-                    <input id="btnDelete" class="btn btn-danger" type="button" value="刪除檔案" onclick="deleteFile('doc')" />
-                    <input  id="cheangeEnable"class="btn btn-warning" type="button"  value="改變啟用狀態" onclick="fileEnable('doc')" />
+                    <input id="btnDelete" class="btn btn-danger" type="button" value="刪除檔案" onclick="deleteFile('Rio_Doc')" />
+                    <input  id="cheangeEnable"class="btn btn-warning" type="button"  value="改變啟用狀態" onclick="fileEnable('Rio_Doc')" />
                     <a id="btnView" class="btn btn-success" href="@Url.Action("RioDocView","Rio_Doc", new {vid=@vid, m="V"})">檢視模式</a>
                 }
                 <a id="btnUpload" class="btn btn-primary" data-fancybox data-type="iframe" data-src="/Tools/fmUpload?t=Doc" href="javascript:;">上傳文件</a>

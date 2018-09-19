@@ -10,6 +10,7 @@ namespace RioManager.Controllers
 {
     public class Rio_CompressionController : Controller
     {
+        private Entities db = new Entities();
         // GET: Rio_Compression
         public ActionResult Index()
         {
@@ -30,6 +31,7 @@ namespace RioManager.Controllers
                 if (Request.QueryString.Get("m").Equals("E"))
                 {
                     title = "CompressionEdit";
+                    mode = "E";
                 }
 
             }
@@ -71,6 +73,53 @@ namespace RioManager.Controllers
             var pageData = data.ToPagedList(pageNumeber, pageSize);            
 
             return View(pageData);
+        }
+
+        public ActionResult fileEnable(string[] SN)
+        {
+            changeEnableCompression(SN);
+
+            return Content("Enable Change Success");
+        }
+
+        private void deleteCompression(string[] SNArray)
+        {
+            foreach (var data in SNArray)
+            {
+                int SN = 0;
+                int.TryParse(data.ToString(), out SN);
+
+                //刪除實體檔案
+                Rio_Compression CF = db.Rio_Compression.Find(SN);
+                if (System.IO.File.Exists(Server.MapPath(CF.Path + "\\" + CF.Name)))
+                {
+                    System.IO.File.Delete(Server.MapPath(CF.Path + "\\" + CF.Name));
+                }
+
+                //資料庫更新刪除標記           
+                CF.IsDelete = true;
+                db.SaveChanges();
+            }
+        }
+
+        private void changeEnableCompression(string[] SNArray)
+        {
+            foreach (var data in SNArray)
+            {
+                int SN = 0;
+                int.TryParse(data.ToString(), out SN);
+
+                Rio_Compression CF = db.Rio_Compression.Find(SN);
+                if (CF.IsEnable == true)
+                {
+                    CF.IsEnable = false;
+                }
+                else
+                {
+                    CF.IsEnable = true;
+                }
+                new CompressionModel().Update(CF);
+            }
         }
     }
 }

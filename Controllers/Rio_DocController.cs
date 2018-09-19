@@ -184,5 +184,59 @@ namespace RioManager.Controllers
 
             return View(pageData);
         }       
+        
+        public ActionResult deleteFile(string[] SN)
+        {
+            deleteDoc(SN);
+
+            return Content("Dlete Success");
+        }
+
+        public ActionResult fileEnable(string[] SN)
+        {
+            changeEnableDoc(SN);
+
+            return Content("Enable Change Success");
+        }
+
+        private void deleteDoc(string[] SNArray)
+        {
+            foreach (var data in SNArray)
+            {
+                int SN = 0;
+                int.TryParse(data.ToString(), out SN);
+
+                //刪除實體檔案
+                Rio_Doc Doc = db.Rio_Doc.Find(SN);
+                if (System.IO.File.Exists(Server.MapPath(Doc.DocPath + "\\" + Doc.DocName)))
+                {
+                    System.IO.File.Delete(Server.MapPath(Doc.DocPath + "\\" + Doc.DocName));
+                }
+
+                //資料庫更新刪除標記           
+                Doc.IsDelete = true;
+                db.SaveChanges();
+            }
+        }
+
+        private void changeEnableDoc(string[] SNArray)
+        {
+            foreach (var data in SNArray)
+            {
+                int SN = 0;
+                int.TryParse(data.ToString(), out SN);
+
+                Rio_Doc Doc = db.Rio_Doc.Find(SN);
+                if (Doc.IsEnable == true)
+                {
+                    Doc.IsEnable = false;
+                }
+                else
+                {
+                    Doc.IsEnable = true;
+                }
+                new DocModel().Update(Doc);
+            }
+        }
     }
 }

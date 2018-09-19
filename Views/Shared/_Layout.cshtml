@@ -11,6 +11,9 @@
     @Scripts.Render("~/bundles/fancybox")
     @Scripts.Render("~/bundles/infinitescroll")
     @Scripts.Render("~/bundles/RioTools")
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Emilys+Candy|Fredericka+the+Great|Galada|Rouge+Script|Yellowtail|Courgette" rel="stylesheet">
     @*@{Html.RenderAction("LoingChecked", "Rio_Account"); }*@
@@ -50,11 +53,7 @@
                 @*電腦版*@
                 <div id="navbarSupportedContent" class="navbar-collapse collapse " >
                     <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Home", "Index", "Home", new { vid = @vid },null)</li>                    
-                        @if (vid == "Rio")
-                        {
-                            <li>@Html.ActionLink("Account", "Index", "Rio_Account")</li>
-                        }                                        
+                        <li>@Html.ActionLink("Home", "Index", "Home", new { vid = @vid },null)</li>                                                         
                         <li>@Html.ActionLink("Picture", "RioPicView", "Rio_Pic", new { vid = @vid }, null)</li>
                         <li>@Html.ActionLink("Album", "RioAlbumView", "Rio_Album", new { vid = @vid }, null)</li>
                         <li>@Html.ActionLink("Document", "RioDocView", "Rio_Doc", new { vid = @vid }, null)</li>

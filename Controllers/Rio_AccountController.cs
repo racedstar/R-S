@@ -290,6 +290,72 @@ namespace RioManager.Controllers
             }
             return View();
         }
+
+        public ActionResult fbLogin(string id, string name, string email)
+        {
+            if (email != null)
+            {
+                Vw_Account account = new AccountModel().getVwAccountByFBEmail(email);
+                if (account == null)
+                {
+                    Rio_Account rio_Account = saveFBAccount(email, name); //註冊新帳號
+                    int accountSN = new AccountModel().getVwAccountByID(rio_Account.ID).SN; // get帳號SN
+                    saveFacebookAccount(accountSN, email, id, name); //加入FB使用者資訊(id, name, email)
+                    Session["UserSN"] = accountSN;
+                    Session["UserID"] = rio_Account.ID;
+                }
+                else
+                {
+                    Session["UserSN"] = account.SN;
+                    Session["UserID"] = account.ID;
+                }
+            }
+
+            return RedirectToAction("Login");
+        }
+
+        private Rio_Account saveFBAccount(string email, string name)
+        {
+            Rio_Account rio_Account = new Rio_Account();
+            string createID = "FaceBookRegister";
+            DateTime dt = DateTime.Now;
+            Random random = new Random();
+            int randomNumber = random.Next(1000, 9999);
+            email = email.Split('@')[0];
+
+            rio_Account.ID = email + randomNumber;
+            rio_Account.Name = name;
+            rio_Account.Password = string.Empty;
+            rio_Account.AccountContent = string.Empty;
+            rio_Account.Email = string.Empty;
+            rio_Account.PicSN = 0;
+
+            rio_Account.CreateID = createID;
+            rio_Account.CreateName = createID;
+            rio_Account.ModifyID = createID;
+            rio_Account.ModifyName = createID;
+            rio_Account.CreateDate = dt;
+            rio_Account.ModifyDate = dt;
+
+            rio_Account.IsEnable = true;
+            rio_Account.IsDelete = false;
+
+            rio_Account.IsFBAccount = true;
+
+            new AccountModel().Insert(rio_Account);
+
+            return rio_Account;
+        }
+
+        private void saveFacebookAccount(int accountSN, string email, string id, string name)
+        {
+            Rio_FBLogin rio_FBLogin = new Rio_FBLogin();
+            rio_FBLogin.AccountSN = accountSN;
+            rio_FBLogin.Email = email;
+            rio_FBLogin.Facebook_ID = id;
+            rio_FBLogin.Name = name;
+            new FBLoginModel().Insert(rio_FBLogin);
+        }
         #endregion
         [HttpGet]
         //[ValidateAntiForgeryToken]
@@ -381,25 +447,43 @@ namespace RioManager.Controllers
 
             return View();
         }
+
+        [HttpPost]
+        public ActionResult SelectCover(string type, int SN)
+        {
+            int accountSN = 0;
+            int.TryParse(Session["UserSN"].ToString(), out accountSN);
+            string userID = Session["UserID"].ToString() ?? string.Empty;
+
+            if (type.Equals("Account"))
+            {
+                Rio_Account Account = new AccountModel().getAccountByID(userID);
+                Account.PicSN = SN;
+                new AccountModel().Update(Account);
+            }
+            else if (type.Equals("Index"))
+            {
+                Rio_UserIndexSetting userSetting = new UserIndexSettingMode().getUserIndexSettingBySN(accountSN);
+                userSetting.CoverSN = SN;
+                new UserIndexSettingMode().Update(userSetting);
+            }
+            return Content("Save Success");
+        }
         #endregion
 
         //所有使用者連結
         public ActionResult AllUserLink(int? page)
         {            
             ViewBag.VwAlbumCount = new AlbumModel().getUserVwAlbumList();
-            //ViewBag.VwPicCount = new PicModel().getAllPic();
-            //ViewBag.VwDocCount = new DocModel().getAllDoc();
             
             var data = new AccountModel().getAccountList();
             var pageNumeber = page ?? 1;
             var pageData = data.ToPagedList(pageNumeber, pageSize);
 
-            ViewBag.VwAccount = pageData;
-
-
             return View(pageData);
         }
 
+        #region 使用者追蹤功能
         public ActionResult userTrack(int? page)
         {
             if (Session["UserSN"] != null)
@@ -415,5 +499,35 @@ namespace RioManager.Controllers
             }
             return View();
         }
+
+        [HttpPost]
+        public ActionResult userTrack(string id)
+        {            
+            int clientSN = 0;
+            int userSN = 0;
+            int.TryParse(new AccountModel().getAccountByID(id).SN.ToString(), out clientSN);
+            int.TryParse(Session["UserSN"].ToString(), out userSN);
+
+            Vw_UserTrack vw_track = new UserTrackModel().getUserTrackBySN(userSN, clientSN);
+            if (vw_track != null)
+            {
+                //delete
+                new UserTrackModel().Delete(vw_track.trackSN);
+                return Content("false");
+            }
+            else
+            {
+                //insert
+                Rio_UserTrack track = new Rio_UserTrack();
+                track.AccountSN = userSN;
+                track.TrackAccountSN = clientSN;
+                
+                new UserTrackModel().Insert(track);
+                return Content("true");
+            }
+            
+        }
+        #endregion
+        
     }
 }

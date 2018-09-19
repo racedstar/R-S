@@ -48,11 +48,12 @@ var SaveFiles = function (fileName, files, sumCount)
         fd.append(fileName, files);
     $.ajax({
         type: 'POST',
-        url: 'fmUpload.ashx?t=' + t + '&count=' + sumCount,  //將資料丟到這個頁面
+        traditional: true,
+        url: 'fmUpload?upLoadType=' + t + '&count=' + sumCount,  //將資料丟到這個頁面
+        data: fd,
         async:false,
         contentType: false,
-        processData: false,
-        data: fd,
+        processData: false,        
         success: function (data) {         //成功時
             var fr = new FileReader();
             if (t === "img") {

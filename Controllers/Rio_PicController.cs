@@ -5,6 +5,9 @@ using System.Data;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using System.Web.Helpers;
+
 
 namespace RioManager.Controllers
 {
@@ -197,6 +200,65 @@ namespace RioManager.Controllers
             }
             return RedirectToAction("RioPicView", "Rio_Pic", new {m="E"});
         }
-       
+                
+        public ActionResult deleteFile(string[] SN)
+        {
+            deletePic(SN);
+
+            return Content("Delete Success");
+        }
+
+        public ActionResult fileEnable(string[] SN)
+        {
+            changeEnablePic(SN);
+
+            return Content("Enable Change Successs");
+        }
+
+        private void deletePic(string[] SNArray)
+        {
+            foreach (var data in SNArray)
+            {
+                int SN = 0;
+                int.TryParse(data.ToString(), out SN);
+
+                //刪除實體檔案
+                Rio_Pic Pic = db.Rio_Pic.Find(SN);
+                if (System.IO.File.Exists(Server.MapPath(Pic.PicPath + "\\" + Pic.PicName)))
+                {
+                    System.IO.File.Delete(Server.MapPath(Pic.PicPath + "\\" + Pic.PicName));
+                }
+
+                //刪除實體檔案縮圖
+                if (System.IO.File.Exists(Server.MapPath(Pic.PicPath + "\\Scaling\\" + Pic.PicName)))
+                {
+                    System.IO.File.Delete(Server.MapPath(Pic.PicPath + "\\Scaling\\" + Pic.PicName));
+                }
+
+                //資料庫更新刪除標記           
+                new PicModel().Delete(Pic);
+            }
+        }
+
+        private void changeEnablePic(string[] SNArray)
+        {
+            foreach (var data in SNArray)
+            {
+                int SN = 0;
+                int.TryParse(data.ToString(), out SN);
+
+
+                Rio_Pic Pic = db.Rio_Pic.Find(SN);
+                if (Pic.IsEnable == true)
+                {
+                    Pic.IsEnable = false;
+                }
+                else
+                {
+                    Pic.IsEnable = true;
+                }
+                new PicModel().Update(Pic);
+            }
+        }
     }
 }

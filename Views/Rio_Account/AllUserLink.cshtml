@@ -3,7 +3,6 @@
 @{
     ViewBag.Title = "R-S_Explore";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var VwAccount = ViewBag.VwAccount;
 }
 
 <div class="container systemContainer">
@@ -12,7 +11,7 @@
     </div>
     <div class="row form-group systemGroup">
         @{
-            foreach (var item in VwAccount)
+            foreach (var item in Model)
             {
                 <div class="col-md-4">
                     <a href="@Url.Action("Index","Home", new { vid = @item.ID })">

@@ -21,8 +21,8 @@
                 {
                     <input class="btn btn-success" type="button" id="fileDownload" value="多檔下載" onclick="zipFile('img')" />
                     <input class="btn btn-warning" type="button" id="imgReScaling" value="重置縮圖" onclick="location.href='@Url.Action("ReScaling", "Rio_Pic")'" />
-                    <input class="btn btn-danger" type="button" id="deleteImg" value="刪除圖片" onclick="deleteFile('img')" />
-                    <input class="btn btn-warning" type="button" id="cheangeEnable" value="改變啟用狀態" onclick="fileEnable('img')" />
+                    <input class="btn btn-danger" type="button" id="deleteImg" value="刪除圖片" onclick="deleteFile('Rio_Pic')" />
+                    <input class="btn btn-warning" type="button" id="cheangeEnable" value="改變啟用狀態" onclick="fileEnable('Rio_Pic')" />
                     <a class="btn btn-success" href="@Url.Action("RioPicView" ,"Rio_Pic" ,new {vid = @vid ,m = "V" })">檢視模式</a>
                 }
                 else

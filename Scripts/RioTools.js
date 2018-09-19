@@ -177,7 +177,7 @@ var deleteFile = function (type) {
             type: 'post',
             cache: false,
             traditional: true,
-            url: '../Tools/deleteFile.ashx?t=' + type,
+            url: '../' + type + '/deleteFile',
             dataType: 'html',
             data: { SN: SNArray },
             success: function (data) { //成功時
@@ -206,9 +206,9 @@ var zipFile = function (type) {
         type: 'post',
         cache: false,
         traditional: true,
-        url: '../Tools/Addzip.ashx?t=' + type,
-        dataType: 'html',
-        data: { SN: SNArray },
+        url: '../Tools/DownloadZip',
+        dataType: 'text',
+        data: {type: type ,SN: SNArray },
         success: function (data) { //成功時                                        
             location.href = data;
         },
@@ -227,7 +227,8 @@ var updateCover = function () {
         type: 'post',
         cache: false,
         traditional: true,
-        url: '../Tools/selectCover.ashx?t=' + type + '&s=' + SN,
+        url: '../Rio_Account/selectCover',
+        data: {type: type, SN: SN},
         dataType: 'html',
         success: function (data) { //成功時                                        
             alert("存檔成功")
@@ -254,15 +255,15 @@ var fileEnable = function (type) {
         type: 'post',
         cache: false,
         traditional: true,
-        url: '../Tools/fileEnable.ashx?t=' + type,
-        dataType: 'html',
+        url: '../' + type + '/fileEnable',
+        dataType: 'text',
         data: { SN: SNArray },
         success: function (data) { //成功時
-            alert('改變啟用狀態成功');
+            alert(data);
             location.reload();
         },
         error: function () {  //失敗時
-            alert("改變啟用狀態成功");
+            alert("Change Error");
         }
     });    
 
@@ -285,11 +286,11 @@ var userTrack = function () {
         type: 'post',
         cache: false,
         traditional: true,
-        url: '../Tools/trackUser.ashx?vid=' + vid,
-        dataType: 'html',
-        success: function (data) { //成功時                                        
-            //$('#btnUserTrack').            
-            if (data == 'True') {
+        url: '../Rio_Account/userTrack',
+        dataType: 'text',
+        data: {id: vid},
+        success: function (data) { //成功時                                                    
+            if (data == 'true') {
                 $('#btnUserTrack').val('UnTrack');
             }
             else {
@@ -297,7 +298,7 @@ var userTrack = function () {
             }            
         },
         error: function () {  //失敗時
-            alert("存檔失敗");
+            alert("Operating Error");
         }
     });
 }

@@ -3,8 +3,8 @@
     ViewBag.Title = "R-S_CompressionView";
     Layout = "~/Views/Shared/_Layout.cshtml";
     #region 變數宣告
-    string mode = "V";
-    string title = "CompressionView";
+    string mode = ViewBag.mode;
+    string title = ViewBag.title;
     string vid = ViewBag.vid;
     bool isUser = ViewBag.isUser;
     var className = ViewBag.className;
@@ -21,7 +21,7 @@
             {
                 if (mode.Equals("E"))
                 {                                        
-                    <input class="btn btn-danger" type="button" id="deleteImg" value="刪除檔案" onclick="deleteFile('Compression')" />
+                    <input class="btn btn-danger" type="button" id="deleteImg" value="刪除檔案" onclick="deleteFile('Rio_Compression')" />
                     <input class="btn btn-warning" type="button" id="cheangeEnable" value="改變啟用狀態" onclick="fileEnable('Compression')" />
                     <a class="btn btn-success" href="@Url.Action("CompressionView" ,"Rio_Compression" ,new {vid = @vid ,m = "V" })">檢視模式</a>
                 }
