@@ -1,42 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Linq.Expressions;
-using System.Data.Linq;
+using System.Web;
 
 namespace RioManager.Models
 {
-    [Serializable]
-    public class BaseEntity<Entity>        
+    public class BaseEntity<Entities, Entity>
+        where Entities : System.Data.Linq.DataContext, new()
         where Entity : class
     {
-        
         public static IEnumerable<Entity> Insert(params Entity[] Record)
         {
-            Entities db = new Entities();
-
+            //防呆null不執行
             if (Record == null)
             {
                 return null;
-            }            
+            }
+
             //防呆長度等於0
             if (Record.Length == 0)
             {
                 return Record;
             }
 
-            IEnumerable<Entity> returnValue = default(IEnumerable<Entity>);
+            IEnumerable<Entity> returnvalue = default(IEnumerable<Entity>);
 
-            
-            
+            using (Entities db = new Entities())
+            {
                 try
-                {                    
-                    //db
-                    //returnValue = Record.AsEnumerable();
-                    //queryentity.InsertAllOnSubmit(returnValue);
+                {
+                    var queryentity = db.GetTable<Entity>();
 
-                    //db.SubmitChanges();
+                    returnvalue = Record.AsEnumerable();
+                    queryentity.InsertAllOnSubmit(returnvalue);
+
+                    db.SubmitChanges();
+
                 }
                 catch (NotSupportedException)
                 {
@@ -60,8 +60,10 @@ namespace RioManager.Models
                     {
                         db.Dispose();
                     }
-                }            
-            return returnValue;
+                }
+            }
+
+            return returnvalue;
         }
     }
 }

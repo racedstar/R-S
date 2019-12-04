@@ -6,11 +6,14 @@
     var VwAlbumEnable = true;
     var createBtn = "inline";
     var updateBtn = "none";
+    var joinPicCount = 0;
+    var picAllCount = ViewBag.picAllCount;
     if(AlbumSN != 0) {
         createBtn = "none";
         updateBtn = "inline";
         VwAlbumName = ViewBag.VwAlbum.AlbumName;
         VwAlbumEnable = ViewBag.VwAlbum.IsEnable;
+        joinPicCount = ViewBag.joinPicCount;
     }
 }
 
@@ -25,10 +28,10 @@
     @Scripts.Render("~/bundles/createAlbum")
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="">
-    <div class="body-content"> 
+<body class="createAlbumBody">
+    <div class="createAlbum-content"> 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12 text-center">
                 <div id="frontCover" class="frontCover" ondrop="cloneDrop(event)" ondragover="allowDrop(event)">
                     @if (AlbumSN != 0)
                     {
@@ -38,16 +41,20 @@
                         <img id="@forntCoverID" src="@path@PicName" />
                     }
                 </div>
-                相簿名稱：<input type="text" id="txtTitle" value="@VwAlbumName"  />
-                啟用：<input type="checkbox" id="chkEnable" checked="@VwAlbumEnable" />
             </div>
-            <div class="col-md-6 text-right">
-                <input id="createAlbumBtn" data-fancybox-close class="btn btn-success"  type="button" value="建立相簿" onclick="SaveData('CreateAlbum')" style="display:@createBtn;"  />
-                <input id="updateAlbumBtn" data-fancybox-close class="btn btn-success" type="button" value="修改相簿" onclick="SaveData('UpdateAlbum')" style="display:@updateBtn;"/>
+            <div class="col-md-12 text-center">
+                <div class="col-md-12">
+                    相簿名稱
+                </div>
+                <div class="col-md-12">
+                    <input type="text" id="txtTitle" value="@VwAlbumName" />
+                    <input type="checkbox" id="chkEnable" checked="@VwAlbumEnable" /><span>啟用</span>
+                </div>
+
             </div>
         </div>
-        <div class="row createAlbumBottom">
-            <div  id="NotJoinedPic" class="col-md-6 row" ondrop="dragPhoto('JoinedPic',event)" ondragover="allowDrop(event)">
+        <div class="createAlbumContent">
+            <div  id="NotJoinedPic" class="row" ondrop="dragPhoto('JoinedPic',event)" ondragover="allowDrop(event)">
                 @{
                     var notJoinData = @ViewBag.getNotJoinPic;
                 }                
@@ -55,11 +62,11 @@
                 {
                     foreach (var item in notJoinData)
                     {
-                    <div id="@item.SN" class="col-md-3 createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)"  onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)"></div>
+                        <div id="@item.SN" class="col-md-4 createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)"  onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)"></div>
                     }
                 }
-            </div>
-            <div id="JoinedPic" class="col-md-6 row" ondrop="dragPhoto('NotJoinedPic',event)" ondragover="allowDrop(event)">
+            </div>            
+            <div id="JoinedPic" class="row" ondrop="dragPhoto('NotJoinedPic',event)" ondragover="allowDrop(event)">
                 @{ 
                     var joinData = ViewBag.getJoinPic;
                 }
@@ -67,9 +74,22 @@
                 {
                     foreach (var item in joinData)
                     {
-                        <div id="@item.PicSN" class="col-md-3 createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" ondrop="dragPhoto('sort',event)" ondragover="allowDrop(event)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)" onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)"></div>
+                        <div id="@item.PicSN" class="col-md-4 createAlbumDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" ondrop="dragPhoto('sort',event)" ondragover="allowDrop(event)" onclick="imgClick(event)" draggable="true" ondragstart="drag(event)" onmouseover="mouseOver(event)" onmousemove="mouseMove(event)" onmouseout="mouseOut(event)"></div>
                     }
                 }
+            </div>
+        </div>
+        <div class="createAlbumBottom">
+            <div class="row">
+                <div class="col-md-6">
+                    <span>
+                        <sapn id="joinPicCount">@joinPicCount</sapn>/@picAllCount
+                    </span>
+                </div>
+                <div class="col-md-6 text-right">
+                    <input id="createAlbumBtn" data-fancybox-close class="btn btn-success" type="button" value="建立相簿" onclick="SaveData('CreateAlbum')" style="display:@createBtn;" />
+                    <input id="updateAlbumBtn" data-fancybox-close class="btn btn-success" type="button" value="修改相簿" onclick="SaveData('UpdateAlbum')" style="display:@updateBtn;" />
+                </div>
             </div>
         </div>
     </div>

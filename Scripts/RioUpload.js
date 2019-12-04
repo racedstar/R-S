@@ -1,16 +1,17 @@
 ﻿//檔案拖曳結束
-var Allowdrag = function (ev) { 
+let Allowdrag = function (ev) {
     event.preventDefault();
-}
+};
 
 //檔案拖曳中
-var Drop = function (ev) {
+let Drop = (ev) => {
     event.preventDefault();
-    var files = ev.dataTransfer.files;//取得檔案
+    let files = ev.dataTransfer.files;//取得檔案
     FileType = document.getElementById('hidUploadType').value,//取得可上傳附檔名
         FileTypeArray = FileType.replace(/\*./g, "").split(';'),//將可上傳附檔名切割成陣列來判斷
         ErrorFileList = "",//錯誤訊息
-        successCount = 0,//檔案上傳成功的數量
+        saveErrorList = "",
+        successCount = $("#UploadArea img").length,//檔案上傳成功的數量
         fileArryLength = 0,
         sumCount = 0;
 
@@ -22,7 +23,7 @@ var Drop = function (ev) {
         }
 
         if ($.inArray(files[i].name.split('.')[fileArryLength - 1].toLowerCase(), FileTypeArray) !== -1) { //判斷檔案類型是否為可上傳類型            
-            SaveFiles(files[i].name, files[i], sumCount);//呼叫存檔涵式
+            saveErrorList = SaveFiles(files[i].name, files[i], sumCount);//呼叫存檔涵式
             successCount += 1;
         }
         else {
@@ -30,63 +31,58 @@ var Drop = function (ev) {
         }
     }
 
-    if (ErrorFileList !== "") {//錯誤訊息
+    $("#uploadSuccess").text(successCount);
+    if (ErrorFileList !== "") {//不符合附檔名，錯誤訊息
         alert(ErrorFileList + '上傳失敗' + '\n' + '上傳檔案的類型必須是' + FileType + '\n' + '上傳結束，共上傳成功' + successCount + '個檔案');
     }
-    else {
-        alert('上傳結束，共上傳成功' + successCount + '個檔案');
-    }    
-}
+
+    //if (saveErrorList !== "") {//存檔失敗，錯誤訊息
+    //    alert('存檔失敗：\n' + saveErrorList);
+    //}
+};
 
 //存檔用
-var SaveFiles = function (fileName, files, sumCount) 
-{
-    var fd = new FormData(),
+let SaveFiles = function (fileName, files, sumCount) {
+    let fd = new FormData(),
         t = getQueryString("t"),
-        tagSrc = '';
+        tagSrc = '',
+        errorFileName = '';
 
-        fd.append(fileName, files);
-    $.ajax({
-        type: 'POST',
-        traditional: true,
-        url: 'fmUpload?upLoadType=' + t + '&count=' + sumCount,  //將資料丟到這個頁面
-        data: fd,
-        async:false,
-        contentType: false,
-        processData: false,        
-        success: function (data) {         //成功時
-            var fr = new FileReader();
-            if (t === "img") {
-                fr.onload = createImgTag;
-            }
-            else if (t === "Doc" || t === "Compression") {
-                tagSrc = getTagSrc(fileName);                
-                fr.onload = createTag(fileName, tagSrc);                
-            }
+    fd.append(fileName, files);
 
-            fr.readAsDataURL(files);
-        },
-        error: function () {  //失敗時
-            alert("error： FileName= " + fileName);
+    fetch('fmUpload?upLoadType=' + t + '&count=' + sumCount, {
+        method: 'POST',
+        body: fd
+    }).then(res => {
+        let fr = new FileReader();
+        if (t === "img") {
+            fr.onload = createImgTag;
         }
+        else if (t === "Doc" || t === "Compression") {
+            tagSrc = getTagSrc(fileName);
+            fr.onload = createTag(fileName, tagSrc);
+        }
+
+        fr.readAsDataURL(files);
     });
-}
+
+    return errorFileName;
+};
 
 //顯示圖片縮圖用
-var createImgTag = function (ev) {
-    var x = ev.target.result,//將圖片轉成base64
+let createImgTag = (ev) => {
+    let convertImg = ev.target.result,//將圖片轉成base64
         FileTag = document.createElement('img');//建立img元素
 
-    FileTag.src = x;//指定元素連結
+    FileTag.src = convertImg;//指定元素連結
     document.getElementById('UploadArea').appendChild(FileTag);
-}
+};
 
 //顯示文件icon用
-var getTagSrc = function (fileName) { 
+let getTagSrc = (fileName) => {
 
-    var Extansion = fileName.split(".")[fileName.split('.').length - 1],
+    let Extansion = fileName.split(".")[fileName.split('.').length - 1],
         fileTagSrc = "";
-
 
     if (Extansion === "doc" || Extansion === "docx")
         fileTagSrc = "../../Content/img/icon/doc.ico";
@@ -110,13 +106,13 @@ var getTagSrc = function (fileName) {
         fileTagSrc = "../../Content/img/icon/rar.png";
 
     return fileTagSrc;
-}
+};
 
-var createTag = function (fileName, fileTagSrc) {
-    var FileTag = document.createElement("img"),//建立img元素        
-    fileNameDiv = document.createElement("div"),
-    fileNamep = document.createElement("p"),
-    fileNameDivText = document.createTextNode(fileName);
+let createTag =  (fileName, fileTagSrc) => {
+    let FileTag = document.createElement("img"),//建立img元素        
+        fileNameDiv = document.createElement("div"),
+        fileNamep = document.createElement("p"),
+        fileNameDivText = document.createTextNode(fileName);
 
     FileTag.src = fileTagSrc;
     fileNameDiv.className = "uploadDocDiv";
@@ -125,11 +121,12 @@ var createTag = function (fileName, fileTagSrc) {
     fileNameDiv.appendChild(fileNamep);
 
     document.getElementById("UploadArea").appendChild(fileNameDiv);
-}
+};
 
-var getQueryString = function (name) {  //取得Querystring  e.g. var s = QueryString("s");
-    var hostUrl = window.location.search.substring(1);
-    var aQueryString = hostUrl.split("&");
+let getQueryString =  (name) => {  //取得Querystring  e.g. var s = QueryString("s");
+    let hostUrl = window.location.search.substring(1),
+        aQueryString = hostUrl.split("&");
+
     for (var i = 0; i < aQueryString.length; i++) {
         var queryString = aQueryString[i].split("=");
         if (queryString[0] === name) {
@@ -137,4 +134,4 @@ var getQueryString = function (name) {  //取得Querystring  e.g. var s = QueryS
         }
     }
     return "";
-}
+};

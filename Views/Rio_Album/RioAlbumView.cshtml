@@ -15,11 +15,11 @@
         @{
             if (isUser)
             {
-                <a class="btn btn-primary" data-fancybox data-type="iframe" data-src="CreateAlbum?s=0" rel="" href="javascript:;">建立新相簿</a>
+                <a class="btn btnUpdate" data-fancybox data-type="iframe" data-src="CreateAlbum?s=0" rel="" href="javascript:;">建立新相簿</a>
             }
             else
             {
-                @Html.ActionLink("回" + vid + "的首頁", "Index", "Home", new { vid = @vid }, new { @class = "btn btn-success" })
+                @Html.ActionLink("回" + vid + "的首頁", "Index", "Home", new { vid = @vid }, new { @class = "btn btnMode" })
             }
         }
     </div>
@@ -37,7 +37,7 @@
                 }
                 <div id="@item.SN" class="col-md-3 " >
                     <div class="@dataClass" style="background-image:url(@item.PicPath/Scaling/@item.PicName)">
-                        <a href="@Url.Action("RioAlbumContent", "Rio_Album", new { vid = @vid, SN = @item.SN })">
+                        <a href="@Url.Action("RioAlbumContent", "Rio_Album", new { vid = @vid, SN = @item.SN })" title="@item.AlbumName">
                             <p>@item.AlbumName</p>
                         </a>
                     </div>

@@ -151,13 +151,13 @@ namespace RioManager.Controllers
             if (Session["UserID"] != null)
             {
                 ID = Session["UserID"].ToString();
-                data = new DocModel().getUserAllDocByID(ID);
+                data = DocModel.getUserAllDocByID(ID);
             }
 
             if (Request.QueryString.Get("vid") != null)
             {
                 ID = Request.QueryString.Get("vid").ToString();
-                data = new DocModel().getUserDocEnableListByID(ID);
+                data = DocModel.getUserDocEnableListByID(ID);
             }
 
             if (Session["UserID"] != null && Request.QueryString.Get("vid") != null)
@@ -165,11 +165,12 @@ namespace RioManager.Controllers
                 if (Session["UserID"].ToString().Equals(Request.QueryString.Get("vid")))
                 {
                     ID = Session["UserID"].ToString();
-                    data = new DocModel().getUserAllDocByID(ID);
+                    data = DocModel.getUserAllDocByID(ID);
                     isUser = true;
                 }
             }
-            else
+
+            if (Session["UserID"] == null && Request.QueryString.Get("vid") == null)
             {
                 return RedirectToAction("Login", "Rio_Account", null);
             }
@@ -235,7 +236,7 @@ namespace RioManager.Controllers
                 {
                     Doc.IsEnable = true;
                 }
-                new DocModel().Update(Doc);
+                DocModel.Update(Doc);
             }
         }
     }

@@ -25,25 +25,27 @@
     <meta name="viewport" content="width=device-width" />
     <title>SelectCover</title>
 </head>
-<body style="overflow:hidden;">
-    <div class="row">
-        <div class="col-md-4 text-left">
-            <h2>@CoverSetting</h2>
+<body class="selectCoverBody">
+    <div class="selectCoverContent">
+        <div class="row">
+            <div class="col-md-4 text-left">
+                <h2>@CoverSetting</h2>
+            </div>
+            <div class="col-md-8  text-right">
+                <a id="btnOk" style="margin-top: 10px;" data-fancybox-close class="btn btn-success" onclick="updateCover()">OK</a>
+            </div>
         </div>
-        <div class="col-md-8  text-right">
-            <a id="btnOk" style="margin-top: 10px;" data-fancybox-close class="btn btn-success" onclick="updateCover()">OK</a>
-        </div>
-    </div>
-    <div class="body-content">
-        <div class="row form-group selectCover">
-            @{
-                foreach (var item in Pic)
-                {
-                    <div class="col-md-2">
-                        <div id="@item.SN" class="picEditDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName);" onclick="radioSelectDiv(event,'picEditDiv')"></div>
-                    </div>
+        <div>
+            <div class="row form-group selectCover">
+                @{
+                    foreach (var item in Pic)
+                    {
+                        <div class="col-md-2">
+                            <div id="@item.SN" class="picEditDiv" style="background-image:url(@item.PicPath/Scaling/@item.PicName);" onclick="radioSelectDiv(event,'picEditDiv')"></div>
+                        </div>
+                    }
                 }
-            }
+            </div>
         </div>
     </div>
 </body>

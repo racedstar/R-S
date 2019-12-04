@@ -1,6 +1,5 @@
 ﻿@model IPagedList<RioManager.Models.Rio_Compression>
-@{
-    ViewBag.Title = "R-S_CompressionView";
+@{    
     Layout = "~/Views/Shared/_Layout.cshtml";
     #region 變數宣告
     string mode = ViewBag.mode;
@@ -21,15 +20,15 @@
             {
                 if (mode.Equals("E"))
                 {                                        
-                    <input class="btn btn-danger" type="button" id="deleteImg" value="刪除檔案" onclick="deleteFile('Rio_Compression')" />
-                    <input class="btn btn-warning" type="button" id="cheangeEnable" value="改變啟用狀態" onclick="fileEnable('Compression')" />
-                    <a class="btn btn-success" href="@Url.Action("CompressionView" ,"Rio_Compression" ,new {vid = @vid ,m = "V" })">檢視模式</a>
+                    <input class="btn btnDelete" type="button" id="deleteImg" value="刪除檔案" onclick="deleteFile('Rio_Compression')" />
+                    <input class="btn btnOther" type="button" id="cheangeEnable" value="改變啟用狀態" onclick="fileEnable('Compression')" />
+                    <a class="btn btnMode" href="@Url.Action("CompressionView" ,"Rio_Compression" ,new {vid = @vid ,m = "V" })">檢視模式</a>
                 }
                 else
                 {
-                    <a class="btn btn-success" href="@Url.Action("CompressionView", "Rio_Compression" , new {vid = @vid ,m = "E"})">編輯模式</a>
+                    <a class="btn btnMode" href="@Url.Action("CompressionView", "Rio_Compression" , new {vid = @vid ,m = "E"})">編輯模式</a>
                 }
-                <a class="btn btn-primary" data-fancybox data-type="iframe" data-src="/Tools/fmUpload?t=Compression" rel="" href="javascript:;">上傳壓縮檔</a>
+                <a class="btn btnUpdate" data-fancybox data-type="iframe" data-src="/Tools/fmUpload?t=Compression" rel="" href="javascript:;">上傳壓縮檔</a>
             }
             else
             {

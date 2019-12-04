@@ -18,11 +18,11 @@
         @{
             if (isUser)
             {
-                <a class="btn btn-danger" href="@Url.Action("DeleteAlbum","Rio_Album",new {SN= @aSN.ToString(),vid = @vid })">刪除相簿</a>
-                <a class="btn btn-primary" data-fancybox data-type="iframe" data-src="CreateAlbum?s=1&aSN=@aSN" href="javascript:;">編輯相簿</a>
+                <a class="btn btnDelete" href="@Url.Action("DeleteAlbum","Rio_Album",new {SN= @aSN.ToString(),vid = @vid })">刪除相簿</a>
+                <a class="btn btnUpdate" data-fancybox data-type="iframe" data-src="CreateAlbum?s=1&aSN=@aSN" href="javascript:;">編輯相簿</a>
             }
-            <a class="btn btn-success" href="@Url.Action("RioAlbumView","Rio_Album", new { vid = @vid })">相簿列表</a>
-            <a class="btn btn-success" href="@Url.Action("ZipAlbum","Rio_Album",new {SN= @aSN.ToString() })">相簿下載</a>
+            <a class="btn btnMode" href="@Url.Action("RioAlbumView","Rio_Album", new { vid = @vid })">相簿列表</a>
+            <a class="btn btnDonwload" href="@Url.Action("ZipAlbum","Rio_Album",new {SN= @aSN.ToString() })">相簿下載</a>
         }
     </div>
 </div>

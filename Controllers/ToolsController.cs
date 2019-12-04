@@ -26,7 +26,7 @@ namespace RioManager.Controllers
             }
             else if (type == "doc")
             {
-                List<Rio_Doc> Doc = new DocModel().getZipDoc(SN);
+                List<Rio_Doc> Doc = DocModel.getZipDoc(SN);
                 foreach (var item in Doc)
                 {
                     zipFileNamePath.Add(Server.MapPath(item.DocPath) + item.DocName);
@@ -141,7 +141,7 @@ namespace RioManager.Controllers
 
             Pic.IsEnable = true;
             Pic.IsDelete = false;
-            new PicModel().Insert(Pic);
+            PicModel.Insert(Pic);
         }
 
         private void setDBDoc(string ID, string fileName, string upLoadType)
@@ -178,12 +178,12 @@ namespace RioManager.Controllers
             CF.IsEnable = true;
             CF.IsDelete = false;
 
-            new CompressionModel().Insert(CF);
+            CompressionModel.Insert(CF);
         }
 
         private void setDBNotice(int userSN, string upLoadType, string sumCount)
         {
-            List<Vw_UserTrack> userTrackList = new UserTrackModel().getTrackerListBySN(userSN);
+            List<Vw_UserTrack> userTrackList = UserTrackModel.getTrackerListBySN(userSN);
             string type = string.Empty;
 
             switch (upLoadType)
@@ -207,7 +207,7 @@ namespace RioManager.Controllers
                 notice.NoticeContent = "已上傳 " + sumCount + type;
                 notice.CreateDate = DateTime.Now;
 
-                new NoticeModel().Insert(notice);
+                NoticeModel.Insert(notice);
             }
         }
         #endregion

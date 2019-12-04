@@ -9,37 +9,48 @@ using System.Data.Entity;
 namespace RioManager.Models
 {
     public class UserIndexSettingMode
-    {
-        private Entities db = new Entities();
+    {        
         #region CU
-        public void Insert(Rio_UserIndexSetting UserIndexSetting)
+        public static void Insert(Rio_UserIndexSetting UserIndexSetting)
         {
-            db.Rio_UserIndexSetting.Add(UserIndexSetting);
-            db.SaveChanges();
+            using (Entities db = new Entities())
+            {
+                db.Rio_UserIndexSetting.Add(UserIndexSetting);
+                db.SaveChanges();
+            }                
         }
 
-        public void Update(Rio_UserIndexSetting UserIndexSetting)
+        public static void Update(Rio_UserIndexSetting UserIndexSetting)
         {
-            db.Entry(UserIndexSetting).State = EntityState.Modified;
-            db.SaveChanges();
+            using (Entities db = new Entities())
+            {
+                db.Entry(UserIndexSetting).State = EntityState.Modified;
+                db.SaveChanges();
+            }
         }
 
         #endregion
 
-        public Rio_UserIndexSetting getUserIndexSettingBySN(int SN)
+        public static Rio_UserIndexSetting getUserIndexSettingBySN(int SN)
         {
-            var data = (from o in db.Rio_UserIndexSetting
-                        where SN == o.AccountSN
-                        select o).FirstOrDefault();
-            return data;
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Rio_UserIndexSetting
+                            where SN == o.AccountSN
+                            select o).FirstOrDefault();
+                return data;
+            }
         }
 
-        public Vw_UserIndexSetting getVwUserIndexSettingBySN(int SN)
+        public static Vw_UserIndexSetting getVwUserIndexSettingBySN(int SN)
         {
-            var data = (from o in db.Vw_UserIndexSetting
-                        where SN == o.AccountSN
-                        select o).FirstOrDefault();
-            return data;
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Vw_UserIndexSetting
+                            where SN == o.AccountSN
+                            select o).FirstOrDefault();
+                return data;
+            }
         }
 
     }

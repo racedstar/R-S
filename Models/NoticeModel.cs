@@ -5,55 +5,68 @@ using System.Web;
 
 namespace RioManager.Models
 {
-    public class NoticeModel
-    {
-        private Entities db = new Entities();
-
-        public void Insert(Rio_Notice data)
+    public static class NoticeModel
+    {        
+        public static void Insert(Rio_Notice data)
         {
-            db.Rio_Notice.Add(data);
-            db.SaveChanges();
-        }
-
-        public void UpdateRead(int SN) 
-        {
-            var data = (from o in db.Rio_Notice
-                        where o.SN == SN
-                        select o).SingleOrDefault();
-            data.IsRead = true;
-
-            db.Entry(data).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-        }
-
-        //View
-        public List<Vw_Notice> getNoticeListByTrackSN(int SN)
-        {
-            var data = (from o in db.Vw_Notice
-                        where o.TrackSN == SN
-                        select o).OrderByDescending(o => o.SN).ToList();
-            return data;
-        }
-
-        public void updateNotReadNoticeByTrackSN(int SN)
-        {
-            var data = (from o in db.Vw_Notice
-                        where o.TrackSN == SN && o.IsRead ==false
-                        select o.SN).ToList();
-
-            foreach(var item in data)
+            using (Entities db = new Entities())
             {
-                UpdateRead(item);
+                db.Rio_Notice.Add(data);
+                db.SaveChanges();
             }
         }
 
-        public int getNotReadNoticeCountByTrackSN(int SN)
+        public static void UpdateRead(int SN) 
         {
-            var data = (from o in db.Vw_Notice
-                        where o.TrackSN == SN && o.IsRead == false
-                        select o.SN).Count();
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Rio_Notice
+                            where o.SN == SN
+                            select o).SingleOrDefault();
+                data.IsRead = true;
 
-            return data;
+                db.Entry(data).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
+        //View
+        public static List<Vw_Notice> getNoticeListByTrackSN(int SN)
+        {
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Vw_Notice
+                            where o.TrackSN == SN
+                            select o).OrderByDescending(o => o.SN).ToList();
+                return data;
+            }
+        }
+
+        public static void updateNotReadNoticeByTrackSN(int SN)
+        {
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Vw_Notice
+                            where o.TrackSN == SN && o.IsRead == false
+                            select o.SN).ToList();
+
+                foreach (var item in data)
+                {
+                    UpdateRead(item);
+                }
+            }
+        }
+
+        public static int getNotReadNoticeCountByTrackSN(int SN)
+        {
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Vw_Notice
+                            where o.TrackSN == SN && o.IsRead == false
+                            select o.SN).Count();
+
+                return data;
+            }
         }
     }
 }

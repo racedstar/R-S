@@ -9,87 +9,115 @@ using System.Data.Entity.Validation;
 namespace RioManager.Models
 {
     public class AlbumModel
-    {
-        private Entities db = new Entities();
-
+    {        
         #region AlbumCUD
-        public void Insert(Rio_Album album)
+        public static void Insert(Rio_Album album)
         {
-            db.Rio_Album.Add(album);
-            db.SaveChanges();
+            using (Entities db = new Entities())
+            {
+                db.Rio_Album.Add(album);
+                db.SaveChanges();
+            }
         }
 
-        public void Update(Rio_Album album)
+        public static void Update(Rio_Album album)
         {
-            db.Entry(album).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            using (Entities db = new Entities())
+            {
+                db.Entry(album).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
         }
 
-        public void Delete(Rio_Album album)
+        public static void Delete(Rio_Album album)
         {
-            db.Entry(album).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            using (Entities db = new Entities())
+            {
+                db.Entry(album).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
         }
         #endregion
 
-        public Rio_Album getAlbum(int SN)
+        public static Rio_Album getAlbum(int SN)
         {
-            var data = (from o in db.Rio_Album
-                        where o.SN == SN && o.IsDelete == false
-                        select o).FirstOrDefault();
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Rio_Album
+                            where o.SN == SN && o.IsDelete == false
+                            select o).FirstOrDefault();
 
-            return data;
+                return data;
+            }
         }
 
-        public Vw_Album getVwAlbum(int AlbumSN)
+        public static Vw_Album getVwAlbum(int AlbumSN)
         {
-            var data = (from o in db.Vw_Album
-                        where o.SN == AlbumSN && o.IsDelete == false
-                        select o).SingleOrDefault();
-            return data;
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Vw_Album
+                            where o.SN == AlbumSN && o.IsDelete == false
+                            select o).SingleOrDefault();
+                return data;
+            }
         }
 
-        public List<Vw_Album> getUserAllVwAlbumList(string ID)
+        public static List<Vw_Album> getUserAllVwAlbumList(string ID)
         {
-            var data = (from o in db.Vw_Album
-                        where o.CreateID == ID && o.IsDelete == false
-                        select o).ToList();
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Vw_Album
+                            where o.CreateID == ID && o.IsDelete == false
+                            select o).OrderBy(o => o.CreateDate).ToList();
 
-            return data;
+                return data;
+            }
         }
 
-        public List<Vw_Album> getUsertVwAlbumEnableListByID(string ID)
+        public static List<Vw_Album> getUsertVwAlbumEnableListByID(string ID)
         {
-            var data = (from o in db.Vw_Album
-                        where o.IsEnable == true && o.IsDelete == false && o.CreateID == ID
-                        select o).OrderByDescending(o => o.CreateDate).ToList();
-            return data;
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Vw_Album
+                            where o.IsEnable == true && o.IsDelete == false && o.CreateID == ID
+                            select o).OrderByDescending(o => o.CreateDate).ToList();
+                return data;
+            }
         }
 
-        public List<Vw_Album> getPreViewAlbumListByID(string ID)
+        public static List<Vw_Album> getPreViewAlbumListByID(string ID)
         {
-            var data = (from o in db.Vw_Album
-                        where o.IsDelete == false && o.IsEnable == true && o.CreateID == ID
-                        select o).OrderByDescending(o => o.CreateDate).ToList();
-            data = data.Take(4).ToList();
-            return data;
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Vw_Album
+                            where o.IsDelete == false && o.IsEnable == true && o.CreateID == ID
+                            select o).OrderByDescending(o => o.CreateDate).ToList();
+                data = data.Take(4).ToList();
+                return data;
+            }
         }
         
         //刪除圖片後，取得所有有使用該圖片的當封面的相簿
-        public List<Rio_Album> getAlbumByFrontCoverSN(int picSN)
+        public static List<Rio_Album> getAlbumByFrontCoverSN(int picSN)
         {
-            var data = (from o in db.Rio_Album
-                        where o.FrontCoverSN == picSN
-                        select o).ToList();
-            return data;
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Rio_Album
+                            where o.FrontCoverSN == picSN
+                            select o).ToList();
+                return data;
+            }
         }
 
-        public List<Vw_Album> getUserVwAlbumList()
+        public static List<Vw_Album> getUserVwAlbumList()
         {
-            var data = (from o in db.Vw_Album
-                        where o.IsEnable == true && o.IsDelete == false
-                        select o).ToList();
-            return data;
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Vw_Album
+                            where o.IsEnable == true && o.IsDelete == false
+                            select o).ToList();
+                return data;
+            }
         }
     }
 

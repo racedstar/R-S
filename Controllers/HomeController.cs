@@ -17,25 +17,25 @@ namespace RioManager.Controllers
             {
                 userID = Request.QueryString.Get("vid").ToString();                
             }
-            Vw_Account rioAccount = new AccountModel().getVwAccountByID(userID);
+            Vw_Account rioAccount = AccountModel.getVwAccountByID(userID);
 
             if (rioAccount != null)
             { 
                 int.TryParse(rioAccount.SN.ToString(), out SN);                
 
                 //使用者設定
-                ViewBag.userSetting = new UserIndexSettingMode().getVwUserIndexSettingBySN(SN);
+                ViewBag.userSetting = UserIndexSettingMode.getVwUserIndexSettingBySN(SN);
                 ViewBag.indexAccountCover = rioAccount.PicPath + rioAccount.PicName;
 
                 //系統相簿、圖片、文件總數
-                ViewBag.albumCount = new AlbumModel().getUsertVwAlbumEnableListByID(userID).Where(o => o.IsEnable == true).Count();
-                ViewBag.picCount = new PicModel().getUserPicEnableByID(userID).Count();
-                ViewBag.docCount = new DocModel().getUserDocEnableListByID(userID).Count();
+                ViewBag.albumCount = AlbumModel.getUsertVwAlbumEnableListByID(userID).Where(o => o.IsEnable == true).Count();
+                ViewBag.picCount = PicModel.getUserPicEnableByID(userID).Count();
+                ViewBag.docCount = DocModel.getUserDocEnableListByID(userID).Count();
 
                 //系統預覽
-                ViewBag.preViewAlbum = new AlbumModel().getPreViewAlbumListByID(userID);
-                ViewBag.preViewPic = new PicModel().getPreViewPicListByID(userID);
-                ViewBag.preViewDoc = new DocModel().getPreviewDocListByID(userID);
+                ViewBag.preViewAlbum = AlbumModel.getPreViewAlbumListByID(userID);
+                ViewBag.preViewPic = PicModel.getPreViewPicListByID(userID);
+                ViewBag.preViewDoc = DocModel.getPreviewDocListByID(userID);
                                
                 if (Session["UserSN"] != null)
                 {
@@ -43,10 +43,10 @@ namespace RioManager.Controllers
                     int.TryParse(Session["UserSN"].ToString(), out userSN);
 
                     //是否Track
-                    ViewBag.userTrack = new UserTrackModel().getUserTrackBySN(userSN, SN);
+                    ViewBag.userTrack = UserTrackModel.getUserTrackBySN(userSN, SN);
 
                     //未閱讀通知數量
-                    Session["notReadNoticeCount"] = new NoticeModel().getNotReadNoticeCountByTrackSN(userSN);
+                    Session["notReadNoticeCount"] = NoticeModel.getNotReadNoticeCountByTrackSN(userSN);
                 }
             }
             return View();

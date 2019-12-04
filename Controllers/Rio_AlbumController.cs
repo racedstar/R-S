@@ -137,13 +137,13 @@ namespace RioManager.Controllers
             if (Session["UserID"] != null)
             {
                 ID = Session["UserID"].ToString();
-                data = new AlbumModel().getUserAllVwAlbumList(ID);
+                data = AlbumModel.getUserAllVwAlbumList(ID).OrderByDescending(o => o.CreateDate).ToList();
             }
 
             if (Request.QueryString.Get("vid") != null)
             {
                 ID = Request.QueryString.Get("vid").ToString();
-                data = new AlbumModel().getUsertVwAlbumEnableListByID(ID);
+                data = AlbumModel.getUsertVwAlbumEnableListByID(ID).OrderByDescending(o => o.CreateDate).ToList();
             }
 
             if (Session["UserID"] != null && Request.QueryString.Get("vid") != null)
@@ -151,11 +151,12 @@ namespace RioManager.Controllers
                 if (Session["UserID"].ToString().Equals(Request.QueryString.Get("vid")))
                 {
                     ID = Session["UserID"].ToString();
-                    data = new AlbumModel().getUserAllVwAlbumList(ID);
+                    data = AlbumModel.getUserAllVwAlbumList(ID).OrderByDescending(o => o.CreateDate).ToList();
                     isUser = true;
                 }
             }
-            else
+            
+            if(Session["UserID"] == null && Request.QueryString.Get("vid") == null)
             {
                 return RedirectToAction("Login", "Rio_Account", null);
             }
@@ -193,7 +194,7 @@ namespace RioManager.Controllers
                 isUser = true;
             }
 
-            va = new AlbumModel().getVwAlbum(aSN);
+            va = AlbumModel.getVwAlbum(aSN);
 
             if (isUser && va.IsEnable == false)
             {
@@ -206,7 +207,7 @@ namespace RioManager.Controllers
             ViewBag.isUser = isUser;
             ViewBag.vid = Request.QueryString.Get("vid");
             ViewBag.className = ClassNameModel.getClassName("albumContent");
-            ViewBag.getJoinPic = new AlbumJoinPicModel().getUpdateJoinPic(aSN).ToPagedList(pageNumber, 20);
+            ViewBag.getJoinPic = AlbumJoinPicModel.getUpdateJoinPic(aSN).ToPagedList(pageNumber, 20);
             return View(db.Rio_Album.ToList());
         }
 
@@ -218,19 +219,25 @@ namespace RioManager.Controllers
             if (Session["UserID"] != null)
             {
                 ID = Session["UserID"].ToString();
-            }
-            if (status == 0)//建立相簿時取得圖片
-            {
-                ViewBag.getNotJoinPic = new PicModel().getUserPicEnableByID(ID);
-            }
+            
+                if (status == 0)//建立相簿時取得圖片
+                {
+                    ViewBag.getNotJoinPic = PicModel.getUserPicEnableByID(ID);
+                }
 
-            if (status == 1 && albumSN != 0)//編輯相簿時取得圖片
-            {
-                ViewBag.VwAlbum = new AlbumModel().getVwAlbum(albumSN);//相簿資料
-                ViewBag.getJoinPic = new AlbumJoinPicModel().getUpdateJoinPic(albumSN);//已加入相簿的圖片
-                ViewBag.getNotJoinPic = new AlbumJoinPicModel().getUpdateNotJoinPic(albumSN, ID).OrderByDescending(o => o.CreateDate);//未加入相簿的圖片
-            }
+                if (status == 1 && albumSN != 0)//編輯相簿時取得圖片
+                {
+                    List<Vw_AlbumJoinPic> joinPic = AlbumJoinPicModel.getUpdateJoinPic(albumSN);//已加入相簿的圖片
 
+                    ViewBag.VwAlbum = AlbumModel.getVwAlbum(albumSN);//相簿資料                    
+                    ViewBag.getJoinPic = joinPic;
+                    ViewBag.joinPicCount = joinPic.Count();
+                    ViewBag.getNotJoinPic = AlbumJoinPicModel.getUpdateNotJoinPic(albumSN, ID).OrderByDescending(o => o.CreateDate);//未加入相簿的圖片
+                }
+
+                ViewBag.picAllCount = PicModel.getUserAllPicByID(ID).Count();
+            }
+            
             ViewBag.aSN = albumSN;
             return View();
         }
@@ -245,13 +252,35 @@ namespace RioManager.Controllers
             }
             if (aSN != 0)
             {
-                Rio_Album Album = new AlbumModel().getAlbum(aSN);
+                Rio_Album Album = AlbumModel.getAlbum(aSN);
                 Album.IsDelete = true;
-                new AlbumModel().Delete(Album);
+                AlbumModel.Delete(Album);
             }
             return Redirect("RioAlbumView?vid=" + vid);
         }
-        
+
+        public ActionResult ZipAlbum(int? SN)
+        {
+            int aSN = SN ?? 0;
+            if (aSN != 0)
+            {
+                List<Vw_AlbumJoinPic> data = AlbumJoinPicModel.getUpdateJoinPic(aSN);
+                List<string> picList = new List<string>();
+
+                foreach (var item in data)
+                {
+                    picList.Add(Server.MapPath(item.PicPath) + item.PicName);
+                }
+
+                string savePath = "~/Upload/zip/Album";
+                string zipName = App_Code.Zip.AddZip(picList, Server.MapPath(savePath));
+
+                return Redirect("/Upload/zip/Album/" + zipName);
+            }
+
+            return Redirect("RioAlbumView");
+        }
+
         [HttpPost]
         public ActionResult CreateAlbum(int frontCover, string Title, bool IsEnable, string[] imgSN)
         {
@@ -277,7 +306,7 @@ namespace RioManager.Controllers
             string userID = Session["UserID"].ToString();            
 
             updateAlbum(AlbumSN, frontCover, Title, IsEnable, userID);
-            new AlbumJoinPicModel().deleteJoinAlbum(AlbumSN);
+            AlbumJoinPicModel.deleteJoinAlbum(AlbumSN);
             joinAlbum(imgSN, AlbumSN);
             setDBNotice(userSN, userID, Title, "更新了");
 
@@ -303,7 +332,7 @@ namespace RioManager.Controllers
             Album.ModifyName = userID;
             Album.ModifyDate = timeNow;
 
-            new AlbumModel().Insert(Album);
+            AlbumModel.Insert(Album);
 
             return Album.SN;
         }
@@ -311,7 +340,7 @@ namespace RioManager.Controllers
         //編輯相簿
         private void updateAlbum(int SN, int frontCoverSN, string Title, bool IsEnable, string userID)
         {
-            Rio_Album Album = new AlbumModel().getAlbum(SN);
+            Rio_Album Album = AlbumModel.getAlbum(SN);
             Album.FrontCoverSN = frontCoverSN;
             Album.AlbumName = Title;
             Album.IsEnable = IsEnable;
@@ -321,7 +350,7 @@ namespace RioManager.Controllers
             Album.ModifyName = userID;
             Album.ModifyDate = timeNow;
 
-            new AlbumModel().Update(Album);
+            AlbumModel.Update(Album);
         }
 
         //寫入相簿與圖片關聯
@@ -338,13 +367,13 @@ namespace RioManager.Controllers
                 joined.AlbumSN = AlbumSN;
                 joined.PicSN = SN;
                 joined.Sort = sort;
-                new AlbumJoinPicModel().joinAlbum(joined);
+                AlbumJoinPicModel.joinAlbum(joined);
             }
         }
 
         private void setDBNotice(int userSN, string userID, string albumTitle, string action)
         {
-            List<Vw_UserTrack> userTrackList = new UserTrackModel().getTrackerListBySN(userSN);
+            List<Vw_UserTrack> userTrackList = UserTrackModel.getTrackerListBySN(userSN);
 
             foreach (var item in userTrackList)
             {
@@ -354,7 +383,7 @@ namespace RioManager.Controllers
                 notice.NoticeContent = "已" + action + albumTitle + "相簿";
                 notice.CreateDate = DateTime.Now;
 
-                new NoticeModel().Insert(notice);
+                NoticeModel.Insert(notice);
             }
         }
     }

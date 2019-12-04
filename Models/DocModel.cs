@@ -8,62 +8,83 @@ using System.Data.Entity.Validation;
 namespace RioManager.Models
 {
     public class DocModel
-    {
-        private Entities db = new Entities();
+    {        
         #region Rio_Doc CUD
-        public void Insert(Rio_Doc doc)
+         public static void Insert(Rio_Doc doc)
         {
-            db.Rio_Doc.Add(doc);
-            db.SaveChanges();
+            using(Entities db = new Entities())
+            { 
+                db.Rio_Doc.Add(doc);
+                db.SaveChanges();
+            }
         }
 
-        public void Update(Rio_Doc doc)
+        public static void Update(Rio_Doc doc)
         {
-            db.Entry(doc).State = EntityState.Modified;
-            db.SaveChanges();
+            using (Entities db = new Entities())
+            {
+                db.Entry(doc).State = EntityState.Modified;
+                db.SaveChanges();
+            }
         }
 
-        public void Delete(Rio_Doc doc)
+        public static void Delete(Rio_Doc doc)
         {
-            db.Entry(doc).State = EntityState.Modified;
-            doc.IsDelete = true;
-            db.SaveChanges();
+            using (Entities db = new Entities())
+            {
+                db.Entry(doc).State = EntityState.Modified;
+                doc.IsDelete = true;
+                db.SaveChanges();
+            }
+            
         }
         #endregion
 
-        public List<Rio_Doc> getUserAllDocByID(string ID)
+        public static List<Rio_Doc> getUserAllDocByID(string ID)
         {
-            var data = (from o in db.Rio_Doc
+            using (Entities db = new Entities())
+            { 
+                var data = (from o in db.Rio_Doc
                         where o.CreateID == ID && o.IsDelete == false
-                        select o).ToList();
+                        select o).OrderBy(o => o.CreateDate).ToList();
 
-            return data;
+                return data;
+            }
         }
 
-        public List<Rio_Doc> getUserDocEnableListByID(string ID)
+        public static List<Rio_Doc> getUserDocEnableListByID(string ID)
         {
-            var data = (from o in db.Rio_Doc
-                        where  o.CreateID == ID && o.IsEnable == true && o.IsDelete == false
-                        select o).OrderByDescending(o => o.CreateDate).ToList();
-            return data;
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Rio_Doc
+                            where o.CreateID == ID && o.IsEnable == true && o.IsDelete == false
+                            select o).OrderByDescending(o => o.CreateDate).ToList();
+                return data;
+            }
         }
         
 
-        public List<Rio_Doc> getPreviewDocListByID(string ID)
+        public static List<Rio_Doc> getPreviewDocListByID(string ID)
         {
-            var data = (from o in db.Rio_Doc
-                        where o.CreateID == ID && o.IsEnable == true && o.IsDelete == false
-                        select o).OrderByDescending(o => o.CreateDate).ToList();
-            data = data.Take(4).ToList();
-            return data;
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Rio_Doc
+                            where o.CreateID == ID && o.IsEnable == true && o.IsDelete == false
+                            select o).OrderByDescending(o => o.CreateDate).ToList();
+                data = data.Take(4).ToList();
+                return data;
+            }
         }
 
-        public List<Rio_Doc> getZipDoc(string[] SN)//取得要被壓縮的檔案
+        public static List<Rio_Doc> getZipDoc(string[] SN)//取得要被壓縮的檔案
         {
-            var data = (from o in db.Rio_Doc
-                        where SN.Contains(o.SN.ToString())
-                        select o).ToList();
-            return data;
+            using (Entities db = new Entities())
+            {
+                var data = (from o in db.Rio_Doc
+                            where SN.Contains(o.SN.ToString())
+                            select o).ToList();
+                return data;
+            }
         }
     }
 }

@@ -18,9 +18,14 @@
     <div>
         <div id="UploadArea" ondrop="Drop(event)" ondragover="Allowdrag(event)">
         </div>
-        <div>
-            上傳檔案限制副檔名為：@UploadType
-            @Html.Hidden("hidUploadType", @UploadType)
+        <div class="uploadDescription">
+            <div id="uploadLimit">
+                上傳檔案限制副檔名為：@UploadType
+                @Html.Hidden("hidUploadType", @UploadType)
+            </div>
+            <div id="uploadCount">
+                已成功上傳：<span id="uploadSuccess">0</span>
+            </div>
         </div>
     </div>
 </body>

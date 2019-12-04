@@ -42,7 +42,7 @@ namespace RioManager.Controllers
             }
             int SN = 0;
             int.TryParse(id.ToString(), out SN);
-            Vw_Account rio_Account = new AccountModel().getVwAccount(SN);
+            Vw_Account rio_Account = AccountModel.getVwAccount(SN);
             if (rio_Account == null)
             {
                 return HttpNotFound();
@@ -86,7 +86,7 @@ namespace RioManager.Controllers
             rio_Account.IsEnable = IsEnable;
             rio_Account.IsDelete = false;
 
-            new AccountModel().Insert(rio_Account);
+            AccountModel.Insert(rio_Account);
 
             return RedirectToAction("Index");
         }
@@ -134,7 +134,7 @@ namespace RioManager.Controllers
 
                 rio_Account.IsEnable = IsEnable;
 
-                new AccountModel().Update(rio_Account);
+                AccountModel.Update(rio_Account);
 
             }
             return RedirectToAction("Index");
@@ -163,7 +163,7 @@ namespace RioManager.Controllers
             Rio_Account rio_Account = db.Rio_Account.Find(id);
             //db.Rio_Account.Remove(rio_Account);
             rio_Account.IsDelete = true;
-            new AccountModel().Update(rio_Account);
+            AccountModel.Update(rio_Account);
             return RedirectToAction("Index");
         }
 
@@ -180,7 +180,7 @@ namespace RioManager.Controllers
         #region 登入、登出、註冊
         public ActionResult Login(string ID, string Password)
         {
-            if (HttpContext.Session["UserID"] != null && HttpContext.Session["UserSN"] != null)
+            if (Session["UserID"] != null && Session["UserSN"] != null)
             {
                 return RedirectToAction("Index","Home",new { vid = HttpContext.Session["UserID"].ToString() });
             }
@@ -199,7 +199,7 @@ namespace RioManager.Controllers
                 if (status == true)
                 {
                     int accountSN = 0;
-                    int.TryParse(new AccountModel().LoginCheck(ID, Password).ToString(), out accountSN);
+                    int.TryParse(AccountModel.LoginCheck(ID, Password).ToString(), out accountSN);
                     if (ModelState.IsValid && accountSN != 0)
                     {
                         HttpContext.Session["UserSN"] = accountSN;
@@ -251,7 +251,7 @@ namespace RioManager.Controllers
 
             if (status == true)
             { 
-                Vw_Account Account = new AccountModel().getVwAccountByID(ID);
+                Vw_Account Account = AccountModel.getVwAccountByID(ID);
                 if (Account == null)
                 {
                     if (!ID.Equals(string.Empty) && !Password.Equals(string.Empty) && !Name.Equals(string.Empty))
@@ -277,7 +277,7 @@ namespace RioManager.Controllers
                         rio_Account.IsEnable = true;
                         rio_Account.IsDelete = false;
 
-                        new AccountModel().Insert(rio_Account);
+                        AccountModel.Insert(rio_Account);
 
                         HttpContext.Session["UserID"] = ID;
                         HttpContext.Session["IsLogin"] = "true";
@@ -295,11 +295,11 @@ namespace RioManager.Controllers
         {
             if (email != null)
             {
-                Vw_Account account = new AccountModel().getVwAccountByFBEmail(email);
+                Vw_Account account = AccountModel.getVwAccountByFBEmail(email);
                 if (account == null)
                 {
                     Rio_Account rio_Account = saveFBAccount(email, name); //註冊新帳號
-                    int accountSN = new AccountModel().getVwAccountByID(rio_Account.ID).SN; // get帳號SN
+                    int accountSN = AccountModel.getVwAccountByID(rio_Account.ID).SN; // get帳號SN
                     saveFacebookAccount(accountSN, email, id, name); //加入FB使用者資訊(id, name, email)
                     Session["UserSN"] = accountSN;
                     Session["UserID"] = rio_Account.ID;
@@ -342,7 +342,7 @@ namespace RioManager.Controllers
 
             rio_Account.IsFBAccount = true;
 
-            new AccountModel().Insert(rio_Account);
+            AccountModel.Insert(rio_Account);
 
             return rio_Account;
         }
@@ -354,31 +354,41 @@ namespace RioManager.Controllers
             rio_FBLogin.Email = email;
             rio_FBLogin.Facebook_ID = id;
             rio_FBLogin.Name = name;
-            new FBLoginModel().Insert(rio_FBLogin);
+            FBLoginModel.Insert(rio_FBLogin);
         }
         #endregion
         [HttpGet]
         //[ValidateAntiForgeryToken]
         #region 使用者自行設定個人資料        
         public ActionResult UserSetting()
-        {
-            string UserID = string.Empty;
+        {            
             if (Session["UserID"] != null)
             {
+                string UserID = string.Empty;
+                string accountCoverPath = string.Empty;
+                string indexCoverPath = string.Empty;
+
                 UserID = Session["UserID"].ToString();
                 #region 個人資料設定            
-                Vw_Account Account = new AccountModel().getVwAccountByID(UserID);
+                Vw_Account Account = AccountModel.getVwAccountByID(UserID);
                 Account.Password = string.Empty;
+
+                if(Account.CoverSN == 0)
+                {
+                    accountCoverPath = "../Content/img/icon/questionMark.png";
+                }
+                else
+                {
+                    accountCoverPath = Account.PicPath + "/Scaling/" + @Account.PicName;
+                }
+
+                ViewBag.accountCoverPath = accountCoverPath;
                 ViewBag.Account = Account;
                 #endregion
 
                 #region 首頁資料設定
-                int SN = new AccountModel().getAccountByID(UserID).SN;
-                if (new UserIndexSettingMode().getUserIndexSettingBySN(SN) != null)
-                {
-                    ViewBag.IndexSetting = new UserIndexSettingMode().getVwUserIndexSettingBySN(SN);
-                }
-                else
+                int SN = AccountModel.getAccountByID(UserID).SN;
+                if(UserIndexSettingMode.getUserIndexSettingBySN(SN) == null)
                 {
                     Rio_UserIndexSetting userSetting = new Rio_UserIndexSetting();
                     userSetting.AccountSN = SN;
@@ -386,9 +396,21 @@ namespace RioManager.Controllers
                     userSetting.SubTitle = "Index";
                     userSetting.CoverSN = 0;
 
-                    new UserIndexSettingMode().Insert(userSetting);
-                    ViewBag.IndexSetting = new UserIndexSettingMode().getVwUserIndexSettingBySN(SN);
+                    UserIndexSettingMode.Insert(userSetting);                    
                 }
+                Vw_UserIndexSetting indexSetting = UserIndexSettingMode.getVwUserIndexSettingBySN(SN);
+
+                if(indexSetting.CoverSN == 0)
+                {
+                    indexCoverPath = "../Content/img/Froncover/indexcover.png";
+                }
+                else
+                {
+                    indexCoverPath = indexSetting.CoverPicPath + "/" + indexSetting.CoverName;
+                }
+
+                ViewBag.indexCoverPath = indexCoverPath;
+                ViewBag.IndexSetting = indexSetting;
                 #endregion
                 return View();
             }
@@ -405,7 +427,7 @@ namespace RioManager.Controllers
             {
                 UserID = Session["UserID"].ToString();
             }
-            int SN = new AccountModel().getAccountByID(UserID).SN;
+            int SN = AccountModel.getAccountByID(UserID).SN;
 
             Rio_Account Account = db.Rio_Account.Find(SN);
             if (!Password.Equals(string.Empty))
@@ -414,7 +436,7 @@ namespace RioManager.Controllers
             }
             Account.Name = Name;
             Account.AccountContent = AccountContent;
-            new AccountModel().Update(Account);
+            AccountModel.Update(Account);
 
             return RedirectToAction("UserSetting");
         }
@@ -427,11 +449,11 @@ namespace RioManager.Controllers
             {
                 UserID = Session["UserID"].ToString();
             }
-            int SN = new AccountModel().getAccountByID(UserID).SN;
-            Rio_UserIndexSetting userSetting = new UserIndexSettingMode().getUserIndexSettingBySN(SN);
+            int SN = AccountModel.getAccountByID(UserID).SN;
+            Rio_UserIndexSetting userSetting = UserIndexSettingMode.getUserIndexSettingBySN(SN);
             userSetting.Title = Title;
             userSetting.SubTitle = SubTitle;
-            new UserIndexSettingMode().Update(userSetting);
+            UserIndexSettingMode.Update(userSetting);
 
             return RedirectToAction("UserSetting");
         }
@@ -443,7 +465,7 @@ namespace RioManager.Controllers
             {
                 UserID = Session["UserID"].ToString();
             }
-            ViewBag.Pic = new PicModel().getUserPicEnableByID(UserID);
+            ViewBag.Pic = PicModel.getUserPicEnableByID(UserID);
 
             return View();
         }
@@ -457,15 +479,15 @@ namespace RioManager.Controllers
 
             if (type.Equals("Account"))
             {
-                Rio_Account Account = new AccountModel().getAccountByID(userID);
+                Rio_Account Account = AccountModel.getAccountByID(userID);
                 Account.PicSN = SN;
-                new AccountModel().Update(Account);
+                AccountModel.Update(Account);
             }
             else if (type.Equals("Index"))
             {
-                Rio_UserIndexSetting userSetting = new UserIndexSettingMode().getUserIndexSettingBySN(accountSN);
+                Rio_UserIndexSetting userSetting = UserIndexSettingMode.getUserIndexSettingBySN(accountSN);
                 userSetting.CoverSN = SN;
-                new UserIndexSettingMode().Update(userSetting);
+                UserIndexSettingMode.Update(userSetting);
             }
             return Content("Save Success");
         }
@@ -474,9 +496,9 @@ namespace RioManager.Controllers
         //所有使用者連結
         public ActionResult AllUserLink(int? page)
         {            
-            ViewBag.VwAlbumCount = new AlbumModel().getUserVwAlbumList();
+            ViewBag.VwAlbumCount = AlbumModel.getUserVwAlbumList();
             
-            var data = new AccountModel().getAccountList();
+            var data = AccountModel.getAccountList();
             var pageNumeber = page ?? 1;
             var pageData = data.ToPagedList(pageNumeber, pageSize);
 
@@ -490,7 +512,7 @@ namespace RioManager.Controllers
             { 
                 int SN = 0;
                 int.TryParse(Session["UserSN"].ToString(), out SN);
-                var data = new UserTrackModel().getUserTrackListBySN(SN);
+                var data = UserTrackModel.getUserTrackListBySN(SN);
 
                 var pageNumeber = page ?? 1;
                 var pageData = data.ToPagedList(pageNumeber, pageSize);
@@ -505,14 +527,14 @@ namespace RioManager.Controllers
         {            
             int clientSN = 0;
             int userSN = 0;
-            int.TryParse(new AccountModel().getAccountByID(id).SN.ToString(), out clientSN);
+            int.TryParse(AccountModel.getAccountByID(id).SN.ToString(), out clientSN);
             int.TryParse(Session["UserSN"].ToString(), out userSN);
 
-            Vw_UserTrack vw_track = new UserTrackModel().getUserTrackBySN(userSN, clientSN);
+            Vw_UserTrack vw_track = UserTrackModel.getUserTrackBySN(userSN, clientSN);
             if (vw_track != null)
             {
                 //delete
-                new UserTrackModel().Delete(vw_track.trackSN);
+                UserTrackModel.Delete(vw_track.trackSN);
                 return Content("false");
             }
             else
@@ -522,7 +544,7 @@ namespace RioManager.Controllers
                 track.AccountSN = userSN;
                 track.TrackAccountSN = clientSN;
                 
-                new UserTrackModel().Insert(track);
+                UserTrackModel.Insert(track);
                 return Content("true");
             }
             

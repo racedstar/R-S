@@ -32,7 +32,7 @@
         }
     }
 }
-<div class="divHomeIndexContent">
+<div class="homeIndexContent">
     <div class="jumbotron" style="@img">
         <h1>@Title</h1>
         <p class="lead">@SubTitle</p>
@@ -58,7 +58,7 @@
             if(@ViewBag.albumCount > 0)
             {
                 var preViewAlbum = ViewBag.preViewAlbum;
-                <h4><a class="btn btn-info" href="@Url.Action("RioAlbumView", "Rio_Album", new { vid = @vid })">Album (@ViewBag.albumCount)</a></h4>
+                <h4><a class="btn btnAlbum" href="@Url.Action("RioAlbumView", "Rio_Album", new { vid = @vid })">Album (@ViewBag.albumCount)</a></h4>
                 <div class="row">
                     @foreach (var item in preViewAlbum)
                     {
@@ -76,7 +76,7 @@
             {
                 var preViewPic = ViewBag.preViewPic;
                 <hr />
-                <h4><a class="btn btn-primary" href="@Url.Action("RioPicView", "Rio_Pic" ,  new { vid = @vid })">Picture (@ViewBag.picCount)</a></h4>                
+                <h4><a class="btn btnPic" href="@Url.Action("RioPicView", "Rio_Pic" ,  new { vid = @vid })">Picture (@ViewBag.picCount)</a></h4>                
                 <div class="row">
                     @foreach (var item in preViewPic)
                     {
@@ -92,7 +92,7 @@
             {
                 var preViewDoc = ViewBag.preViewDoc;
                 <hr />
-                <h4><a class="btn btn-danger" href="@Url.Action("RioDocView", "Rio_Doc",  new { vid = @vid })">Document(@ViewBag.docCount)</a></h4>                
+                <h4><a class="btn btnDoc" href="@Url.Action("RioDocView", "Rio_Doc",  new { vid = @vid })">Document(@ViewBag.docCount)</a></h4>                
                 <div class="row">
                     @foreach (var item in preViewDoc)
                     {

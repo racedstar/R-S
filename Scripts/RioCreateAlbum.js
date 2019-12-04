@@ -8,18 +8,22 @@ $(document).ready(function () {
 })
 
 //拖曳相關
-var allowDrop = function (ev) {
+let allowDrop = (ev) => {
     ev.preventDefault();
 }
 //拖曳相關
-var drag = function (ev) {
+let drag =  (ev) => {
     ev.dataTransfer.setData("Text", ev.target.id);
 }
 
 //將圖片新增到相簿
-var dragPhoto = function (sourceID, ev) {
-    var data = ev.dataTransfer.getData("Text");
+let dragPhoto = (sourceID, ev) => {
+    let data = ev.dataTransfer.getData("Text"),
+        count = 0;
+
     if (sourceID != ev.target.id) {
+        count = $("#JoinedPic div").length + 1;        
+        $("#joinPicCount").text(count);
         ev.preventDefault();
         if (document.getElementsByClassName("Active").length !== 0) {//一次拖拉多檔
             multiImg(ev, ev.target.id);
@@ -36,12 +40,12 @@ var dragPhoto = function (sourceID, ev) {
 }
 
 //多選功能
-var imgClick = function (ev) {
-    var imgDivName = document.getElementById(ev.target.id).className,
+let imgClick = function (ev) {
+    let imgDivName = document.getElementById(ev.target.id).className,
         shiftRangeparentID = document.getElementById(ev.target.id).parentNode.id;
         shiftRange = $("#" + shiftRangeparentID + " .createAlbumDiv").length,
         isShiftSelect = false,
-        initialClassName = "col-md-3 createAlbumDiv",
+        initialClassName = "col-md-4 createAlbumDiv",
         selected = document.getElementById(ev.target.id),
         allSelected = document.getElementsByClassName("col-md-3 text-center");
     //單選功能
@@ -50,32 +54,32 @@ var imgClick = function (ev) {
         
         var createIcon = document.createElement("i");
         createIcon.setAttribute("class", "fa fa-check-square-o");
-        createIcon.setAttribute("style", "font-size:48px;background-color:white;");
+        createIcon.setAttribute("style", "font-size:28px;");
         document.getElementById(ev.target.id).appendChild(createIcon);           
     }
     else {
         selected.className = initialClassName;
         $("#" + ev.target.id).children().remove();
     }
-
+    
     //Shift連續選取功能
     if ($('.Active').length > 1) {
-        if (ev.shiftKey) {
-            for (var i = 0; i < shiftRange; i++) {
+        if (ev.shiftKey) {            
+            for (let i = 0; i < shiftRange; i++) {
                 if (isShiftSelect === true) {
-                    if ($(".col-md-3.createAlbumDiv")[i].className.indexOf("Active") != -1) {
+                    if ($(".col-md-4.createAlbumDiv")[i].className.indexOf("Active") != -1) {
                         isShiftSelect = false;
                     }
-                    $(".col-md-3.createAlbumDiv")[i].className = initialClassName + " Active";
-                    if ($(".col-md-3.createAlbumDiv")[i].id != ev.target.id) {
-                        var createIcon = document.createElement("i");
+                    $(".col-md-4.createAlbumDiv")[i].className = initialClassName + " Active";
+                    if ($(".col-md-4.createAlbumDiv")[i].id != ev.target.id) {
+                        let createIcon = document.createElement("i");
                         createIcon.setAttribute("class", "fa fa-check-square-o");
-                        createIcon.setAttribute("style", "font-size:48px;background-color:white;");
-                        $("#" + $(".col-md-3.createAlbumDiv")[i].id).append(createIcon);
+                        createIcon.setAttribute("style", "font-size:28px;");
+                        $("#" + $(".col-md-4.createAlbumDiv")[i].id).append(createIcon);
                     }
 
                 }
-                else if ($(".col-md-3.createAlbumDiv")[i].className.indexOf("Active") != -1) {
+                else if ($(".col-md-4.createAlbumDiv")[i].className.indexOf("Active") != -1) {
                     isShiftSelect = true;
 
                 }
@@ -85,13 +89,14 @@ var imgClick = function (ev) {
 }
 
 //拖曳多檔
-var multiImg = function (ev, divID) {
-    var Addimg = [];
+let multiImg = (ev, divID) => {
+    let Addimg = [];
+
     for (i = 0; i < document.getElementsByClassName("Active").length; i++) {
         Addimg[i] = document.getElementsByClassName("Active")[i].id;
     }
     for (j = 0; j < Addimg.length; j++) {
-        var data = Addimg[j];
+        let data = Addimg[j];
         document.getElementById(divID).appendChild(document.getElementById(data));
         if (ev.target.id != "NotJoinedPic" && ev.target.id != "JoinedPic") {
             $('#' + event.target.id).before(document.getElementById(data));
@@ -102,21 +107,21 @@ var multiImg = function (ev, divID) {
 }
 
 //封面用(封面只能單一照片，需要用複製而且是取代的)
-var cloneDrop = function (ev){
-    var getID = ev.dataTransfer.getData("Text"),        
+let cloneDrop =  (ev) => {
+    let getID = ev.dataTransfer.getData("Text"),        
         imgSrc = $("#" + getID).css("background-image").split('"')[1];
     ev.preventDefault();
     $("#frontCover").empty(); //清空封面div內的所有元素
     
-    $("#frontCover").append("<div id='" + getID + "fronCover' style='background-image:url(" + imgSrc + ");height:80px;'></div>");//複製html到封面的div    
+    $("#frontCover").append("<img id='" + getID + "==fronCover' src='" + imgSrc + "'>");//複製html到封面的div    
     frontCoverSN = getID;
 
 }
 
 //取得Querystring  e.g. var s = QueryString("s");
-var getQueryString = function (name) {  
-    var hostUrl = window.location.search.substring(1);
-    var aQueryString = hostUrl.split("&");
+let getQueryString = (name) => {  
+    let hostUrl = window.location.search.substring(1),
+        aQueryString = hostUrl.split("&");
     for (i = 0; i < aQueryString.length; i++) {
         var queryString = aQueryString[i].split("=");
         if (queryString[0] === name) {
@@ -127,8 +132,8 @@ var getQueryString = function (name) {
 }
 
 //將所有在addArea內的圖片SN放進陣列送到後端
-var addimgArray = function () {
-    var imgIDArray = [],
+let addimgArray =  () => {
+    let imgIDArray = [],
         addContanirID = "JoinedPic";
     if ($("#" + addContanirID).length !== 0){
         for (i = 0; i < $("#" + addContanirID + " div").length; i++) {
@@ -139,8 +144,8 @@ var addimgArray = function () {
 }
 
 //存檔
-var SaveData = function (state) {    
-    var title = $("#txtTitle").val(),
+let SaveData = (state) => {
+    let title = $("#txtTitle").val(),
         State = 'Create',
         SN = "",
         imgIDArray = []
@@ -193,19 +198,19 @@ var SaveData = function (state) {
 }
 
 //ToolTip系列
-var mouseOver = function (ev) {
+let mouseOver = (ev) => {
     var imgSrc = ev.target.id;
     imgSrc = $("#" + imgSrc).css("background-image").split('"')[1];    
     $("body").append("<div id='tooltip'><img src='" + imgSrc + "'/></div>");
     setToolTipCss(ev);
 }
-var mouseOut = function () {
+let mouseOut =  () => {
     $("#tooltip").remove();
 }
-var mouseMove = function (ev) {
+let mouseMove = (ev) => {
     setToolTipCss(ev);
 }
-var setToolTipCss = function (ev) {
+let setToolTipCss = (ev) => {
     var x = 20,
         y = -100;
     if (ev.target.parentElement.id == "JoinedPic") {

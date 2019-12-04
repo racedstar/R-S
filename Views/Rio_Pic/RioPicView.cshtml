@@ -13,27 +13,27 @@
     <div class="col-md-4">
         <h2>@title</h2>
     </div>
-    <div class="col-md-8 text-right" style="line-height:70px;">                
+    <div class="col-md-8 text-right" style="line-height:70px;">
         @{
             if (isUser)
-            {           
+            {
                 if (mode.Equals("E"))
                 {
-                    <input class="btn btn-success" type="button" id="fileDownload" value="多檔下載" onclick="zipFile('img')" />
-                    <input class="btn btn-warning" type="button" id="imgReScaling" value="重置縮圖" onclick="location.href='@Url.Action("ReScaling", "Rio_Pic")'" />
-                    <input class="btn btn-danger" type="button" id="deleteImg" value="刪除圖片" onclick="deleteFile('Rio_Pic')" />
-                    <input class="btn btn-warning" type="button" id="cheangeEnable" value="改變啟用狀態" onclick="fileEnable('Rio_Pic')" />
-                    <a class="btn btn-success" href="@Url.Action("RioPicView" ,"Rio_Pic" ,new {vid = @vid ,m = "V" })">檢視模式</a>
+                    <input class="btn btnOther" type="button" id="imgReScaling" value="重置縮圖" onclick="location.href='@Url.Action("ReScaling", "Rio_Pic")'" />
+                    <input class="btn btnOther" type="button" id="cheangeEnable" value="改變啟用狀態" onclick="fileEnable('Rio_Pic')" />
+                    <input class="btn btnDonwload" type="button" id="fileDownload" value="多檔下載" onclick="zipFile('img')" />
+                    @Html.ActionLink("檢視模式", "RioPicView", "Rio_Pic", new { vid = @vid, m = "V" }, new { @class = "btn btnMode" })
+                    <input class="btn btnDelete" type="button" id="deleteImg" value="刪除圖片" onclick="deleteFile('Rio_Pic')" />
                 }
                 else
                 {
-                    <a class="btn btn-success" href="@Url.Action("RioPicView", "Rio_Pic" , new {vid = @vid ,m = "E"})">編輯模式</a>
+                    @Html.ActionLink("編輯模式", "RioPicView", "Rio_Pic", new { vid = @vid, m = "E" }, new { @class = "btn btnMode" })
                 }
-                <a class="btn btn-primary" data-fancybox data-type="iframe" data-src="/Tools/fmUpload?t=img" rel="" href="javascript:;">上傳圖片</a>
+                <a class="btn btnUpdate" data-fancybox data-type="iframe" data-src="/Tools/fmUpload?t=img" rel="" href="javascript:;">上傳圖片</a>
             }
             else
             {
-                @Html.ActionLink("回" + vid + "的首頁","Index","Home",new { vid = @vid},new {@class= "btn btn-success" })
+                @Html.ActionLink("回" + vid + "的首頁", "Index", "Home", new { vid = @vid }, new { @class = "btn btn-success" })
             }
         }
     </div>
@@ -49,7 +49,7 @@
                     dataClassName = className.DataClass + " NotEnable";
                 }
                 <div class="col-md-3">
-                    <div id="@item.SN" class="@dataClassName" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="selectDiv(event,'@dataClassName','.picEditDiv')">
+                    <div id="@item.SN" class="@dataClassName" style="background-image:url(@item.PicPath/Scaling/@item.PicName)" onclick="selectDiv(event,'@dataClassName','.picViewDiv')">
                         @if (!mode.Equals("E"))
                         {
                             <a class="fancybox" data-fancybox="images" style="display:block;" rel="ligthbox" href="@item.PicPath/@item.PicName" title="@item.PicName"></a>

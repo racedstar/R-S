@@ -28,7 +28,7 @@ namespace RioManager
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/jquery.fancybox.min.css",
-                      "~/Content/Rio.css"));
+                      "~/Content/main.css"));
             
             bundles.Add(new ScriptBundle("~/bundles/fancybox").Include(
                         "~/Scripts/jquery.fancybox.min.js"));

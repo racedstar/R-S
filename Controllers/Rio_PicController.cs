@@ -154,13 +154,13 @@ namespace RioManager.Controllers
             if (Session["UserID"] != null)
             {
                 ID = Session["UserID"].ToString();
-                data = new PicModel().getUserAllPicByID(ID);
+                data = PicModel.getUserAllPicByID(ID);
             }
 
             if (Request.QueryString.Get("vid") != null)
             {
                 ID = Request.QueryString.Get("vid");
-                data = new PicModel().getUserPicEnableByID(ID);                
+                data = PicModel.getUserPicEnableByID(ID);                
             }
 
             if (Session["UserID"] != null && Request.QueryString.Get("vid") != null)
@@ -169,10 +169,11 @@ namespace RioManager.Controllers
                 {
                     ID = Session["UserID"].ToString();
                     isUser = true;
-                    data = new PicModel().getUserAllPicByID(ID);
+                    data = PicModel.getUserAllPicByID(ID);
                 }
             }
-            else
+
+            if (Session["UserID"] == null && Request.QueryString.Get("vid") == null)
             {
                 return RedirectToAction("Login", "Rio_Account", null);
             }
@@ -192,9 +193,9 @@ namespace RioManager.Controllers
             if(Session["UserID"] != null)
             { 
                 string ID = Session["UserID"].ToString();
-                if (new PicModel().getUserAllPicByID(ID) != null)
+                if (PicModel.getUserAllPicByID(ID) != null)
                 { 
-                    string Message = App_Code.ImageTools.ReScaling(new PicModel().getUserAllPicByID(ID));
+                    string Message = App_Code.ImageTools.ReScaling(PicModel.getUserAllPicByID(ID));
                     Response.Write(App_Code.JS.Alert(Message));
                 }
             }
@@ -236,7 +237,7 @@ namespace RioManager.Controllers
                 }
 
                 //資料庫更新刪除標記           
-                new PicModel().Delete(Pic);
+                PicModel.Delete(Pic);
             }
         }
 
@@ -257,7 +258,7 @@ namespace RioManager.Controllers
                 {
                     Pic.IsEnable = true;
                 }
-                new PicModel().Update(Pic);
+                PicModel.Update(Pic);
             }
         }
     }

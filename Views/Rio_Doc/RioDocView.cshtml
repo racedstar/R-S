@@ -14,25 +14,26 @@
     </div>
     <div class="col-md-8 text-right" style="line-height:70px;">
         @{
-            if(isUser) { 
+            if (isUser)
+            {
                 if (!mode.Equals("E"))
                 {
                     <a id="btnEdit" class="btn btn-success" href="@Url.Action("RioDocView","Rio_Doc", new {vid=@vid, m="E"})">編輯模式</a>
                 }
                 else
                 {
-                    <input id="fileDownload" class="btn btn-success" type="button"  value="多檔下載" onclick="zipFile('doc')" />
-                    <input id="btnDelete" class="btn btn-danger" type="button" value="刪除檔案" onclick="deleteFile('Rio_Doc')" />
-                    <input  id="cheangeEnable"class="btn btn-warning" type="button"  value="改變啟用狀態" onclick="fileEnable('Rio_Doc')" />
-                    <a id="btnView" class="btn btn-success" href="@Url.Action("RioDocView","Rio_Doc", new {vid=@vid, m="V"})">檢視模式</a>
+                    <input id="btnDelete" class="btn btnDelete" type="button" value="刪除檔案" onclick="deleteFile('Rio_Doc')" />
+                    <input id="cheangeEnable" class="btn btnOther" type="button" value="改變啟用狀態" onclick="fileEnable('Rio_Doc')" />
+                    <input id="fileDownload" class="btn btnDonwload" type="button" value="多檔下載" onclick="zipFile('doc')" />
+                    <a id="btnView" class="btn btnMode" href="@Url.Action("RioDocView","Rio_Doc", new {vid=@vid, m="V"})">檢視模式</a>
                 }
-                <a id="btnUpload" class="btn btn-primary" data-fancybox data-type="iframe" data-src="/Tools/fmUpload?t=Doc" href="javascript:;">上傳文件</a>
+                <a id="btnUpload" class="btn btnUpdate" data-fancybox data-type="iframe" data-src="/Tools/fmUpload?t=Doc" href="javascript:;">上傳文件</a>
             }
             else
-            {                
-                @Html.ActionLink("回" + vid + "的首頁", "Index", "Home", new { vid = @vid }, new { @class = "btn btn-success" })
+            {
+                @Html.ActionLink("回" + vid + "的首頁", "Index", "Home", new { vid = @vid }, new { @class = "btn btnMode" })
             }
-        }    
+        }
     </div>
 </div>
 <div class="container @className.SysContainer">

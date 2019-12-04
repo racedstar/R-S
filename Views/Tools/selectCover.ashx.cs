@@ -26,21 +26,21 @@ namespace RioManager.Views.Tools
                 int SN = 0;
                 int picSN = 0;
                 string type = string.Empty;
-                SN = new AccountModel().getAccountByID(UserID).SN;
+                SN = AccountModel.getAccountByID(UserID).SN;
                 type = context.Request.QueryString["t"].ToString();
                 int.TryParse(context.Request.QueryString["s"], out picSN);
 
                 if (type.Equals("Account"))
                 {
-                    Rio_Account Account = new AccountModel().getAccountByID(UserID);
+                    Rio_Account Account = AccountModel.getAccountByID(UserID);
                     Account.PicSN = picSN;
-                    new AccountModel().Update(Account);
+                    AccountModel.Update(Account);
                 }
                 else if (type.Equals("Index"))
                 {
-                    Rio_UserIndexSetting userSetting = new UserIndexSettingMode().getUserIndexSettingBySN(SN);
+                    Rio_UserIndexSetting userSetting = UserIndexSettingMode.getUserIndexSettingBySN(SN);
                     userSetting.CoverSN = picSN;
-                    new UserIndexSettingMode().Update(userSetting);
+                    UserIndexSettingMode.Update(userSetting);
                 }
             }
         }

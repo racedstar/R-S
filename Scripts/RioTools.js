@@ -17,9 +17,9 @@ $(document).ready(function () {
     infiniteScrollDefault();
 })
 
-var infiniteScrollDefault = function () {
+let infiniteScrollDefault = () => {
     
-    var pageName = location.pathname.split('/')[2],
+    let pageName = location.pathname.split('/')[2],
         appendTag = '.col-md-3';
         getPageCount();    
 
@@ -37,21 +37,21 @@ var infiniteScrollDefault = function () {
 }
 
 //get page to Infinte Scroll
-var getPageCount = function () {
-    var lastPage = $(".pagination li a").length - 2;
+let getPageCount = function () {
+    let lastPage = $(".pagination li a").length - 2;
     for (i = 1; i <= lastPage; i++) {
         nextPenSlugs.push($(".pagination li a")[i].innerHTML);        
     }
 }
 
 //get Path to Infinte Scroll
-var getPenPath = function () {
-    var slug = nextPenSlugs[this.loadCount],
+var getPenPath = function() {
+    let slug = nextPenSlugs[this.loadCount],
         pageName = location.pathname.split('/')[2],
         vid = '',
         m = 'm',
         path = '',
-        SN = '0';
+        SN = '0';    
     if (slug) {
         if (pageName == 'RioPicView' || pageName == 'RioDocView'){
             vid = getQueryString('vid');
@@ -66,17 +66,17 @@ var getPenPath = function () {
             SN = getQueryString("SN");
             vid = getQueryString('vid');
             path = pageName + '?vid=' + vid + '&SN=' + SN + '&page=' + slug;
-        }
+        }        
         return path;
-    }
+    }    
     return '';
 
 }
 
 //get Querystring  e.g. var s = QueryString("s");
-var getQueryString = function (name) {
-    var hostUrl = window.location.search.substring(1);
-    var aQueryString = hostUrl.split("&");
+let getQueryString =  (name) => {
+    let hostUrl = window.location.search.substring(1),
+        aQueryString = hostUrl.split("&");
     for (i = 0; i < aQueryString.length; i++) {
         var queryString = aQueryString[i].split("=");
         if (queryString[0] === name) {
@@ -87,7 +87,7 @@ var getQueryString = function (name) {
 }
 
 //use System Rio_Pic,Rio_Doc
-var selectDiv = function (ev, docInitialClass, docInitialjQueryClass) {
+var selectDiv = (ev, docInitialClass, docInitialjQueryClass) => {
     var Div = document.getElementById(ev.target.id).className,
         selected = document.getElementById(ev.target.id),
         isShiftSelect = false,
@@ -98,7 +98,7 @@ var selectDiv = function (ev, docInitialClass, docInitialjQueryClass) {
         selected.className = docInitialClass + " Active";
         var createIcon = document.createElement("i");
         createIcon.setAttribute("class", "fa fa-check-square-o");
-        createIcon.setAttribute("style", "font-size:48px;background-color:white;");
+        createIcon.setAttribute("style", "font-size:48px;");
         document.getElementById(ev.target.id).appendChild(createIcon);        
     }
     else {
@@ -108,16 +108,18 @@ var selectDiv = function (ev, docInitialClass, docInitialjQueryClass) {
 
     if (ev.shiftKey) {
         ev.preventDefault();
+        console.log(docInitialjQueryClass);
         for (var i = 0; i < shiftRange; i++) {
             if (isShiftSelect === true) {
                 if ($(docInitialjQueryClass)[i].className.indexOf("Active") != -1) {
                     isShiftSelect = false;                    
                 }
+                console.log($(docInitialjQueryClass)[i]);
                 $(docInitialjQueryClass)[i].className = docInitialClass + " Active";                
                 if ($(docInitialjQueryClass)[i].id != ev.target.id) {
                     var createIcon = document.createElement("i");
                     createIcon.setAttribute("class", "fa fa-check-square-o");
-                    createIcon.setAttribute("style", "font-size:48px;background-color:white;");
+                    createIcon.setAttribute("style", "font-size:48px;");
                     $("#" + $(docInitialjQueryClass)[i].id).append(createIcon);                    
                 }
             }
@@ -126,12 +128,11 @@ var selectDiv = function (ev, docInitialClass, docInitialjQueryClass) {
             }
         }
     }
-
 }
 
 //use System selectCover
-var radioSelectDiv = function (ev, docInitialClass) {
-    var count = document.getElementsByClassName('picEditDiv Active').length;
+let radioSelectDiv = (ev, docInitialClass) =>{
+    let count = document.getElementsByClassName('picEditDiv Active').length;
     if (ev.target.className.indexOf("Active") != -1) {
         ev.target.className = docInitialClass;
         $('#' + ev.target.id).children().remove();
@@ -151,9 +152,9 @@ var radioSelectDiv = function (ev, docInitialClass) {
 
 //use System Rio_Pic,Rio_Doc
 //選擇物件
-var getSelectFile = function () {
-    var selectCount = $(".Active").length;
-    var SNArray = [];
+let getSelectFile = function () {
+    let selectCount = $(".Active").length,
+        SNArray = [];
     for (var i = 0; i < selectCount; i++) {
         SNArray.push($(".Active")[i].id);
     }
@@ -162,10 +163,10 @@ var getSelectFile = function () {
 
 //use System Rio_Pic,Rio_Doc
 //多檔刪除 
-var deleteFile = function (type) {
+let deleteFile = function (type) {
 
     if (confirm('確認是否刪除檔案?')){
-        var SNArray = 0;
+        let SNArray = 0;
         SNArray = getSelectFile();
 
         if (SNArray == 0){
@@ -184,7 +185,7 @@ var deleteFile = function (type) {
                 alert('檔案刪除成功');
                 location.reload();
             },
-            error: function () {  //失敗時
+            error: () =>{  //失敗時
                 alert("檔案刪除失敗");
             }
         });
@@ -193,9 +194,9 @@ var deleteFile = function (type) {
 
 //use System Rio_Pic,Rio_Doc
 //多檔壓縮
-var zipFile = function (type) {
+let zipFile = (type) =>{
 
-    var SNArray = getSelectFile();
+    let SNArray = getSelectFile();
 
     if (SNArray.length == 0) {
         alert("請點選檔案");
@@ -212,14 +213,14 @@ var zipFile = function (type) {
         success: function (data) { //成功時                                        
             location.href = data;
         },
-        error: function () {  //失敗時
+        error:  () => {  //失敗時
             alert("壓縮失敗");
         }
     });
 }
 
 //更新個人照
-var updateCover = function () {
+let updateCover =  () => {
 
     var SN = document.getElementsByClassName('picEditDiv Active')[0].id    
     var type = getQueryString('t');
@@ -234,7 +235,7 @@ var updateCover = function () {
             alert("存檔成功")
             parent.$.fancybox.close();//callback 關閉建立頁面，且讓原頁面重新整理
         },
-        error: function () {  //失敗時
+        error: () => {  //失敗時
             alert("存檔失敗");
         }
     });
@@ -270,7 +271,7 @@ var fileEnable = function (type) {
 }
 
 //頁簽
-var bookMark = function (ev,divID) {
+let bookMark =  (ev,divID) => {
 
     $('#AccountSetting').removeClass();
     $('#IndexSetting').removeClass();
@@ -280,8 +281,8 @@ var bookMark = function (ev,divID) {
     $('#' + divID).show();
 }
 
-var userTrack = function () {
-    var vid = getQueryString('vid');    
+let userTrack = () => {
+    let vid = getQueryString('vid');    
     $.ajax({
         type: 'post',
         cache: false,

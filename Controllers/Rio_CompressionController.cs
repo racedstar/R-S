@@ -39,14 +39,14 @@ namespace RioManager.Controllers
             if (Session["UserID"] != null)
             {
                 int.TryParse(Session["UserSN"].ToString(), out userSN);
-                data = new CompressionModel().getCompressionByUserSN(userSN);
+                data = CompressionModel.getCompressionByUserSN(userSN);
             }
 
             if (Request.QueryString.Get("vid") != null)
             {
                 ID = Request.QueryString.Get("vid");
-                userSN = new AccountModel().getAccountByID(ID).SN;
-                data = new CompressionModel().getCompressionClientByUserSN(userSN);
+                userSN = AccountModel.getAccountByID(ID).SN;
+                data = CompressionModel.getCompressionClientByUserSN(userSN);
             }
 
             if (Request.QueryString.Get("vid") != null && Session["UserID"] != null)
@@ -54,11 +54,12 @@ namespace RioManager.Controllers
                 if (Request.QueryString.Get("vid") == Session["UserID"].ToString())
                 {
                     int.TryParse(Session["UserSN"].ToString(), out userSN);
-                    data = new CompressionModel().getCompressionByUserSN(userSN);
+                    data = CompressionModel.getCompressionByUserSN(userSN);
                     isUser = true;
                 }
             }
-            else
+
+            if (Session["UserID"] == null && Request.QueryString.Get("vid") == null)
             {
                 return RedirectToAction("Login", "Rio_Account", null);
             }
@@ -118,7 +119,7 @@ namespace RioManager.Controllers
                 {
                     CF.IsEnable = true;
                 }
-                new CompressionModel().Update(CF);
+                CompressionModel.Update(CF);
             }
         }
     }

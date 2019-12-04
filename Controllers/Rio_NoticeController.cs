@@ -17,9 +17,9 @@ namespace RioManager.Controllers
             {
                 int userSN = 0;
                 int.TryParse(Session["UserSN"].ToString(), out userSN);                
-                List<Vw_Notice> noticeList = new NoticeModel().getNoticeListByTrackSN(userSN);
+                List<Vw_Notice> noticeList = NoticeModel.getNoticeListByTrackSN(userSN);
 
-                new NoticeModel().updateNotReadNoticeByTrackSN(userSN);
+                NoticeModel.updateNotReadNoticeByTrackSN(userSN);
                 Session["notReadNoticeCount"] = "0";
 
                 var pageNumeber = page ?? 1;
