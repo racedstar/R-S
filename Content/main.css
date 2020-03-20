@@ -101,22 +101,39 @@
 /*上傳檔案介面*/
 
 #UploadArea {
+    display: block;
     width: 100%;
     min-height: 85vh;
     padding: 10px;
-    border: 1px #ccc dashed;
-    float: left;
     margin-right: 10px;
-    background-image: url('../Content/img/dragHint.jpg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center center;
 }
 
 #UploadArea img {
     max-height: 200px;
     max-width: 200px;
+}
+
+#fileDrag {
+    display: block;
+    width: 100%;    
+    min-height: 85vh;
+    cursor: pointer;
+    border: 1px #ccc dashed;
+    background: url("https://img.icons8.com/ios/96/c8cccf/upload-2.png")50% 50% no-repeat;
+    background-color: #f7f7f7;
+}
+
+#fileSelect{
+    display: none;
+}
+
+.uploadContent {
+    height: 200px;
+    width: 200px;
     margin: 10px;
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
 }
 
 .uploadDocDiv {
@@ -138,420 +155,426 @@
     white-space: nowrap;
     margin: 0;
 }
-/*相簿List頁*/
 
-.albumDiv {
+.loading::after {
+    content: " ";
     display: block;
-    height: 165px;
-    margin-bottom: 40px;
-    padding-bottom: 20px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center center;
-}
-
-.albumDiv a {
-    display: block;
-    height: 165px;
-    padding-bottom: 20px;
-}
-
-.albumDiv span {
-    bottom: -5px;
-}
-
-.albumDiv a p {
-    position: absolute;
-    left: 25px;
-    bottom: 5px;
-    color: #888592e0;
-    width: 60%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin: 0px;        
-    font-family: 'Playball', 'Noto Sans TC', sans-serif;
-}
-
-/*建立相簿*/
-.createAlbum-content{
-    margin-top: 30px;
-}
-.createAlbumBody {    
-    overflow: hidden;
-}
-
-.createAlbumDiv {
-    height: 100px;
-    margin-bottom: 5px;
-    position: relative;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center center;
-    cursor: pointer;
-}
-
-.createAlbumBottom{
-    margin: 20px 20px;;
-}
-
-.createAlbumBottom .row{
-    margin: auto; 
-    width: 80%;
-}
-
-.frontCover {
-    width: 180px;
-    height: 180px;
-    border: dashed 2px;
-    overflow: hidden;
+    position:absolute;
+    top: 40%;
+    left: 40%;
+    width: 30px;
+    height: 30px;
     margin: 0 auto;
+    border-radius: 50%;
+    border: 6px solid #000;
+    border-color: #000 transparent #000 transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
 }
 
-.frontCover div {
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center center;
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
-.frontCover img ,.frontCover div{
-    width: 160px;
-    height: 160px;
-    margin: 3px;
-}
-
-.createAlbumContent {
-    margin: auto;
-    padding-top: 40px;
-    width: 80%;
-}
-
-#NotJoinedPic, #JoinedPic {
-    display: inline-flex;
-    width: 50%;
-    border: dotted 2px;
-    height: 45vh;
-    overflow-y: scroll;    
-}
-
-#JoinedPic {
-    float: right;
-}
-
-#txtTitle {
-    display: inline-block;
-    width: 50%;
-    margin-top: 10px;
-}
-
-.fa {    
-    background-color:#000;
-    color:#fff;
-    margin-left:15px;
-}
-
-/*相簿Content頁*/
-
-.albumContentDiv {
-    margin-bottom: 10px;
-    height: 165px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center center;
-}
-
-.albumContentDiv a {
-    display: block;
-    height: 165px;
-}
-
-/*文件檢視*/
-
-.docViewDiv {
-    display: block;
-    height: 160px;
-    cursor: pointer;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center center;
-    margin-bottom: 40px;
-    padding-bottom: 20px;
-}
-
-.docViewDiv a {
-    display: block;
-    height: 160px;
-    padding-bottom: 20px;
-    text-align: center;
-}
-
-.docViewDiv p {
-    display: block;
-    position: absolute;
-    left: 15px;
-    bottom: -10px;
-    width: 90%;
-    color: #888592e0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-family: Microsoft JhengHei;
-    /*微軟正黑體*/
-    font-weight: bold;
-    /*粗體*/
-}
-
-/*圖片系統*/
-
-.picEditDiv {
-    border: outset;
-    border-radius: 7px;
-    margin-bottom: 10px;
-    height: 165px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center center;
-}
-
-.picViewDiv {
-    margin-bottom: 10px;
-    height: 165px;
-    box-shadow: 2px 3px 4px #ccc;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-}
-
-.picViewDiv:hover {
-    border: outset;
-}
-
-.picViewDiv a {
-    display: block;
-    height: 165px;
-}
-
-.NotEnable {
-    opacity: 0.5;
-}
-
-/*所有使用者連結*/
-
-.accountLinkRow {
-    margin-bottom: 20px;
-}
-
-.accoutCover img {
-    width: 100px;
-    height: 100px;
-    border-radius: 100%;
-}
-
-.accountIntroduction {
-    color: black;
-    font-size: small;
-}
-
-/*個人資料設定*/
-
-.settingTitle {
-    display: inline-block;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-size: large;
-    cursor: pointer;
-    border: solid 1px;
-    background-color: rgba(144, 135, 135, 0.1);
-}
-
-.bookMarkSelect {
-    background-color: white;
-}
-
-.markDiv {
-    color: white;
-    margin: 20px 0;
-}
-
-.settingContent {
-    font-family: Ruthie;
-}
-
-/*選擇個人照*/
-.selectCoverBody{
-    overflow:hidden;
-}
-
-.selectCoverContent{
-    margin: 20px;
-}
-
-.selectCover {
-    height: 650px;
-    overflow-y: scroll;
-}
-
-.coverImg {
-    display: block;
-    margin-bottom: 10px;
-}
-
-/*MENU*/
-
-.menuAccount {
-    color: white;
-    border: solid;
-    border-radius: 14px;
-    background: #3f6696;
-    border-color: #3f6696;
-}
-
-.menuAccount a {
-    color: white;
-}
-
-/*通用*/
-
-.btn {
-    font-family: 'Noto Sans TC', sans-serif;
-}
-
-.btnDonwload{
-    color:#fff;
-    background-color: #ffa928;
-}
-
-.btnDonwload:hover{
-    color:#fff;
-    background-color: #e69926;
-}
-
-.btnMode{
-    color:#fff;
-    background-color:#b4dd77;
-}
-
-.btnMode:hover{
-    color:#fff;
-    background-color: #a5ca6d;
-}
-
-.btnOther{
-    color:#fff;
-    background-color: #fec919;
-}
-
-.btnOther:hover{
-    color:#fff;
-    background-color: #f7c31b;
-}
-
-.btnDelete{
-    color:#fff;
-    background-color: #d24a3a ;
-}
-
-.btnDelete:hover{
-    color:#fff;
-    background-color: #b13e30 ;
-}
-
-.btnUpdate{
-    color:#fff;
-    background-color: #7aa5da ;
-}
-
-.btnUpdate:hover{
-    color:#fff;
-    background-color: #5f7fa7 ;
-}
-
-.center {
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/*系統分頁連節*/
-
-.pagination-container {
-    color: white;
-}
-
-.pagination-container ul li a {
-    color: white;
-}
-
-/*通知*/
-
-.noticeDiv {
-    border-bottom: solid 1px;
-    border-color: darkgray;
-    margin-bottom: 5px;
-}
-
-.noticeDiv img {
-    height: 50px;
-    width: 50px;
-    border-radius: 25px;
-    margin-right: 10px;
-}
-
-.noticeDate {
-    text-align: right;
-    margin-bottom: 0px;
-}
-
-.settingAccountCover {
-    background-color: white;
-    width: 200px;
-    height: 200px;
-    border-radius: 100%;
-}
-
-.settingAccountCover img {
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 200px;
-    height: 200px;
-    border-radius: 100%;
-}
-
-.settingIndexCover img {
-    width: 600px;
-}
-
-.navbar-toggler {
-    right: 30px;
-    position: absolute;
-}
-
-.nav li {
-    margin-bottom: 10px;
-}
-
-.nav li a {
-    font-family: 'Playball', cursive;
-    color: white;
-}
-
-.navbar-brand {
-    color: white;
-    font-family: Emilys Candy;
-    font-size: 20px;
-}
-
-.homeIndexContent {
-    padding-left: 0rem;
-}
-
-.systemGroup {
-    margin-top: 250px;
-}
-
-@media screen and (min-width: 768px) {
-    .jumbotron{
+    /*相簿List頁*/
+    .albumDiv {
+        display: block;
+        height: 165px;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center;
+    }
+
+    .albumDiv a {
+        display: block;
+        height: 165px;
+        padding-bottom: 20px;
+    }
+
+    .albumDiv span {
+        bottom: -5px;
+    }
+
+    .albumDiv a p {
+        position: absolute;
+        left: 25px;
+        bottom: 5px;
+        color: #888592e0;
+        width: 60%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 0px;
+        font-family: 'Playball', 'Noto Sans TC', sans-serif;
+    }
+    /*建立相簿*/
+    .createAlbum-content {
+        margin-top: 30px;
+    }
+
+    .createAlbumBody {
+        overflow: hidden;
+    }
+
+    .createAlbumDiv {
+        height: 100px;
+        margin-bottom: 5px;
+        position: relative;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center;
+        cursor: pointer;
+    }
+
+    .createAlbumBottom {
+        margin: 20px 20px;
+    }
+
+    .createAlbumBottom .row {
+        margin: auto;
+        width: 80%;
+    }
+
+    .frontCover {
+        width: 180px;
+        height: 180px;
+        border: dashed 2px;
+        overflow: hidden;
+        margin: 0 auto;
+    }
+
+    .frontCover div {
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center;
+    }
+
+    .frontCover img,.frontCover div {
+        width: 160px;
+        height: 160px;
+        margin: 3px;
+    }
+
+    .createAlbumContent {
+        margin: auto;
+        padding-top: 40px;
+        width: 80%;
+    }
+
+    #NotJoinedPic, #JoinedPic {
+        display: inline-flex;
+        width: 50%;
+        border: dotted 2px;
+        height: 45vh;
+        overflow-y: scroll;
+    }
+
+    #JoinedPic {
+        float: right;
+    }
+
+    #txtTitle {
+        display: inline-block;
+        width: 50%;
+        margin-top: 10px;
+    }
+
+    .fa {
+        background-color: #000;
+        color: #fff;
+        margin-left: 15px;
+    }
+    /*相簿Content頁*/
+    .albumContentDiv {
+        margin-bottom: 10px;
+        height: 165px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center;
+    }
+
+    .albumContentDiv a {
+        display: block;
+        height: 165px;
+    }
+    /*文件檢視*/
+    .docViewDiv {
+        display: block;
+        height: 160px;
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+    }
+
+    .docViewDiv a {
+        display: block;
+        height: 160px;
+        padding-bottom: 20px;
+        text-align: center;
+    }
+
+    .docViewDiv p {
+        display: block;
+        position: absolute;
+        left: 15px;
+        bottom: -10px;
+        width: 90%;
+        color: #888592e0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: Microsoft JhengHei;
+        /*微軟正黑體*/
+        font-weight: bold;
+        /*粗體*/
+    }
+    /*圖片系統*/
+    .picEditDiv {
+        border: outset;
+        border-radius: 7px;
+        margin-bottom: 10px;
+        height: 165px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center;
+    }
+
+    .picViewDiv {
+        margin-bottom: 10px;
+        height: 165px;
+        box-shadow: 2px 3px 4px #ccc;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+    }
+
+    .picViewDiv:hover {
+        border: outset;
+    }
+
+    .picViewDiv a {
+        display: block;
+        height: 165px;
+    }
+
+    .NotEnable {
+        opacity: 0.5;
+    }
+    /*所有使用者連結*/
+    .accountLinkRow {
+        margin-bottom: 20px;
+    }
+
+    .accoutCover img {
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+    }
+
+    .accountIntroduction {
+        color: black;
+        font-size: small;
+    }
+    /*個人資料設定*/
+    .settingTitle {
+        display: inline-block;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        font-size: large;
+        cursor: pointer;
+        border: solid 1px;
+        background-color: rgba(144, 135, 135, 0.1);
+    }
+
+    .bookMarkSelect {
+        background-color: white;
+    }
+
+    .markDiv {
+        color: white;
+        margin: 20px 0;
+    }
+
+    .settingContent {
+        font-family: Ruthie;
+    }
+    /*選擇個人照*/
+    .selectCoverBody {
+        overflow: hidden;
+    }
+
+    .selectCoverContent {
+        margin: 20px;
+    }
+
+    .selectCover {
+        height: 650px;
+        overflow-y: scroll;
+    }
+
+    .coverImg {
+        display: block;
+        margin-bottom: 10px;
+    }
+    /*MENU*/
+    .menuAccount {
+        color: white;
+        border: solid;
+        border-radius: 14px;
+        background: #3f6696;
+        border-color: #3f6696;
+    }
+
+    .menuAccount a {
+        color: white;
+    }
+    /*通用*/
+    .btn {
+        font-family: 'Noto Sans TC', sans-serif;
+    }
+
+    .btnDonwload {
+        color: #fff;
+        background-color: #ffa928;
+    }
+
+    .btnDonwload:hover {
+        color: #fff;
+        background-color: #e69926;
+    }
+
+    .btnMode {
+        color: #fff;
+        background-color: #b4dd77;
+    }
+
+    .btnMode:hover {
+        color: #fff;
+        background-color: #a5ca6d;
+    }
+
+    .btnOther {
+        color: #fff;
+        background-color: #fec919;
+    }
+
+    .btnOther:hover {
+        color: #fff;
+        background-color: #f7c31b;
+    }
+
+    .btnDelete {
+        color: #fff;
+        background-color: #d24a3a;
+    }
+
+    .btnDelete:hover {
+        color: #fff;
+        background-color: #b13e30;
+    }
+
+    .btnUpdate {
+        color: #fff;
+        background-color: #7aa5da;
+    }
+
+    .btnUpdate:hover {
+        color: #fff;
+        background-color: #5f7fa7;
+    }
+
+    .center {
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    /*系統分頁連節*/
+    .pagination-container {
+        color: white;
+    }
+
+    .pagination-container ul li a {
+        color: white;
+    }
+    /*通知*/
+    .noticeDiv {
+        border-bottom: solid 1px;
+        border-color: darkgray;
+        margin-bottom: 5px;
+    }
+
+    .noticeDiv img {
+        height: 50px;
+        width: 50px;
+        border-radius: 25px;
+        margin-right: 10px;
+    }
+
+    .noticeDate {
+        text-align: right;
+        margin-bottom: 0px;
+    }
+
+    .settingAccountCover {
+        background-color: white;
+        width: 200px;
+        height: 200px;
+        border-radius: 100%;
+    }
+
+    .settingAccountCover img {
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 200px;
+        height: 200px;
+        border-radius: 100%;
+    }
+
+    .settingIndexCover img {
+        width: 600px;
+    }
+
+    .navbar-toggler {
+        right: 30px;
+        position: absolute;
+    }
+
+    .nav li {
+        margin-bottom: 10px;
+    }
+
+    .nav li a {
+        font-family: 'Playball', cursive;
+        color: white;
+    }
+
+    .navbar-brand {
+        color: white;
+        font-family: Emilys Candy;
+        font-size: 20px;
+    }
+
+    .homeIndexContent {
+        padding-left: 0rem;
+    }
+
+    .systemGroup {
+        margin-top: 250px;
+    }
+
+    @media screen and (min-width: 768px) {
+        .jumbotron{
         padding-left: 15rem;    
     }
     .systemGroup {

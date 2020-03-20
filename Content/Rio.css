@@ -53,7 +53,19 @@
 
 #UploadArea img {
     max-height: 200px;
-    max-width: 200px;
+    max-width: 200px;    
+}
+
+.uploadContent {
+    height: 200px;
+    width: 200px;
+    margin: 10px;
+    position:relative;
+    display:inline-block;
+}
+
+.uploadContent-Empty{
+    display:inline-block;
     margin: 10px;
 }
 
@@ -86,6 +98,35 @@
     display: table-cell;
     vertical-align: middle;
     text-align: center;
+}
+
+.loading::after {
+    position: absolute;
+    content: '';
+    top: 60%;
+    left: 50%;
+    margin: -1.71em 0 0 -1.71em;
+    width: 3em;
+    height: 3em;
+    animation: segment-spin .5s linear;
+    animation-iteration-count: infinite;
+    border-radius: 500em;
+    border-color: #666 rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.1);
+    border-style: solid;
+    border-width: .21em;
+    box-shadow: 0px 0px 0px 1px transparent;
+    visibility: visible;
+    z-index: 12;
+}
+
+@keyframes segment-spin {
+    from {
+        transform: rotate(0deg)
+    }
+
+    to {
+        transform: rotate(360deg)
+    }
 }
 
 /*相簿List頁*/

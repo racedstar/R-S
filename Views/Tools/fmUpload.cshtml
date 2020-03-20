@@ -11,12 +11,15 @@
     <meta name="viewport" content="width=device-width" />
     <title>多檔上傳</title>
     @Scripts.Render("~/bundles/jquery")
-    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/css")    
     <script src="~/Scripts/RioUpload.js"></script>
 </head>
 <body>
     <div>
         <div id="UploadArea" ondrop="Drop(event)" ondragover="Allowdrag(event)">
+            <label id="fileDrag">
+                <input id="fileSelect" type="file" multiple />
+            </label>
         </div>
         <div class="uploadDescription">
             <div id="uploadLimit">

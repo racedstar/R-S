@@ -1,4 +1,9 @@
 ﻿//檔案拖曳結束
+$(document).ready(() => {
+    let fileSelect = document.getElementById('fileSelect');
+    fileSelect.addEventListener('change', Drop, false);
+});
+
 let Allowdrag = function (ev) {
     event.preventDefault();
 };
@@ -6,7 +11,7 @@ let Allowdrag = function (ev) {
 //檔案拖曳中
 let Drop = (ev) => {
     event.preventDefault();
-    let files = ev.dataTransfer.files;//取得檔案
+    let files;
     FileType = document.getElementById('hidUploadType').value,//取得可上傳附檔名
         FileTypeArray = FileType.replace(/\*./g, "").split(';'),//將可上傳附檔名切割成陣列來判斷
         ErrorFileList = "",//錯誤訊息
@@ -15,6 +20,12 @@ let Drop = (ev) => {
         fileArryLength = 0,
         sumCount = 0;
 
+    if (ev.target.id == 'fileDrag') {
+        files = ev.dataTransfer.files;
+    }
+    else {
+        files = ev.target.files;
+    }
 
     for (i = 0; i < files.length; i++) { //依據檔案數量一個一個往Server上丟
         fileArryLength = files[i].name.split('.').length;//有檔名內有多個. 所以要知道該檔名的附檔名的話這邊是用split切割取最後一個為附檔名
@@ -22,8 +33,8 @@ let Drop = (ev) => {
             sumCount = files.length;
         }
 
-        if ($.inArray(files[i].name.split('.')[fileArryLength - 1].toLowerCase(), FileTypeArray) !== -1) { //判斷檔案類型是否為可上傳類型            
-            saveErrorList = SaveFiles(files[i].name, files[i], sumCount);//呼叫存檔涵式
+        if ($.inArray(files[i].name.split('.')[fileArryLength - 1].toLowerCase(), FileTypeArray) !== -1) { //判斷檔案類型是否為可上傳類型
+            saveErrorList = SaveFiles(files[i].name, files[i], i, sumCount);//呼叫存檔涵式
             successCount += 1;
         }
         else {
@@ -42,7 +53,7 @@ let Drop = (ev) => {
 };
 
 //存檔用
-let SaveFiles = function (fileName, files, sumCount) {
+let SaveFiles = async(fileName, files, count, sumCount) => {
     let fd = new FormData(),
         t = getQueryString("t"),
         tagSrc = '',
@@ -50,17 +61,33 @@ let SaveFiles = function (fileName, files, sumCount) {
 
     fd.append(fileName, files);
 
+    if (document.getElementsByClassName('uploadContent').length != 0) {
+        count = document.getElementsByClassName('uploadContent').length;
+    }
+
+    console.log(count);
+
+    let div = document.createElement('div');
+    div.id = "uploadContent-" + count;
+    div.className = "uploadContent";
+    div.innerHTML = ['<p class="loading"></>'];
+    document.getElementById('fileDrag').append(div);   
+
     fetch('fmUpload?upLoadType=' + t + '&count=' + sumCount, {
         method: 'POST',
         body: fd
     }).then(res => {
         let fr = new FileReader();
-        if (t === "img") {
-            fr.onload = createImgTag;
+        document.getElementById(div.id).innerHTML = "";
+        if (t === "img") {            
+            fr.onload = async () => {                
+                let fileTag = await createImgTag(files);                
+                document.getElementById(div.id).appendChild(fileTag);
+            };
         }
         else if (t === "Doc" || t === "Compression") {
             tagSrc = getTagSrc(fileName);
-            fr.onload = createTag(fileName, tagSrc);
+            fr.onload = createTag(fileName, tagSrc, div.id);
         }
 
         fr.readAsDataURL(files);
@@ -69,13 +96,21 @@ let SaveFiles = function (fileName, files, sumCount) {
     return errorFileName;
 };
 
-//顯示圖片縮圖用
-let createImgTag = (ev) => {
-    let convertImg = ev.target.result,//將圖片轉成base64
-        FileTag = document.createElement('img');//建立img元素
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
 
-    FileTag.src = convertImg;//指定元素連結
-    document.getElementById('UploadArea').appendChild(FileTag);
+//顯示圖片縮圖用
+let createImgTag = async(files) => {
+    let convertImg = await toBase64(files),//將圖片轉成base64
+        fileTag = document.createElement('img');//建立img元素
+    
+    fileTag.src = convertImg;//指定元素連結    
+
+    return fileTag;
 };
 
 //顯示文件icon用
@@ -108,7 +143,7 @@ let getTagSrc = (fileName) => {
     return fileTagSrc;
 };
 
-let createTag =  (fileName, fileTagSrc) => {
+let createTag =  (fileName, fileTagSrc , divID) => {
     let FileTag = document.createElement("img"),//建立img元素        
         fileNameDiv = document.createElement("div"),
         fileNamep = document.createElement("p"),
@@ -120,7 +155,7 @@ let createTag =  (fileName, fileTagSrc) => {
     fileNamep.appendChild(fileNameDivText);
     fileNameDiv.appendChild(fileNamep);
 
-    document.getElementById("UploadArea").appendChild(fileNameDiv);
+    document.getElementById(divID).appendChild(fileNameDiv);
 };
 
 let getQueryString =  (name) => {  //取得Querystring  e.g. var s = QueryString("s");
