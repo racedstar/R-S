@@ -145,7 +145,7 @@ let radioSelectDiv = (ev, docInitialClass) =>{
         ev.target.className += " Active";
         var createIcon = document.createElement("i");
         createIcon.setAttribute("class", "fa fa-check-square-o");
-        createIcon.setAttribute("style", "font-size:48px;background-color:white;");
+        createIcon.setAttribute("style", "font-size:48px;");
         document.getElementById(ev.target.id).appendChild(createIcon);
     }
 }
