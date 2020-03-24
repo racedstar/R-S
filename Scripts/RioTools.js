@@ -88,47 +88,82 @@ let getQueryString =  (name) => {
 
 //use System Rio_Pic,Rio_Doc
 var selectDiv = (ev, docInitialClass, docInitialjQueryClass) => {
-    var Div = document.getElementById(ev.target.id).className,
-        selected = document.getElementById(ev.target.id),
-        isShiftSelect = false,
-        shiftRangeparentID = document.getElementById(ev.target.id).id,
-        shiftRange = $(docInitialjQueryClass).length;
+    let selected = document.getElementById(ev.target.id);                        
 
-    if (Div.indexOf("Active") === -1) {
+    if (selected.className.indexOf("Active") === -1) {
         selected.className = docInitialClass + " Active";
-        var createIcon = document.createElement("i");
+        let createIcon = document.createElement("i");
         createIcon.setAttribute("class", "fa fa-check-square-o");
         createIcon.setAttribute("style", "font-size:48px;");
-        document.getElementById(ev.target.id).appendChild(createIcon);        
+        document.getElementById(ev.target.id).appendChild(createIcon);
+        
+
+        if ($('.start').length == 0) {
+            selected.className += " start";
+        }
+        else if (!ev.shiftKey && $('.start').length == 1) {
+            let startId = $('.start')[0].id;
+            $('#' + startId).className = docInitialClass + " Active";
+
+            selected.className += " start";
+        }
     }
     else {
         selected.className = docInitialClass;
         $("#" + ev.target.id).children('.fa').remove();
     }
 
-    if (ev.shiftKey) {
+    if (ev.shiftKey && $('.start').length == 1) {
         ev.preventDefault();
-        console.log(docInitialjQueryClass);
-        for (var i = 0; i < shiftRange; i++) {
+
+        let dataArray = [],
+            isShiftSelect = false,
+            shiftRange = $(docInitialjQueryClass).length;
+
+        if ($('.end').length == 0) {
+            selected.className += " end";
+        }
+        else {
+            let endId = $('.end')[0].id;
+            document.getElementById(endId).className = docInitialClass;
+
+            selected.className += " end";
+        }
+
+        for (let i = 0; i < $(docInitialjQueryClass).length; i++) {
+            if ($(docInitialjQueryClass)[i].className.indexOf('start') != -1 || $(docInitialjQueryClass)[i].className.indexOf('end') != -1) {                
+                dataArray.push(i);
+                continue;
+            }
+
+            if ($(docInitialjQueryClass)[i].className.indexOf('start')) {
+                $(docInitialjQueryClass)[i].className = docInitialClass;
+
+                let id = $(docInitialjQueryClass)[i].id;
+                $('#' + id).children('.fa').remove();
+            }            
+        }       
+
+        for (let i = 0; i < shiftRange; i++) {
             if (isShiftSelect === true) {
-                if ($(docInitialjQueryClass)[i].className.indexOf("Active") != -1) {
-                    isShiftSelect = false;                    
+                if (i == dataArray[1]) {
+                    isShiftSelect = false;
+                    return;
                 }
-                console.log($(docInitialjQueryClass)[i]);
-                $(docInitialjQueryClass)[i].className = docInitialClass + " Active";                
+                $(docInitialjQueryClass)[i].className = docInitialClass + " Active";
                 if ($(docInitialjQueryClass)[i].id != ev.target.id) {
-                    var createIcon = document.createElement("i");
+                    let createIcon = document.createElement("i");
                     createIcon.setAttribute("class", "fa fa-check-square-o");
                     createIcon.setAttribute("style", "font-size:48px;");
-                    $("#" + $(docInitialjQueryClass)[i].id).append(createIcon);                    
+                    $("#" + $(docInitialjQueryClass)[i].id).append(createIcon);
                 }
             }
-            else if ($(docInitialjQueryClass)[i].className.indexOf("Active") != -1) {
+            else if (i == dataArray[0]) {
                 isShiftSelect = true;
-            }
+            }            
         }
     }
-}
+};
 
 //use System selectCover
 let radioSelectDiv = (ev, docInitialClass) =>{
